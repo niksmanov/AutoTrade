@@ -4,7 +4,7 @@ namespace AutoTrade.Services.UsersService
 {
 	public interface IUsersService
 	{
-		void CreateAccount(UserJsonModel model);
-		bool ValidatePassword(string email, string password);
+		bool CreateAccount(UserJsonModel model);
+		bool IsPasswordValid(string email, string password);
 	}
 }

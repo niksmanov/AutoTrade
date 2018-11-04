@@ -13,16 +13,22 @@ namespace AutoTrade.Services.UsersService
 		public UsersService(AppDbContext dbContext) : base(dbContext)
 		{ }
 
-		public void CreateAccount(UserJsonModel model)
+		public bool CreateAccount(UserJsonModel model)
 		{
-			var user = (User)this.Map(model, new User());
-			user.Hash = HashPassword(model.Password);
-
-			DbContext.Users.Add(user);
-			DbContext.SaveChanges();
+			bool isNewUser = DbContext.Users
+				.SingleOrDefault(u => u.Email == model.Email) == null;
+			if (isNewUser)
+			{
+				var user = (User)this.Map(model, new User());
+				user.Hash = HashPassword(model.Password);
+				DbContext.Users.Add(user);
+				int rowsAffected = DbContext.SaveChanges();
+				isNewUser = rowsAffected > 0 ? true : false;
+			}
+			return isNewUser;
 		}
 
-		public bool ValidatePassword(string email, string password)
+		public bool IsPasswordValid(string email, string password)
 		{
 			var user = DbContext.Users.SingleOrDefault(u => u.Email == email);
 			return VerifyHashedPassword(user.Hash, password);
@@ -30,10 +36,10 @@ namespace AutoTrade.Services.UsersService
 
 		private byte[] HashPassword(string password)
 		{
-			const KeyDerivationPrf Pbkdf2Prf = KeyDerivationPrf.HMACSHA1; // default for Rfc2898DeriveBytes
-			const int Pbkdf2IterCount = 1000; // default for Rfc2898DeriveBytes
-			const int Pbkdf2SubkeyLength = 256 / 8; // 256 bits
-			const int SaltSize = 128 / 8; // 128 bits
+			const KeyDerivationPrf Pbkdf2Prf = KeyDerivationPrf.HMACSHA1;
+			const int Pbkdf2IterCount = 1000;
+			const int Pbkdf2SubkeyLength = 256 / 8;
+			const int SaltSize = 128 / 8;
 
 			byte[] salt = new byte[SaltSize];
 
@@ -53,15 +59,14 @@ namespace AutoTrade.Services.UsersService
 
 		private bool VerifyHashedPassword(byte[] hashedPassword, string password)
 		{
-			const KeyDerivationPrf Pbkdf2Prf = KeyDerivationPrf.HMACSHA1; // default for Rfc2898DeriveBytes
-			const int Pbkdf2IterCount = 1000; // default for Rfc2898DeriveBytes
-			const int Pbkdf2SubkeyLength = 256 / 8; // 256 bits
-			const int SaltSize = 128 / 8; // 128 bits
+			const KeyDerivationPrf Pbkdf2Prf = KeyDerivationPrf.HMACSHA1;
+			const int Pbkdf2IterCount = 1000;
+			const int Pbkdf2SubkeyLength = 256 / 8;
+			const int SaltSize = 128 / 8;
 
-			// We know ahead of time the exact length of a valid hashed password payload.
 			if (hashedPassword.Length != 1 + SaltSize + Pbkdf2SubkeyLength)
 			{
-				return false; // bad size
+				return false;
 			}
 
 			byte[] salt = new byte[SaltSize];
@@ -70,7 +75,6 @@ namespace AutoTrade.Services.UsersService
 			byte[] expectedSubkey = new byte[Pbkdf2SubkeyLength];
 			Buffer.BlockCopy(hashedPassword, 1 + salt.Length, expectedSubkey, 0, expectedSubkey.Length);
 
-			// Hash the incoming password and verify it
 			byte[] actualSubkey = KeyDerivation.Pbkdf2(password, salt, Pbkdf2Prf, Pbkdf2IterCount, Pbkdf2SubkeyLength);
 			return ByteArraysEqual(actualSubkey, expectedSubkey);
 		}
