@@ -21,7 +21,10 @@ class Login extends Component {
 					<input name="password" type="password" />
 					<br />
 					<label>Remember me:</label>
-					<input name="rememberMe" type="checkbox" />
+					<span>Yes</span>
+					<input type="radio" name="rememberMe" value="true" defaultChecked />
+					<span>No</span>
+					<input type="radio" name="rememberMe" value="false" /> 
 					<br />
 					<button type="submit">Submit</button>
 				</form>

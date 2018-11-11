@@ -6,6 +6,7 @@ namespace AutoTrade.Services.UsersService
 	{
 		UserJsonModel GetUserByEmail(string email);
 		UserJsonModel GetUserById(string id);
-		bool IsUserExists(string email);
+		ResponseJsonModel IsUserExists(string email);
+		string GetUserUserName(string email);
 	}
 }

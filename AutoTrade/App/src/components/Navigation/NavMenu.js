@@ -47,6 +47,5 @@ export default props => (
 				</LinkContainer>
 			</Nav>
 		</Navbar.Collapse>
-		<a href="/user/logout"> Logout</a>
 	</Navbar>
 );

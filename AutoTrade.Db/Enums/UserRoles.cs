@@ -1,8 +1,8 @@
 ﻿namespace AutoTrade.Db.Enums
 {
-	public enum UserRoles
+	public static class UserRoles
 	{
-		User = 0,
-		PowerUser = 1,
+		public static string User { get { return "User"; } }
+		public static string PowerUser { get { return "PowerUser"; } }
 	}
 }

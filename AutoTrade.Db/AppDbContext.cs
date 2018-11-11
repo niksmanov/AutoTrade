@@ -12,9 +12,9 @@ namespace AutoTrade.Db
 			this.Database.Migrate();
 		}
 
-		protected override void OnModelCreating(ModelBuilder builder)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			base.OnModelCreating(builder);
+			base.OnModelCreating(modelBuilder);
 		}
 
 	}

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db.Entities;
+using AutoTrade.Db.Enums;
 using AutoTrade.Services.UsersService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,17 +18,17 @@ namespace AutoTrade.Controllers
 		private readonly SignInManager<User> _signInManager;
 		private readonly UserManager<User> _userManager;
 
-		private readonly IUserService _usersService;
+		private readonly IUserService _userService;
 
 		public UserController(
 			UserManager<User> userManager,
 			SignInManager<User> signInManager,
 			IEmailSender emailSender,
-			IUserService usersService)
+			IUserService userService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
-			_usersService = usersService;
+			_userService = userService;
 		}
 
 
@@ -35,8 +36,16 @@ namespace AutoTrade.Controllers
 		public IActionResult Current()
 		{
 			string id = _userManager.GetUserId(HttpContext.User);
-			var user = _usersService.GetUserById(id);
-			return Json(user);
+			var user = _userService.GetUserById(id);
+			var response = new ResponseJsonModel();
+
+			if (user != null)
+			{
+				user.IsAdmin = User.IsInRole(UserRoles.PowerUser);
+				response.Succeeded = true;
+				response.Data = user;
+			}
+			return Json(response);
 		}
 
 		[HttpPost("[action]")]
@@ -47,9 +56,8 @@ namespace AutoTrade.Controllers
 				var user = new User { UserName = model.UserName, Email = model.Email, LockoutEnabled = false };
 				var result = await _userManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
-				{
 					await _signInManager.SignInAsync(user, isPersistent: true);
-				}
+
 				return Json(new { succeeded = result.Succeeded, errors = result.Errors });
 			}
 			return BadRequest();
@@ -60,9 +68,15 @@ namespace AutoTrade.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var result = await _signInManager.PasswordSignInAsync(
-					model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-				return Json(new { succeeded = result.Succeeded });
+				var response = _userService.IsUserExists(model.Email);
+				if (response.Succeeded)
+				{
+					string userName = _userService.GetUserUserName(model.Email);
+					var result = await _signInManager.PasswordSignInAsync(
+					userName, model.Password, model.RememberMe, lockoutOnFailure: false);
+					return Json(response);
+				}
+				return Json(response);
 			}
 			//var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
 			return BadRequest();
@@ -72,7 +86,7 @@ namespace AutoTrade.Controllers
 		public async Task<IActionResult> Logout()
 		{
 			await _signInManager.SignOutAsync();
-			return Json(new { succeeded = true });
+			return Json(new ResponseJsonModel { Succeeded = true });
 		}
 
 		[HttpPost("[action]")]
@@ -93,7 +107,7 @@ namespace AutoTrade.Controllers
 		public IActionResult Profile()
 		{
 
-			return Json(null);
+			return Json(new ResponseJsonModel { Succeeded = true });
 		}
 	}
 }

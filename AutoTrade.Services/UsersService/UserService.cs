@@ -6,6 +6,9 @@ namespace AutoTrade.Services.UsersService
 {
 	public class UserService : BaseService, IUserService
 	{
+		private const string INVALID_EMAIL = "Invalid email!";
+
+
 		public UserService(AppDbContext dbContext) : base(dbContext)
 		{ }
 
@@ -21,10 +24,25 @@ namespace AutoTrade.Services.UsersService
 			return (UserJsonModel)this.Map(user, new UserJsonModel());
 		}
 
-		public bool IsUserExists(string email)
+		public ResponseJsonModel IsUserExists(string email)
 		{
 			var user = DbContext.Users.SingleOrDefault(u => u.Email == email);
-			return user != null ? true : false;
+			var response = new ResponseJsonModel();
+			if (user == null)
+			{
+				var error = new ErrorJsonModel { Description = INVALID_EMAIL };
+				response.Errors.Add(error);
+			}
+			else
+				response.Succeeded = true;
+
+			return response;
+		}
+
+		public string GetUserUserName(string email)
+		{
+			var user = DbContext.Users.SingleOrDefault(u => u.Email == email);
+			return user != null ? user.UserName : null;
 		}
 	}
 }

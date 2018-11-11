@@ -75,6 +75,7 @@ namespace AutoTrade
 			app.UseCookiePolicy();
 			app.UseSpaStaticFiles();
 			app.UseAuthentication();
+			app.SeedDatabase();
 
 			app.UseMvc(routes =>
 			{
