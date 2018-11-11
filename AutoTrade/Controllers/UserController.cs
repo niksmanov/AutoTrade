@@ -54,6 +54,10 @@ namespace AutoTrade.Controllers
 			if (ModelState.IsValid)
 			{
 				var user = new User { UserName = model.UserName, Email = model.Email, LockoutEnabled = false };
+				var response = _userService.IsUserExists(model.Email);
+				if (response.Succeeded)
+					return Json(response);
+
 				var result = await _userManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
 					await _signInManager.SignInAsync(user, isPersistent: true);

@@ -7,6 +7,7 @@ namespace AutoTrade.Services.UsersService
 	public class UserService : BaseService, IUserService
 	{
 		private const string INVALID_EMAIL = "Invalid email!";
+		private const string EMAIL_EXISTS = "Email already exists!";
 
 
 		public UserService(AppDbContext dbContext) : base(dbContext)
@@ -34,8 +35,11 @@ namespace AutoTrade.Services.UsersService
 				response.Errors.Add(error);
 			}
 			else
+			{
 				response.Succeeded = true;
-
+				var error = new ErrorJsonModel { Description = EMAIL_EXISTS };
+				response.Errors.Add(error);
+			}
 			return response;
 		}
 

@@ -1,16 +1,9 @@
 ﻿import React, { Component } from 'react';
 import axios from 'axios';
+import DisplayErrors from '../Shared/Error/Error';
 
 class Register extends Component {
 	render() {
-		let errorMessages = [];
-
-		if (this.state.errors) {
-			errorMessages = this.state.errors.map((err, i) => {
-				return <p key={i}> {err.description} </p>
-			});
-		}
-
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>
@@ -26,9 +19,8 @@ class Register extends Component {
 					<button type="submit">Submit</button>
 				</form>
 				<br />
-				<div>
-					{errorMessages}
-				</div>
+
+				<DisplayErrors errors={this.state.errors} />
 			</div>
 		);
 	}
@@ -47,9 +39,7 @@ class Register extends Component {
 		axios.post('/user/register', new FormData(e.target))
 			.then(r => { return r.data })
 			.then(response => {
-				if (!response.succeeded) {
-					this.setState({ errors: response.errors });
-				}
+				this.setState({ errors: response.errors });
 			});
 	}
 }
