@@ -29,12 +29,24 @@ export default props => (
 						<Glyphicon glyph='education' /> Register
           </NavItem>
 				</LinkContainer>
+				<LinkContainer to={'/login'}>
+					<NavItem>
+						<Glyphicon glyph='education' /> Login
+          </NavItem>
+				</LinkContainer>
+
 				<LinkContainer to={'/fetchdata'}>
 					<NavItem>
 						<Glyphicon glyph='th-list' /> Fetch data
           </NavItem>
 				</LinkContainer>
+				<LinkContainer to={'/profile'}>
+					<NavItem>
+						<Glyphicon glyph='th-list' /> Profile
+          </NavItem>
+				</LinkContainer>
 			</Nav>
 		</Navbar.Collapse>
+		<a href="/user/logout"> Logout</a>
 	</Navbar>
 );

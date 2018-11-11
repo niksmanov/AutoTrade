@@ -14,15 +14,19 @@ namespace AutoTrade.Services
 
 		public object Map(object sourceObject, object destinationObject)
 		{
-			foreach (var sourceProperty in sourceObject.GetType().GetProperties())
+			if (sourceObject != null & destinationObject != null)
 			{
-				var destinationProperty = destinationObject.GetType().GetProperty(sourceProperty.Name);
-				if (destinationProperty != null && destinationProperty.PropertyType == sourceProperty.PropertyType)
+				foreach (var sourceProperty in sourceObject.GetType().GetProperties())
 				{
-					destinationProperty.SetValue(destinationObject, sourceProperty.GetValue(sourceObject));
+					var destinationProperty = destinationObject.GetType().GetProperty(sourceProperty.Name);
+					if (destinationProperty != null && destinationProperty.PropertyType == sourceProperty.PropertyType)
+					{
+						destinationProperty.SetValue(destinationObject, sourceProperty.GetValue(sourceObject));
+					}
 				}
+				return destinationObject;
 			}
-			return destinationObject;
+			return null;
 		}
 
 		public void Dispose()

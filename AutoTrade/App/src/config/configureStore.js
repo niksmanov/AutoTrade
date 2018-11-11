@@ -1,6 +1,9 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
+import * as Counter from '../components/Counter/store/Counter';
+import * as WeatherForecasts from '../components/FetchData/store/WeatherForecasts';
+
 
 export default function configureStore(history, initialState) {
 	const reducers = {
@@ -20,6 +23,7 @@ export default function configureStore(history, initialState) {
 		enhancers.push(window.devToolsExtension());
 	}
 
+	// Share state between several reducers
 	const rootReducer = combineReducers({
 		...reducers,
 		routing: routerReducer

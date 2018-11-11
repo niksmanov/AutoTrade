@@ -1,7 +1,9 @@
 using AutoTrade.Db;
+using AutoTrade.Db.Entities;
 using AutoTrade.Services.UsersService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -31,10 +33,28 @@ namespace AutoTrade
 				configuration.RootPath = "App/build";
 			});
 
-			ConfigureDependencies(services);
-
 			services.AddDbContext<AppDbContext>(options =>
-				options.UseSqlServer(Configuration.GetConnectionString("MainDbConnection")));
+				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+			services.AddIdentity<User, IdentityRole>()
+				.AddDefaultUI()
+				.AddDefaultTokenProviders()
+				.AddEntityFrameworkStores<AppDbContext>();
+
+			services.Configure<IdentityOptions>(options =>
+			{
+				options.Password = new PasswordOptions()
+				{
+					RequiredLength = 5,
+					RequiredUniqueChars = 0,
+					RequireLowercase = false,
+					RequireDigit = false,
+					RequireUppercase = false,
+					RequireNonAlphanumeric = false,
+				};
+			});
+
+			ConfigureDependencies(services);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +72,9 @@ namespace AutoTrade
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
+			app.UseCookiePolicy();
 			app.UseSpaStaticFiles();
+			app.UseAuthentication();
 
 			app.UseMvc(routes =>
 			{
@@ -74,7 +96,7 @@ namespace AutoTrade
 
 		private void ConfigureDependencies(IServiceCollection services)
 		{
-			services.AddScoped<IUsersService, UsersService>();
+			services.AddScoped<IUserService, UserService>();
 		}
 	}
 }
