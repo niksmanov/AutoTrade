@@ -6,44 +6,28 @@ namespace AutoTrade.Services.UsersService
 {
 	public class UserService : BaseService, IUserService
 	{
-		private const string INVALID_EMAIL = "Invalid email!";
-		private const string EMAIL_EXISTS = "Email already exists!";
-
-
 		public UserService(AppDbContext dbContext) : base(dbContext)
 		{ }
 
-		public UserJsonModel GetUserByEmail(string email)
+		public UserJsonModel GetByEmail(string email)
 		{
 			var user = DbContext.Users.SingleOrDefault(u => u.Email == email);
 			return (UserJsonModel)this.Map(user, new UserJsonModel());
 		}
 
-		public UserJsonModel GetUserById(string id)
+		public UserJsonModel GetById(string id)
 		{
 			var user = DbContext.Users.SingleOrDefault(u => u.Id == id);
 			return (UserJsonModel)this.Map(user, new UserJsonModel());
 		}
 
-		public ResponseJsonModel IsUserExists(string email)
+		public bool IsExists(string email)
 		{
 			var user = DbContext.Users.SingleOrDefault(u => u.Email == email);
-			var response = new ResponseJsonModel();
-			if (user == null)
-			{
-				var error = new ErrorJsonModel { Description = INVALID_EMAIL };
-				response.Errors.Add(error);
-			}
-			else
-			{
-				response.Succeeded = true;
-				var error = new ErrorJsonModel { Description = EMAIL_EXISTS };
-				response.Errors.Add(error);
-			}
-			return response;
+			return user == null ? false : true;
 		}
 
-		public string GetUserUserName(string email)
+		public string GetUserName(string email)
 		{
 			var user = DbContext.Users.SingleOrDefault(u => u.Email == email);
 			return user != null ? user.UserName : null;

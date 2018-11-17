@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoTrade.Core;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db.Entities;
 using AutoTrade.Db.Enums;
 using AutoTrade.Services.UsersService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoTrade.Controllers
@@ -17,13 +17,11 @@ namespace AutoTrade.Controllers
 	{
 		private readonly SignInManager<User> _signInManager;
 		private readonly UserManager<User> _userManager;
-
 		private readonly IUserService _userService;
 
 		public UserController(
 			UserManager<User> userManager,
 			SignInManager<User> signInManager,
-			IEmailSender emailSender,
 			IUserService userService)
 		{
 			_userManager = userManager;
@@ -36,16 +34,14 @@ namespace AutoTrade.Controllers
 		public IActionResult Current()
 		{
 			string id = _userManager.GetUserId(HttpContext.User);
-			var user = _userService.GetUserById(id);
-			var response = new ResponseJsonModel();
+			var user = _userService.GetById(id);
 
 			if (user != null)
 			{
 				user.IsAdmin = User.IsInRole(UserRoles.PowerUser);
-				response.Succeeded = true;
-				response.Data = user;
+				return Json(new ResponseJsonModel(true, user));
 			}
-			return Json(response);
+			return Json(new ResponseJsonModel());
 		}
 
 		[HttpPost("[action]")]
@@ -54,17 +50,20 @@ namespace AutoTrade.Controllers
 			if (ModelState.IsValid)
 			{
 				var user = new User { UserName = model.UserName, Email = model.Email, LockoutEnabled = false };
-				var response = _userService.IsUserExists(model.Email);
-				if (response.Succeeded)
-					return Json(response);
+				var isExist = _userService.IsExists(model.Email);
+				if (isExist)
+					return Json(new ResponseJsonModel(false, errors: Errors.EMAIL_EXISTS));
 
 				var result = await _userManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
 					await _signInManager.SignInAsync(user, isPersistent: true);
 
-				return Json(new { succeeded = result.Succeeded, errors = result.Errors });
+				var res = new ResponseJsonModel(result.Succeeded);
+				res.Errors = result.Errors.Select(e => e.Description).ToList();
+				return Json(res);
 			}
-			return BadRequest();
+			var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+			return Json(new ResponseJsonModel(false, errors: errors));
 		}
 
 		[HttpPost("[action]")]
@@ -72,25 +71,29 @@ namespace AutoTrade.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var response = _userService.IsUserExists(model.Email);
-				if (response.Succeeded)
+				var isExist = _userService.IsExists(model.Email);
+				if (isExist)
 				{
-					string userName = _userService.GetUserUserName(model.Email);
+					string userName = _userService.GetUserName(model.Email);
 					var result = await _signInManager.PasswordSignInAsync(
 					userName, model.Password, model.RememberMe, lockoutOnFailure: false);
-					return Json(response);
+
+					if (result.Succeeded)
+						return Json(new ResponseJsonModel(true));
+					else
+						return Json(new ResponseJsonModel(false, errors: Errors.INVALID_PASSWORD));
 				}
-				return Json(response);
+				return Json(new ResponseJsonModel(false, errors: Errors.INVALID_EMAIL));
 			}
-			//var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-			return BadRequest();
+			var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+			return Json(new ResponseJsonModel(false, errors: errors));
 		}
 
 		[HttpGet("[action]")]
 		public async Task<IActionResult> Logout()
 		{
 			await _signInManager.SignOutAsync();
-			return Json(new ResponseJsonModel { Succeeded = true });
+			return Json(new ResponseJsonModel(true));
 		}
 
 		[HttpPost("[action]")]
@@ -101,17 +104,13 @@ namespace AutoTrade.Controllers
 				var user = await _userManager.FindByEmailAsync(model.Email);
 				var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 				var result = await _userManager.ResetPasswordAsync(user, code, model.Password);
-				return Json(new { succeeded = result.Succeeded, errors = result.Errors });
+
+				var res = new ResponseJsonModel(result.Succeeded);
+				res.Errors = result.Errors.Select(e => e.Description).ToList();
+				return Json(res);
 			}
-			return BadRequest();
-		}
-
-		[Authorize]
-		[HttpGet("[action]")]
-		public IActionResult Profile()
-		{
-
-			return Json(new ResponseJsonModel { Succeeded = true });
+			var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+			return Json(new ResponseJsonModel(false, errors: errors));
 		}
 	}
 }

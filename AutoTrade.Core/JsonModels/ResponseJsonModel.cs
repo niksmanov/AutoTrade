@@ -4,15 +4,23 @@ namespace AutoTrade.Core.JsonModels
 {
 	public class ResponseJsonModel
 	{
+		public ResponseJsonModel(bool succeeded = false, object data = null, params string[] errors)
+		{
+			this.Succeeded = succeeded;
+			this.Data = data;
+			foreach (string err in errors)
+				this.Errors.Add(err);
+		}
+
+		public ResponseJsonModel(bool succeeded = false, object data = null, List<string> errors = null)
+		{
+			this.Succeeded = succeeded;
+			this.Data = data;
+			this.Errors = errors;
+		}
+
 		public bool Succeeded { get; set; }
-		public ICollection<ErrorJsonModel> Errors { get; set; } = new List<ErrorJsonModel>();
+		public ICollection<string> Errors { get; set; } = new List<string>();
 		public object Data { get; set; }
-	}
-
-
-	public class ErrorJsonModel
-	{
-		public string Code { get; set; }
-		public string Description { get; set; }
 	}
 }

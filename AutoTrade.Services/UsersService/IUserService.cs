@@ -4,9 +4,9 @@ namespace AutoTrade.Services.UsersService
 {
 	public interface IUserService
 	{
-		UserJsonModel GetUserByEmail(string email);
-		UserJsonModel GetUserById(string id);
-		ResponseJsonModel IsUserExists(string email);
-		string GetUserUserName(string email);
+		UserJsonModel GetByEmail(string email);
+		UserJsonModel GetById(string id);
+		bool IsExists(string email);
+		string GetUserName(string email);
 	}
 }
