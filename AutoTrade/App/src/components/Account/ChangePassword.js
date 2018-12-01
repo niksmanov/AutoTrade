@@ -2,7 +2,7 @@
 import axios from 'axios';
 import DisplayErrors from '../Shared/Error/Error';
 
-class Login extends Component {
+class ChangePassword extends Component {
 	constructor() {
 		super();
 		this.state = {
@@ -12,7 +12,7 @@ class Login extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		axios.post('/user/login', new FormData(e.target))
+		axios.post('/user/resetpassword', new FormData(e.target))
 			.then(r => { return r.data })
 			.then(response => {
 				if (response.succeeded) {
@@ -31,17 +31,11 @@ class Login extends Component {
 					<br />
 					<input name="email" type="email" autoComplete="off" required />
 					<br />
-					<label>Password:</label>
+					<label>New Password:</label>
 					<br />
 					<input name="password" type="password" required />
 					<br />
-					<label className="spacer">Remember me: </label>
-					<span> Yes </span>
-					<input type="radio" name="rememberMe" value="true" defaultChecked />
-					<span> No </span>
-					<input type="radio" name="rememberMe" value="false" />
-					<br />
-					<button type="submit">Submit</button>
+					<button type="submit" className="spacer">Submit</button>
 				</form>
 				<br />
 
@@ -51,4 +45,4 @@ class Login extends Component {
 	}
 }
 
-export default Login;
+export default ChangePassword;

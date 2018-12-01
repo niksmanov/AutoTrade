@@ -1,9 +1,11 @@
 using AutoTrade.Db;
 using AutoTrade.Db.Entities;
+using AutoTrade.Infrastructure;
 using AutoTrade.Services.UsersService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -97,6 +99,7 @@ namespace AutoTrade
 
 		private void ConfigureDependencies(IServiceCollection services)
 		{
+			services.AddTransient<IEmailSender, EmailSender>();
 			services.AddScoped<IUserService, UserService>();
 		}
 	}

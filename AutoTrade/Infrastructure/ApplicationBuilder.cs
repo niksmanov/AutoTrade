@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutoTrade
+namespace AutoTrade.Infrastructure
 {
 	public static class ApplicationBuilder
 	{

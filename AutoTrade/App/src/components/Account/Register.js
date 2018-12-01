@@ -28,15 +28,18 @@ class Register extends Component {
 			<div>
 				<form onSubmit={this.handleSubmit.bind(this)}>
 					<label>Email:</label>
-					<input name="email" type="email" autoComplete="off" />
+					<br />
+					<input name="email" type="email" autoComplete="off" required />
 					<br />
 					<label>Username:</label>
-					<input name="userName" type="text" autoComplete="off" />
+					<br />
+					<input name="userName" type="text" autoComplete="off" required />
 					<br />
 					<label>Password:</label>
-					<input name="password" type="password" />
 					<br />
-					<button type="submit">Submit</button>
+					<input name="password" type="password" required />
+					<br />
+					<button type="submit" className="spacer">Submit</button>
 				</form>
 				<br />
 

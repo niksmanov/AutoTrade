@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Glyphicon, Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import '../../styles/components/Navigation/NavMenu.css';
+import '../../styles/components/MainNavigation/NavMenu.css';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -28,6 +28,8 @@ class Navigation extends Component {
 		let register;
 		let profile;
 		let logout;
+		let forgotPassword;
+		let changePassword;
 
 		if (user.userName) {
 			profile = <LinkContainer to={'/profile'}>
@@ -36,7 +38,13 @@ class Navigation extends Component {
 							</NavItem>
 			</LinkContainer>
 
-			logout = <NavItem onClick={this.logoutUser.bind(this)}>
+			changePassword = <LinkContainer to={'/changepassword'}>
+				<NavItem>
+					<Glyphicon glyph='th-list' /> Change Password
+							</NavItem>
+			</LinkContainer>
+
+			logout = <NavItem onClick={this.logoutUser}>
 				<Glyphicon glyph='th-list' /> Logout
 							</NavItem>
 		} else {
@@ -49,6 +57,12 @@ class Navigation extends Component {
 			login = <LinkContainer to={'/login'}>
 				<NavItem>
 					<Glyphicon glyph='th-list' /> Login
+							</NavItem>
+			</LinkContainer>
+
+			forgotPassword = <LinkContainer to={'/forgotpassword'}>
+				<NavItem>
+					<Glyphicon glyph='th-list' /> Forgot Password
 							</NavItem>
 			</LinkContainer>
 		}
@@ -72,6 +86,8 @@ class Navigation extends Component {
 						{register}
 						{profile}
 						{logout}
+						{forgotPassword}
+						{changePassword}
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>

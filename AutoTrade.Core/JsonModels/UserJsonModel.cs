@@ -7,8 +7,8 @@ namespace AutoTrade.Core.JsonModels
 		public string Id { get; set; }
 		[Required]
 		public string Email { get; set; }
-		[Required]
 		public string Password { get; set; }
+		public string Code { get; set; }
 		public string UserName { get; set; }
 		public bool RememberMe { get; set; }
 		public bool IsAdmin { get; set; }

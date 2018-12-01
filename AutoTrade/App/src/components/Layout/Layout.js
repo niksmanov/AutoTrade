@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Grid, Row } from 'react-bootstrap';
-import NavMenu from '../Navigation/NavMenu';
+import NavMenu from '../MainNavigation/NavMenu';
 
 export default props => (
   <Grid fluid>
