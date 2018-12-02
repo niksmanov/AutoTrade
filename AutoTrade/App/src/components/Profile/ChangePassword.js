@@ -1,8 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import axios from 'axios';
 import DisplayErrors from '../Shared/Error/Error';
+import Navigation from './Navigation';
 
-class ChangePassword extends Component {
+class ChangePassword extends PureComponent {
 	constructor() {
 		super();
 		this.state = {
@@ -26,6 +27,8 @@ class ChangePassword extends Component {
 	render() {
 		return (
 			<div>
+				<Navigation />
+
 				<form onSubmit={this.handleSubmit.bind(this)}>
 					<label>Email:</label>
 					<br />

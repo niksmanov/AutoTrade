@@ -12,14 +12,14 @@ import ForgotPassword from './components/Account/ForgotPassword';
 
 //Private routes
 import Profile from './components/Profile/Profile';
-import ChangePassword from './components/Account/ChangePassword';
+import ChangePassword from './components/Profile/ChangePassword';
 
 
 const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
 	return <Route {...rest} render={(props) =>
 		isAuth ?
 			<Component {...props} /> :
-			<Redirect to='/login' />
+			<Redirect to='/' />
 	} />
 };
 

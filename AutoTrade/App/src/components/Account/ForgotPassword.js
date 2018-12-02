@@ -1,8 +1,8 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import axios from 'axios';
 import DisplayErrors from '../Shared/Error/Error';
 
-class ForgotPassword extends Component {
+class ForgotPassword extends PureComponent {
 	constructor() {
 		super();
 		this.state = {

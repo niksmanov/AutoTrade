@@ -2,6 +2,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators } from '../Shared/User/store/User';
+import Navigation from './Navigation';
 
 class Profile extends Component {
 	componentWillMount() {
@@ -13,6 +14,8 @@ class Profile extends Component {
 
 		return (
 			<div>
+				<Navigation />
+
 				<p> Hello, {user.userName} </p>
 				<br />
 			</div>

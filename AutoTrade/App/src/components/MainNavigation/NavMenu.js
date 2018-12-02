@@ -29,49 +29,46 @@ class Navigation extends Component {
 		let profile;
 		let logout;
 		let forgotPassword;
-		let changePassword;
 
 		if (user.userName) {
 			profile = <LinkContainer to={'/profile'}>
 				<NavItem>
-					<Glyphicon glyph='th-list' /> Profile
+					<Glyphicon glyph='user' /> Profile
 							</NavItem>
 			</LinkContainer>
 
-			changePassword = <LinkContainer to={'/changepassword'}>
-				<NavItem>
-					<Glyphicon glyph='th-list' /> Change Password
+			logout = <LinkContainer to={'/logout'}>
+				<NavItem onClick={this.logoutUser}>
+					<Glyphicon glyph='off' /> Logout
 							</NavItem>
 			</LinkContainer>
-
-			logout = <NavItem onClick={this.logoutUser}>
-				<Glyphicon glyph='th-list' /> Logout
-							</NavItem>
 		} else {
 			register = <LinkContainer to={'/register'}>
 				<NavItem>
-					<Glyphicon glyph='education' /> Register
+					<Glyphicon glyph='th-list' /> Register
 							</NavItem>
 			</LinkContainer>
 
 			login = <LinkContainer to={'/login'}>
 				<NavItem>
-					<Glyphicon glyph='th-list' /> Login
+					<Glyphicon glyph='off' /> Login
 							</NavItem>
 			</LinkContainer>
 
 			forgotPassword = <LinkContainer to={'/forgotpassword'}>
 				<NavItem>
-					<Glyphicon glyph='th-list' /> Forgot Password
+					<Glyphicon glyph='refresh' /> Forgot Password
 							</NavItem>
 			</LinkContainer>
 		}
 
 		return (
-			<Navbar inverse fixedTop fluid collapseOnSelect>
+			<Navbar className="main-nav" inverse fixedTop fluid collapseOnSelect>
 				<Navbar.Header>
 					<Navbar.Brand>
-						<Link to={'/'}>AutoTrade</Link>
+						<Link to={'/'}>
+							<Glyphicon glyph='road' /> AutoTrade
+						</Link>
 					</Navbar.Brand>
 					<Navbar.Toggle />
 				</Navbar.Header>
@@ -85,9 +82,8 @@ class Navigation extends Component {
 						{login}
 						{register}
 						{profile}
-						{logout}
 						{forgotPassword}
-						{changePassword}
+						{logout}
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>
@@ -97,5 +93,6 @@ class Navigation extends Component {
 
 export default connect(
 	state => state.user,
-	dispatch => bindActionCreators(actionCreators, dispatch)
+	dispatch => bindActionCreators(actionCreators, dispatch),
+	null, { pure: false },
 )(Navigation);
