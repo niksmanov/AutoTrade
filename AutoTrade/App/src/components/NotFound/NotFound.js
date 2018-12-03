@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import '../../styles/index.css';
+import '../../styles/shared/index.css';
 
 const NotFound = () => {
 	return (

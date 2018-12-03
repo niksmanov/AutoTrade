@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="App\public\images\" />
-    <Folder Include="App\src\styles\shared\" />
   </ItemGroup>
 
   <ItemGroup>

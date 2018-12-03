@@ -19,7 +19,7 @@ const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
 	return <Route {...rest} render={(props) =>
 		isAuth ?
 			<Component {...props} /> :
-			<Redirect to='/' />
+			<Redirect to='/login' />
 	} />
 };
 
@@ -28,6 +28,7 @@ class App extends Component {
 	constructor() {
 		super();
 		this.state = {
+			isLoading: true,
 			isUserAuth: false,
 		};
 	}
@@ -37,11 +38,27 @@ class App extends Component {
 			.then(r => { return r.data })
 			.then(response => {
 				this.setState({ isUserAuth: response.succeeded });
+				this.setState({ isLoading: false });
 			});
 	}
 
 	render() {
 		let isAuth = this.state.isUserAuth;
+		let privateRoutes;
+
+		if (this.state.isLoading) {
+			privateRoutes =
+				<React.Fragment>
+					<div className="loading-app"></div>
+				</React.Fragment>;
+		} else {
+			privateRoutes =
+				<React.Fragment>
+					<PrivateRoute isAuth={isAuth} path="/profile" component={Profile} />
+					<PrivateRoute isAuth={isAuth} path="/changepassword" component={ChangePassword} />
+				</React.Fragment>;
+		}
+
 		return (
 			<Layout>
 				<Switch>
@@ -50,9 +67,7 @@ class App extends Component {
 					<Route path='/login' component={Login} />
 					<Route path='/forgotpassword' component={ForgotPassword} />
 
-					<PrivateRoute isAuth={isAuth} path="/profile" component={Profile} />
-					<PrivateRoute isAuth={isAuth} path="/changepassword" component={ChangePassword} />
-
+					{privateRoutes}
 
 					<Route component={NotFound} />
 				</Switch>

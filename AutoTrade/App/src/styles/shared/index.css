@@ -1,0 +1,17 @@
+@media (max-width: 767px) {
+	/* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
+	body {
+		padding-top: 50px;
+	}
+}
+
+.spacer {
+	margin: 10px 0;
+}
+
+.loading-app {
+	height: 66px;
+	width: 66px;
+	background-image: url('/loading.gif');
+	margin: 100px auto 0 auto; 
+}

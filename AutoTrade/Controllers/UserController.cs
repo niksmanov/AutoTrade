@@ -7,6 +7,7 @@ using AutoTrade.Core.JsonModels;
 using AutoTrade.Db.Entities;
 using AutoTrade.Db.Enums;
 using AutoTrade.Services.UsersService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -138,6 +139,7 @@ namespace AutoTrade.Controllers
 			return Redirect("/");
 		}
 
+		[Authorize]
 		[HttpPost("[action]")]
 		public async Task<IActionResult> ResetPassword(UserJsonModel model)
 		{

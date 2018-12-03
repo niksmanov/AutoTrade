@@ -23,43 +23,44 @@ class Navigation extends Component {
 
 	render() {
 		let user = this.props.user;
-
-		let login;
-		let register;
-		let profile;
-		let logout;
-		let forgotPassword;
+		let routes;
 
 		if (user.userName) {
-			profile = <LinkContainer to={'/profile'}>
-				<NavItem>
-					<Glyphicon glyph='user' /> Profile
+			routes =
+				<React.Fragment>
+					<LinkContainer to={'/profile'}>
+						<NavItem>
+							<Glyphicon glyph='user' /> Profile
 							</NavItem>
-			</LinkContainer>
+					</LinkContainer>
 
-			logout = <LinkContainer to={'/logout'}>
-				<NavItem onClick={this.logoutUser}>
-					<Glyphicon glyph='off' /> Logout
+					<LinkContainer to={'/logout'}>
+						<NavItem onClick={this.logoutUser}>
+							<Glyphicon glyph='off' /> Logout
 							</NavItem>
-			</LinkContainer>
+					</LinkContainer>
+				</React.Fragment>;
 		} else {
-			register = <LinkContainer to={'/register'}>
-				<NavItem>
-					<Glyphicon glyph='th-list' /> Register
+			routes =
+				<React.Fragment>
+					<LinkContainer to={'/register'}>
+						<NavItem>
+							<Glyphicon glyph='th-list' /> Register
 							</NavItem>
-			</LinkContainer>
+					</LinkContainer>
 
-			login = <LinkContainer to={'/login'}>
-				<NavItem>
-					<Glyphicon glyph='off' /> Login
+					<LinkContainer to={'/login'}>
+						<NavItem>
+							<Glyphicon glyph='off' /> Login
 							</NavItem>
-			</LinkContainer>
+					</LinkContainer>
 
-			forgotPassword = <LinkContainer to={'/forgotpassword'}>
-				<NavItem>
-					<Glyphicon glyph='refresh' /> Forgot Password
+					<LinkContainer to={'/forgotpassword'}>
+						<NavItem>
+							<Glyphicon glyph='refresh' /> Forgot Password
 							</NavItem>
-			</LinkContainer>
+					</LinkContainer>
+				</React.Fragment>
 		}
 
 		return (
@@ -79,11 +80,7 @@ class Navigation extends Component {
 								<Glyphicon glyph='home' /> Home
 							</NavItem>
 						</LinkContainer>
-						{login}
-						{register}
-						{profile}
-						{forgotPassword}
-						{logout}
+						{routes}
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>
