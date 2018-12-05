@@ -25,13 +25,10 @@ const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
 
 
 class App extends Component {
-	constructor() {
-		super();
-		this.state = {
-			isLoading: true,
-			isUserAuth: false,
-		};
-	}
+	state = {
+		isLoading: true,
+		isUserAuth: false,
+	};
 
 	componentWillMount() {
 		axios.get('/user/current')
@@ -45,7 +42,6 @@ class App extends Component {
 	render() {
 		let isAuth = this.state.isUserAuth;
 		let privateRoutes;
-
 		if (this.state.isLoading) {
 			privateRoutes =
 				<React.Fragment>
@@ -54,8 +50,12 @@ class App extends Component {
 		} else {
 			privateRoutes =
 				<React.Fragment>
-					<PrivateRoute isAuth={isAuth} path="/profile" component={Profile} />
-					<PrivateRoute isAuth={isAuth} path="/changepassword" component={ChangePassword} />
+					<Switch>
+						<PrivateRoute isAuth={isAuth} path="/profile" component={Profile} />
+						<PrivateRoute isAuth={isAuth} path="/changepassword" component={ChangePassword} />
+
+						<Route component={NotFound} />
+					</Switch>
 				</React.Fragment>;
 		}
 
@@ -66,10 +66,7 @@ class App extends Component {
 					<Route path='/register' component={Register} />
 					<Route path='/login' component={Login} />
 					<Route path='/forgotpassword' component={ForgotPassword} />
-
 					{privateRoutes}
-
-					<Route component={NotFound} />
 				</Switch>
 			</Layout >
 		);

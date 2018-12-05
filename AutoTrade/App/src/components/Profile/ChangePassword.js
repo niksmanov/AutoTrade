@@ -4,12 +4,9 @@ import DisplayErrors from '../Shared/Error/Error';
 import Navigation from './Navigation';
 
 class ChangePassword extends PureComponent {
-	constructor() {
-		super();
-		this.state = {
-			errors: []
-		};
-	}
+	state = {
+		errors: []
+	};
 
 	handleSubmit(e) {
 		e.preventDefault();

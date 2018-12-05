@@ -3,12 +3,9 @@ import axios from 'axios';
 import DisplayErrors from '../Shared/Error/Error';
 
 class Login extends PureComponent {
-	constructor() {
-		super();
-		this.state = {
-			errors: []
-		};
-	}
+	state = {
+		errors: []
+	};
 
 	handleSubmit(e) {
 		e.preventDefault();

@@ -1,5 +1,4 @@
 ﻿import React from 'react';
-import '../../styles/shared/index.css';
 
 const NotFound = () => {
 	return (
