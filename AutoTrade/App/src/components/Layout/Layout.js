@@ -8,7 +8,7 @@ export default props => {
 			<Col sm={1}>
 				<NavMenu />
 			</Col>
-			<Col sm={11}>
+			<Col sm={11} className="spacer">
 				{props.children}
 			</Col>
 		</Row>

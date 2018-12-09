@@ -21,28 +21,26 @@ class Register extends PureComponent {
 	}
 
 	render() {
-		return (
-			<div>
-				<form onSubmit={this.handleSubmit.bind(this)}>
-					<label>Email:</label>
-					<br />
-					<input name="email" type="email" autoComplete="off" required />
-					<br />
-					<label>Username:</label>
-					<br />
-					<input name="userName" type="text" autoComplete="off" required />
-					<br />
-					<label>Password:</label>
-					<br />
-					<input name="password" type="password" required />
-					<br />
-					<button type="submit" className="spacer">Submit</button>
-				</form>
+		return (<React.Fragment>
+			<form onSubmit={this.handleSubmit.bind(this)}>
+				<label>Email:</label>
 				<br />
+				<input name="email" type="email" autoComplete="off" required />
+				<br />
+				<label>Username:</label>
+				<br />
+				<input name="userName" type="text" autoComplete="off" required />
+				<br />
+				<label>Password:</label>
+				<br />
+				<input name="password" type="password" required />
+				<br />
+				<button type="submit" className="spacer">Submit</button>
+			</form>
+			<br />
 
-				<DisplayErrors errors={this.state.errors} />
-			</div>
-		);
+			<DisplayErrors errors={this.state.errors} />
+		</React.Fragment>);
 	}
 }
 

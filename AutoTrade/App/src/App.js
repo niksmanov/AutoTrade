@@ -23,24 +23,25 @@ const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
 	} />
 };
 
+export const UserContext = React.createContext();
 
 class App extends Component {
 	state = {
+		user: null,
 		isLoading: true,
-		isUserAuth: false,
 	};
 
 	componentWillMount() {
 		axios.get('/user/current')
 			.then(r => { return r.data })
 			.then(response => {
-				this.setState({ isUserAuth: response.succeeded });
+				this.setState({ user: response.data });
 				this.setState({ isLoading: false });
 			});
 	}
 
 	render() {
-		let isAuth = this.state.isUserAuth;
+		let isAuth = this.state.user !== null;
 		let privateRoutes;
 		if (this.state.isLoading) {
 			privateRoutes =
@@ -59,7 +60,7 @@ class App extends Component {
 				</React.Fragment>;
 		}
 
-		return (
+		return (<UserContext.Provider value={this.state.user}>
 			<Layout>
 				<Switch>
 					<Route exact path='/' component={Home} />
@@ -69,7 +70,7 @@ class App extends Component {
 					{privateRoutes}
 				</Switch>
 			</Layout >
-		);
+		</UserContext.Provider>);
 	}
 }
 

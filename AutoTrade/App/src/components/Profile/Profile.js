@@ -1,30 +1,13 @@
-﻿import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { actionCreators } from '../Shared/User/store/User';
+﻿import React from 'react';
 import Navigation from './Navigation';
+import { UserContext } from '../../App';
 
-class Profile extends Component {
-	componentWillMount() {
-		this.props.getUser();
-	}
+export default props => {
+	return (<UserContext.Consumer>
+		{user => <React.Fragment>
+			<Navigation />
 
-	render() {
-		let user = this.props.user;
-
-		return (
-			<div>
-				<Navigation />
-
-				<p> Hello, {user.userName} </p>
-				<br />
-			</div>
-		);
-	}
+			<p> Hello, {user.userName} </p>
+		</React.Fragment>}
+	</UserContext.Consumer>);
 }
-
-export default connect(
-	state => state.user,
-	dispatch => bindActionCreators(actionCreators, dispatch)
-)(Profile);
-

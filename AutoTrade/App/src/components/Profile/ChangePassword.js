@@ -22,26 +22,24 @@ class ChangePassword extends PureComponent {
 	}
 
 	render() {
-		return (
-			<div>
-				<Navigation />
+		return (<React.Fragment>
+			<Navigation />
 
-				<form onSubmit={this.handleSubmit.bind(this)}>
-					<label>Email:</label>
-					<br />
-					<input name="email" type="email" autoComplete="off" required />
-					<br />
-					<label>New Password:</label>
-					<br />
-					<input name="password" type="password" required />
-					<br />
-					<button type="submit" className="spacer">Submit</button>
-				</form>
+			<form onSubmit={this.handleSubmit.bind(this)}>
+				<label>Email:</label>
 				<br />
+				<input name="email" type="email" autoComplete="off" required />
+				<br />
+				<label>New Password:</label>
+				<br />
+				<input name="password" type="password" required />
+				<br />
+				<button type="submit" className="spacer">Submit</button>
+			</form>
+			<br />
 
-				<DisplayErrors errors={this.state.errors} />
-			</div>
-		);
+			<DisplayErrors errors={this.state.errors} />
+		</React.Fragment>);
 	}
 }
 
