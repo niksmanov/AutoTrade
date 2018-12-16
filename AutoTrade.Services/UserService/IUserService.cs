@@ -1,6 +1,6 @@
 ﻿using AutoTrade.Core.JsonModels;
 
-namespace AutoTrade.Services.UsersService
+namespace AutoTrade.Services.UserService
 {
 	public interface IUserService
 	{

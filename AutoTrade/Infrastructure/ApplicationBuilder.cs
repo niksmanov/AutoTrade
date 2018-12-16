@@ -14,8 +14,8 @@ namespace AutoTrade.Infrastructure
 		{
 			IdentityRole[] roles =
 			{
-				 new IdentityRole(UserRoles.User),
-				 new IdentityRole(UserRoles.PowerUser)
+				 new IdentityRole(UserRoles.User.ToString()),
+				 new IdentityRole(UserRoles.Admin.ToString())
 			};
 
 			var serviceFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
@@ -32,7 +32,6 @@ namespace AutoTrade.Infrastructure
 					{
 						await roleManager.CreateAsync(role);
 					}
-
 				}
 
 				var user = new User { Email = "admin@gmail.com", UserName = "Admin" };

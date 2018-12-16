@@ -9,5 +9,14 @@ namespace AutoTrade.Db.Entities
 {
 	public class User : IdentityUser
 	{
+		public Towns TownId { get; set; }
+		public string Address { get; set; }
+
+		public virtual ICollection<Vehicle> Vehicles { get; set; }
+
+		public User()
+		{
+			this.Vehicles = new HashSet<Vehicle>();
+		}
 	}
 }

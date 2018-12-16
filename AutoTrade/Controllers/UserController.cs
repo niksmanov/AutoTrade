@@ -6,7 +6,7 @@ using AutoTrade.Core;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db.Entities;
 using AutoTrade.Db.Enums;
-using AutoTrade.Services.UsersService;
+using AutoTrade.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -43,7 +43,7 @@ namespace AutoTrade.Controllers
 
 			if (user != null)
 			{
-				user.IsAdmin = User.IsInRole(UserRoles.PowerUser);
+				user.IsAdmin = User.IsInRole(UserRoles.Admin.ToString());
 				return Json(new ResponseJsonModel(true, user));
 			}
 			return Json(new ResponseJsonModel());
@@ -96,7 +96,7 @@ namespace AutoTrade.Controllers
 					if (result.Succeeded)
 						return Json(new ResponseJsonModel(true));
 				}
-				return Json(new ResponseJsonModel(false, error: Messages.ERROR_INVALID_DATA));
+				return Json(new ResponseJsonModel(false, error: Messages.ERROR_INVALID_EMAIL_OR_PASSWORD));
 			}
 			var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
 			return Json(new ResponseJsonModel(false, errors: errors));

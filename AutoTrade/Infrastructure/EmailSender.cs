@@ -9,7 +9,7 @@ namespace AutoTrade.Infrastructure
 	{
 		public Task SendEmailAsync(string email, string subject, string htmlMessage)
 		{
-			var client = new SmtpClient()
+			var client = new SmtpClient
 			{
 				Port = 587,
 				Host = "smtp.gmail.com",

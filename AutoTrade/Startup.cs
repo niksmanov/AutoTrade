@@ -1,7 +1,8 @@
 using AutoTrade.Db;
 using AutoTrade.Db.Entities;
 using AutoTrade.Infrastructure;
-using AutoTrade.Services.UsersService;
+using AutoTrade.Services.UserService;
+using AutoTrade.Services.VehicleService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -101,6 +102,7 @@ namespace AutoTrade
 		{
 			services.AddTransient<IEmailSender, EmailSender>();
 			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IVehicleService, VehicleService>();
 		}
 	}
 }

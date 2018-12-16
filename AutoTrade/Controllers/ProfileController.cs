@@ -11,6 +11,7 @@ namespace AutoTrade.Controllers
 	[Authorize]
 	public class ProfileController : Controller
     {
+		//https://www.npmjs.com/package/react-infinite-scroller
 		[HttpGet("[action]")]
 		public IActionResult Index()
         {

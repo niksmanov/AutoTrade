@@ -2,7 +2,7 @@
 using AutoTrade.Db;
 using System.Linq;
 
-namespace AutoTrade.Services.UsersService
+namespace AutoTrade.Services.UserService
 {
 	public class UserService : BaseService, IUserService
 	{
