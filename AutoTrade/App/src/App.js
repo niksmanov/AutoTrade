@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router';
+import { UserContext } from './components/Shared/User/UserContext';
 import axios from 'axios';
 
 //Public routes
@@ -23,7 +24,6 @@ const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
 	} />
 };
 
-export const UserContext = React.createContext();
 
 class App extends Component {
 	state = {
@@ -31,7 +31,7 @@ class App extends Component {
 		isLoading: true,
 	};
 
-	componentWillMount() {
+	componentDidMount() {
 		axios.get('/user/current')
 			.then(r => { return r.data })
 			.then(response => {

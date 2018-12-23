@@ -9,7 +9,6 @@
 		//Errors
 		public const string ERROR_INVALID_EMAIL_OR_PASSWORD = "Invalid email or password!";
 		public const string ERROR_INVALID_EMAIL = "Invalid email!";
-		public const string ERROR_EMAIL_EXISTS = "Email already exists!";
 		 
 	}
 }

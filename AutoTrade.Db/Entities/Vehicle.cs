@@ -32,5 +32,12 @@ namespace AutoTrade.Db.Entities
 		public bool AirConditioning { get; set; }
 		public bool AutoPilot { get; set; }
 
+
+		public virtual ICollection<Image> Images { get; set; }
+
+		public Vehicle()
+		{
+			this.Images = new HashSet<Image>();
+		}
 	}
 }

@@ -55,21 +55,11 @@ namespace AutoTrade.Controllers
 			if (ModelState.IsValid)
 			{
 				var user = new User { UserName = model.UserName, Email = model.Email, LockoutEnabled = false };
-				var isExist = _userService.IsExists(model.Email);
-				if (isExist)
-					return Json(new ResponseJsonModel(false, error: Messages.ERROR_EMAIL_EXISTS));
 
 				var result = await _userManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
 				{
-					var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-					var callbackUrl = Url.RouteUrl("ConfirmEmail",
-					 values: new UserJsonModel { Id = user.Id, Code = code },
-					 protocol: Request.Scheme);
-
-					await _emailSender.SendEmailAsync(model.Email, "Confirm your email",
-						"Please confirm your email by clicking here " + callbackUrl);
+					await this.SendConfirmationEmail(user);
 					await _signInManager.SignInAsync(user, isPersistent: true);
 				}
 
@@ -79,6 +69,34 @@ namespace AutoTrade.Controllers
 			}
 			var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
 			return Json(new ResponseJsonModel(false, errors: errors));
+		}
+
+		[NonAction]
+		private async Task SendConfirmationEmail(User user)
+		{
+			var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+			var callbackUrl = Url.RouteUrl("ConfirmEmail",
+			 values: new { Id = user.Id, Code = code },
+			 protocol: Request.Scheme);
+
+			await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
+				"Please confirm your email by clicking here " + callbackUrl);
+		}
+
+		[HttpGet("[action]")]
+		public async Task<IActionResult> ReSendConfirmationEmail(string id)
+		{
+			if (!string.IsNullOrEmpty(id))
+			{
+				var user = await _userManager.FindByIdAsync(id);
+				if (user != null)
+				{
+					await this.SendConfirmationEmail(user);
+					return Json(new ResponseJsonModel(error: Messages.INFO_EMAIL_SENT));
+				}
+			}
+			return Json(new ResponseJsonModel());
 		}
 
 		[HttpPost("[action]")]
@@ -165,5 +183,7 @@ namespace AutoTrade.Controllers
 			await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
 			return model.Password;
 		}
+
+
 	}
 }

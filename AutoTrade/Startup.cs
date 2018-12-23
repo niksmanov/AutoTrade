@@ -46,6 +46,8 @@ namespace AutoTrade
 
 			services.Configure<IdentityOptions>(options =>
 			{
+				options.User.RequireUniqueEmail = true;
+
 				options.Password = new PasswordOptions()
 				{
 					RequiredLength = 5,

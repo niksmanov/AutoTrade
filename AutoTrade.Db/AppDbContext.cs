@@ -15,6 +15,8 @@ namespace AutoTrade.Db
 		public DbSet<Vehicle> Vehicles { get; set; }
 		public DbSet<VehicleMake> VehicleMakes { get; set; }
 		public DbSet<VehicleModel> VehicleModels { get; set; }
+		public DbSet<Image> Images { get; set; }
+
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{		
