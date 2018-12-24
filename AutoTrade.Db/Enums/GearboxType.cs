@@ -4,13 +4,9 @@ using System.Text;
 
 namespace AutoTrade.Db.Enums
 {
-	public enum Colors
+	public enum GearboxType
 	{
-		Grey = 0,
-		Black,
-		Red,
-		Green,
-		Yellow,
-		Brown,
+		Manual = 0,
+		Automatic,
 	}
 }

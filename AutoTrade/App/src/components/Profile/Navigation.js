@@ -15,5 +15,15 @@ export default props => (<Navbar className="profile-nav">
 				<Glyphicon glyph='wrench' /> Change Password
           </NavItem>
 		</LinkContainer>
+		<LinkContainer to={'/profile/addvehicle'}>
+			<NavItem>
+				<Glyphicon glyph='wrench' /> Add Vehicle
+          </NavItem>
+		</LinkContainer>
+		<LinkContainer to={'/profile/listvehicles'}>
+			<NavItem>
+				<Glyphicon glyph='wrench' /> List Vehicles
+          </NavItem>
+		</LinkContainer>
 	</Nav>
 </Navbar>);

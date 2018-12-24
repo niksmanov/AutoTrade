@@ -1,10 +1,10 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import Navigation from './Navigation';
 import { UserContext } from '../Shared/User/UserContext';
 import axios from 'axios';
 import DisplayErrors from '../Shared/Error/Error';
 
-class Profile extends Component {
+class Profile extends PureComponent {
 	state = {
 		errors: [],
 		sendEmail: false,

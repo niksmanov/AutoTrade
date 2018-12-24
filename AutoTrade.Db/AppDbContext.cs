@@ -16,10 +16,16 @@ namespace AutoTrade.Db
 		public DbSet<VehicleMake> VehicleMakes { get; set; }
 		public DbSet<VehicleModel> VehicleModels { get; set; }
 		public DbSet<Image> Images { get; set; }
+		public DbSet<Color> Colors { get; set; }
+		public DbSet<Town> Towns { get; set; }
 
 
 		protected override void OnModelCreating(ModelBuilder builder)
-		{		
+		{
+			builder.Entity<User>()
+				   .HasOne(e => e.Town)
+				   .WithOne();
+
 			builder.Entity<User>()
 				   .HasMany(e => e.Vehicles)
 				   .WithOne(e => e.User)

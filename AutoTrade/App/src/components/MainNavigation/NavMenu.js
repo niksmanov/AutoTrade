@@ -32,6 +32,12 @@ class Navigation extends Component {
 							<Glyphicon glyph='home' /> Home
 							</NavItem>
 					</LinkContainer>
+					<LinkContainer to={'/search'}>
+						<NavItem>
+							<Glyphicon glyph='refresh' /> Search Vehicle
+						</NavItem>
+					</LinkContainer>
+
 
 					<UserContext.Consumer>
 						{user => {
@@ -72,7 +78,6 @@ class Navigation extends Component {
 							}
 						}}
 					</UserContext.Consumer>
-
 				</Nav>
 			</Navbar.Collapse>
 		</Navbar>);

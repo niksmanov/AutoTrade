@@ -1,7 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
 import axios from 'axios';
 import DisplayErrors from '../Shared/Error/Error';
-import Navigation from './Navigation';
+import Navigation from '../Profile/Navigation';
 
 class ChangePassword extends PureComponent {
 	state = {

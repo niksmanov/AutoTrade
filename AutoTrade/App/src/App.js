@@ -10,10 +10,15 @@ import Home from './components/Home/Home';
 import Register from './components/Account/Register';
 import Login from './components/Account/Login';
 import ForgotPassword from './components/Account/ForgotPassword';
+import SearchVehicle from './components/Shared/Vehicle/Search';
+
 
 //Private routes
 import Profile from './components/Profile/Profile';
-import ChangePassword from './components/Profile/ChangePassword';
+import ChangePassword from './components/Account/ChangePassword';
+import AddVehicle from './components/Shared/Vehicle/Add';
+import ListVehicles from './components/Shared/Vehicle/List';
+
 
 
 const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
@@ -52,8 +57,12 @@ class App extends Component {
 			privateRoutes =
 				<React.Fragment>
 					<Switch>
-						<PrivateRoute isAuth={isAuth} path="/profile" component={Profile} />
 						<PrivateRoute isAuth={isAuth} path="/changepassword" component={ChangePassword} />
+						<PrivateRoute isAuth={isAuth} path="/profile" component={Profile} />
+						<PrivateRoute isAuth={isAuth} path="/profile/addvehicle" component={AddVehicle} />
+						<PrivateRoute isAuth={isAuth} path="/profile/listvehicles" component={ListVehicles} />
+
+
 
 						<Route component={NotFound} />
 					</Switch>
@@ -64,6 +73,7 @@ class App extends Component {
 			<Layout>
 				<Switch>
 					<Route exact path='/' component={Home} />
+					<Route path='/search' component={SearchVehicle} />
 					<Route path='/register' component={Register} />
 					<Route path='/login' component={Login} />
 					<Route path='/forgotpassword' component={ForgotPassword} />

@@ -9,8 +9,10 @@ namespace AutoTrade.Db.Entities
 {
 	public class User : IdentityUser
 	{
-		public Towns TownId { get; set; }
 		public string Address { get; set; }
+
+		public int? TownId { get; set; }
+		public virtual Town Town { get; set; }
 
 		public virtual ICollection<Vehicle> Vehicles { get; set; }
 

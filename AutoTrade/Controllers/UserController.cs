@@ -55,7 +55,6 @@ namespace AutoTrade.Controllers
 			if (ModelState.IsValid)
 			{
 				var user = new User { UserName = model.UserName, Email = model.Email, LockoutEnabled = false };
-
 				var result = await _userManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
 				{
@@ -84,6 +83,7 @@ namespace AutoTrade.Controllers
 				"Please confirm your email by clicking here " + callbackUrl);
 		}
 
+		[Authorize]
 		[HttpGet("[action]")]
 		public async Task<IActionResult> ReSendConfirmationEmail(string id)
 		{
@@ -184,6 +184,18 @@ namespace AutoTrade.Controllers
 			return model.Password;
 		}
 
-
+		[Authorize(Roles = "Admin")]
+		[HttpPost("[action]")]
+		public async Task<IActionResult> ChangeRole(UserJsonModel model)
+		{
+			var user = await _userManager.FindByEmailAsync(model.Email);
+			if (user != null)
+			{
+				string role = model.IsAdmin ? UserRoles.Admin.ToString() : UserRoles.User.ToString();
+				await _userManager.AddToRoleAsync(user, role);
+				return Json(new ResponseJsonModel(true, error: Messages.INFO_USER_ROLE_CHANGED));
+			}
+			return Json(new ResponseJsonModel(error: Messages.ERROR_INVALID_EMAIL));
+		}
 	}
 }
