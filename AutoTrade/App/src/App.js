@@ -12,13 +12,18 @@ import Login from './components/Account/Login';
 import ForgotPassword from './components/Account/ForgotPassword';
 import SearchVehicle from './components/Shared/Vehicle/Search';
 
-
 //Private routes
 import Profile from './components/Profile/Profile';
 import ChangePassword from './components/Account/ChangePassword';
 import AddVehicle from './components/Shared/Vehicle/Add';
 import ListVehicles from './components/Shared/Vehicle/List';
 
+//Admin routes
+import Users from './components/Administration/Users';
+import VehicleMakes from './components/Administration/VehicleMakes';
+import VehicleModels from './components/Administration/VehicleModels';
+import Towns from './components/Administration/Towns';
+import Colors from './components/Administration/Colors';
 
 
 const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
@@ -28,7 +33,6 @@ const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
 			<Redirect to='/login' />
 	} />
 };
-
 
 class App extends Component {
 	state = {
@@ -47,6 +51,7 @@ class App extends Component {
 
 	render() {
 		let isAuth = this.state.user !== null;
+		let isAdmin = isAuth && this.state.user.isAdmin;
 		let privateRoutes;
 		if (this.state.isLoading) {
 			privateRoutes =
@@ -57,12 +62,16 @@ class App extends Component {
 			privateRoutes =
 				<React.Fragment>
 					<Switch>
-						<PrivateRoute isAuth={isAuth} path="/changepassword" component={ChangePassword} />
-						<PrivateRoute isAuth={isAuth} path="/profile" component={Profile} />
+						<PrivateRoute isAuth={isAdmin} path="/admin/users" component={Users} />
+						<PrivateRoute isAuth={isAdmin} path="/admin/makes" component={VehicleMakes} />
+						<PrivateRoute isAuth={isAdmin} path="/admin/models" component={VehicleModels} />
+						<PrivateRoute isAuth={isAdmin} path="/admin/towns" component={Towns} />
+						<PrivateRoute isAuth={isAdmin} path="/admin/colors" component={Colors} />
+
+						<PrivateRoute isAuth={isAuth} path="/profile/home" component={Profile} />
+						<PrivateRoute isAuth={isAuth} path="/profile/changepassword" component={ChangePassword} />
 						<PrivateRoute isAuth={isAuth} path="/profile/addvehicle" component={AddVehicle} />
 						<PrivateRoute isAuth={isAuth} path="/profile/listvehicles" component={ListVehicles} />
-
-
 
 						<Route component={NotFound} />
 					</Switch>

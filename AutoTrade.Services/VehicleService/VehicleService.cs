@@ -23,74 +23,140 @@ namespace AutoTrade.Services.VehicleService
 			return vehicle.Id;
 		}
 
-		public VehicleJsonModel GetEmptyVehicle()
+		public bool AddMake(VehicleMakeJsonModel model)
 		{
-			var makes = new VehicleMakeJsonModel
+			var make = DbContext.VehicleMakes
+				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
+
+			if (make == null)
 			{
+				make = (VehicleMake)this.Map(model, new VehicleMake());
+				DbContext.VehicleMakes.Add(make);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
+		}
 
-			};
+		public bool RemoveMake(int id)
+		{
+			var make = DbContext.VehicleMakes.SingleOrDefault(c => c.Id == id);
 
-
-			var vehicle = new VehicleJsonModel
+			if (make != null)
 			{
-
-			};
-
-			return vehicle;
+				DbContext.VehicleMakes.Remove(make);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
 		}
-
-
-
-
-
-
-		public void AddMake(VehicleMakeJsonModel model)
-		{
-			var make = (VehicleMake)this.Map(model, new VehicleMake());
-			DbContext.VehicleMakes.Add(make);
-			DbContext.SaveChanges();
-		}
-
-		public void AddModel(VehicleModelJsonModel model)
-		{
-			var vehicleModel = (VehicleModel)this.Map(model, new VehicleModel());
-			DbContext.VehicleModels.Add(vehicleModel);
-			DbContext.SaveChanges();
-		}
-
 
 		public IEnumerable<VehicleMakeJsonModel> GetMakes()
 		{
-			
+			return DbContext.VehicleMakes?
+			.Select(m => (VehicleMakeJsonModel)this.Map(m, new VehicleMakeJsonModel()));
 		}
 
-		public IEnumerable<VehicleMakeJsonModel> GetModels(int makeId)
+		public bool AddModel(VehicleModelJsonModel model)
 		{
+			var vehicleModel = DbContext.VehicleModels
+				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
 
+			if (vehicleModel == null)
+			{
+				vehicleModel = (VehicleModel)this.Map(model, new VehicleModel());
+				DbContext.VehicleModels.Add(vehicleModel);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
 		}
 
-		public void AddTown(TownJsonModel model)
+		public bool RemoveModel(int id)
 		{
-			var town = (Town)this.Map(model, new Town());
-			DbContext.Towns.Add(town);
-			DbContext.SaveChanges();
+			var vehicleModel = DbContext.VehicleModels.SingleOrDefault(c => c.Id == id);
+
+			if (vehicleModel != null)
+			{
+				DbContext.VehicleModels.Remove(vehicleModel);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
 		}
 
-		public void AddColor(ColorJsonModel model)
+		public IEnumerable<VehicleModelJsonModel> GetModels(int makeId)
 		{
-			var color = (Color)this.Map(model, new Color());
-			DbContext.Colors.Add(color);
-			DbContext.SaveChanges();
+			return DbContext.VehicleMakes.SingleOrDefault(m => m.Id == makeId)?.Models
+			.Select(m => (VehicleModelJsonModel)this.Map(m, new VehicleModelJsonModel()));
+		}
+
+		public bool AddTown(TownJsonModel model)
+		{
+			var town = DbContext.Towns
+				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
+
+			if (town == null)
+			{
+				town = (Town)this.Map(model, new Town());
+				DbContext.Towns.Add(town);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
+		}
+
+		public bool RemoveTown(int id)
+		{
+			var town = DbContext.Towns.SingleOrDefault(c => c.Id == id);
+
+			if (town != null)
+			{
+				DbContext.Towns.Remove(town);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
 		}
 
 		public IEnumerable<TownJsonModel> GetTowns()
 		{
+			return DbContext.Towns?
+			.Select(m => (TownJsonModel)this.Map(m, new TownJsonModel()));
+		}
 
+		public bool AddColor(ColorJsonModel model)
+		{
+			var color = DbContext.Colors
+				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
+
+			if (color == null)
+			{
+				color = (Color)this.Map(model, new Color());
+				DbContext.Colors.Add(color);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
+		}
+
+		public bool RemoveColor(int id)
+		{
+			var color = DbContext.Colors.SingleOrDefault(c => c.Id == id);
+
+			if (color != null)
+			{
+				DbContext.Colors.Remove(color);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
 		}
 
 		public IEnumerable<ColorJsonModel> GetColors()
 		{
-
+			return DbContext.Colors?
+			.Select(m => (ColorJsonModel)this.Map(m, new ColorJsonModel()));
 		}
 
 	}

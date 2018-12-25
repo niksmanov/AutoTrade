@@ -2,11 +2,13 @@
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as user from '../components/Shared/User/store/User';
+import * as administration from '../components/Administration/store/Administration';
 
 
 export default function configureStore(history, initialState) {
 	const reducers = {
 		user: user.reducer,
+		administration: administration.reducer,
 	};
 
 	const middleware = [
@@ -21,7 +23,6 @@ export default function configureStore(history, initialState) {
 		enhancers.push(window.devToolsExtension());
 	}
 
-	// Share state between several reducers
 	const rootReducer = combineReducers({
 		...reducers,
 		routing: routerReducer

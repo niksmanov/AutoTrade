@@ -5,24 +5,24 @@ import '../../styles/components/Profile/Navigation.css';
 
 export default props => (<Navbar className="profile-nav">
 	<Nav>
-		<LinkContainer to={'/profile'}>
+		<LinkContainer to={'/profile/home'}>
 			<NavItem>
 				<Glyphicon glyph='user' />
 			</NavItem>
 		</LinkContainer>
-		<LinkContainer to={'/changepassword'}>
+		<LinkContainer to={'/profile/changepassword'}>
 			<NavItem>
-				<Glyphicon glyph='wrench' /> Change Password
+				Change Password
           </NavItem>
 		</LinkContainer>
 		<LinkContainer to={'/profile/addvehicle'}>
 			<NavItem>
-				<Glyphicon glyph='wrench' /> Add Vehicle
+				Add Vehicle
           </NavItem>
 		</LinkContainer>
 		<LinkContainer to={'/profile/listvehicles'}>
 			<NavItem>
-				<Glyphicon glyph='wrench' /> List Vehicles
+				List Vehicles
           </NavItem>
 		</LinkContainer>
 	</Nav>

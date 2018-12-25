@@ -34,7 +34,7 @@ namespace AutoTrade.Infrastructure
 					}
 				}
 
-				var user = new User { Email = "admin@gmail.com", UserName = "Admin" };
+				var user = new User { Email = "admin@autotrade.com", UserName = "Admin" };
 				if (await userManager.FindByEmailAsync(user.Email) == null)
 				{
 					await userManager.CreateAsync(user, "password");

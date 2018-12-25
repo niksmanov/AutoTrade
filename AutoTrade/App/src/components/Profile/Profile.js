@@ -1,8 +1,8 @@
 ﻿import React, { PureComponent } from 'react';
-import Navigation from './Navigation';
-import { UserContext } from '../Shared/User/UserContext';
 import axios from 'axios';
+import { UserContext } from '../Shared/User/UserContext';
 import DisplayErrors from '../Shared/Error/Error';
+import Navigation from './Navigation';
 
 class Profile extends PureComponent {
 	state = {
@@ -37,6 +37,7 @@ class Profile extends PureComponent {
 			{user =>
 				<React.Fragment>
 					<Navigation />
+
 					<p> Hello, {user.userName} </p>
 					{emailConfirmed}
 

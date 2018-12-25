@@ -1,9 +1,9 @@
 ﻿import React, { PureComponent } from 'react';
 import axios from 'axios';
-import Navigation from '../../Profile/Navigation';
-import DisplayErrors from '../Error/Error';
+import Navigation from '../Administration/Navigation';
+import DisplayErrors from '../Shared/Error/Error';
 
-class Add extends PureComponent {
+class Users extends PureComponent {
 	state = {
 		errors: []
 	};
@@ -16,4 +16,4 @@ class Add extends PureComponent {
 	}
 }
 
-export default Add;
+export default Users;
