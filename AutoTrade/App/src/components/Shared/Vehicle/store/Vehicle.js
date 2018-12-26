@@ -2,18 +2,17 @@
 import axios from 'axios';
 
 const initialState = {
-	users: [],
 	towns: [],
 	colors: [],
-	vehicleModels: [],
 	vehicleMakes: [],
+	vehicleModels: [],
 	isLoading: true,
 };
 
 export const actionCreators = {
 	[types.GET_TOWNS]: () => {
 		return (dispatch) => {
-			axios.get('/admin/gettowns')
+			axios.get('/vehicle/gettowns')
 				.then(r => { return r.data })
 				.then(response => {
 					if (response.succeeded) {
@@ -27,13 +26,41 @@ export const actionCreators = {
 	},
 	[types.GET_COLORS]: () => {
 		return (dispatch) => {
-			axios.get('/admin/getcolors')
+			axios.get('/vehicle/getcolors')
 				.then(r => { return r.data })
 				.then(response => {
 					if (response.succeeded) {
 						dispatch({
 							type: types.UPDATE_COLORS,
 							colors: response.data
+						});
+					}
+				});
+		}
+	},
+	[types.GET_VEHICLE_MAKES]: () => {
+		return (dispatch) => {
+			axios.get('/vehicle/getvehiclemakes')
+				.then(r => { return r.data })
+				.then(response => {
+					if (response.succeeded) {
+						dispatch({
+							type: types.UPDATE_VEHICLE_MAKES,
+							vehicleMakes: response.data
+						});
+					}
+				});
+		}
+	},
+	[types.GET_VEHICLE_MODELS]: (makeId) => {
+		return (dispatch) => {
+			axios.get(`/vehicle/getvehiclemodels?makeId=${makeId}`)
+				.then(r => { return r.data })
+				.then(response => {
+					if (response.succeeded) {
+						dispatch({
+							type: types.UPDATE_VEHICLE_MODELS,
+							vehicleModels: response.data
 						});
 					}
 				});
@@ -54,6 +81,18 @@ export const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				colors: action.colors,
+				isLoading: false,
+			};
+		case types.UPDATE_VEHICLE_MAKES:
+			return {
+				...state,
+				vehicleMakes: action.vehicleMakes,
+				isLoading: false,
+			};
+		case types.UPDATE_VEHICLE_MODELS:
+			return {
+				...state,
+				vehicleModels: action.vehicleModels,
 				isLoading: false,
 			};
 

@@ -21,12 +21,6 @@ namespace AutoTrade.Controllers
 			_vehicleService = vehicleService;
 		}
 
-		[HttpGet("[action]")]
-		public IActionResult GetVehicleMakes()
-		{
-			var result = _vehicleService.GetMakes();
-			return Json(new ResponseJsonModel(true, result));
-		}
 
 		[HttpPost("[action]")]
 		public IActionResult AddVehicleMake(VehicleMakeJsonModel model)
@@ -48,12 +42,6 @@ namespace AutoTrade.Controllers
 			return Json(new ResponseJsonModel(isDeleted));
 		}
 
-		[HttpGet("[action]")]
-		public IActionResult GetVehicleModels(int makeId)
-		{
-			var result = _vehicleService.GetModels(makeId);
-			return Json(new ResponseJsonModel(true, result));
-		}
 
 		[HttpPost("[action]")]
 		public IActionResult AddVehicleModel(VehicleModelJsonModel model)
@@ -75,12 +63,6 @@ namespace AutoTrade.Controllers
 			return Json(new ResponseJsonModel(isDeleted));
 		}
 
-		[HttpGet("[action]")]
-		public IActionResult GetTowns()
-		{
-			var result = _vehicleService.GetTowns();
-			return Json(new ResponseJsonModel(true, result));
-		}
 
 		[HttpPost("[action]")]
 		public IActionResult AddTown(TownJsonModel model)
@@ -100,13 +82,6 @@ namespace AutoTrade.Controllers
 		{
 			bool isDeleted = _vehicleService.RemoveTown(id);
 			return Json(new ResponseJsonModel(isDeleted));
-		}
-
-		[HttpGet("[action]")]
-		public IActionResult GetColors()
-		{
-			var result = _vehicleService.GetColors();
-			return Json(new ResponseJsonModel(true, result));
 		}
 
 		[HttpPost("[action]")]

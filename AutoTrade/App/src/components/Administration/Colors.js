@@ -2,8 +2,8 @@
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from './store/Administration';
-import * as types from './store/types';
+import { actionCreators } from '../Shared/Vehicle/store/Vehicle';
+import * as types from '../Shared/Vehicle/store/types';
 import axios from 'axios';
 import Navigation from '../Administration/Navigation';
 import DisplayErrors from '../Shared/Error/Error';
@@ -86,6 +86,6 @@ class Colors extends Component {
 }
 
 export default connect(
-	state => state.administration,
+	state => state.vehicle,
 	dispatch => bindActionCreators(actionCreators, dispatch)
 )(Colors);

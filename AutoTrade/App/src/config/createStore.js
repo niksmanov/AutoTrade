@@ -2,13 +2,13 @@
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as user from '../components/Shared/User/store/User';
-import * as administration from '../components/Administration/store/Administration';
+import * as vehicle from '../components/Shared/Vehicle/store/Vehicle';
 
 
 export default function configureStore(history, initialState) {
 	const reducers = {
 		user: user.reducer,
-		administration: administration.reducer,
+		vehicle: vehicle.reducer,
 	};
 
 	const middleware = [

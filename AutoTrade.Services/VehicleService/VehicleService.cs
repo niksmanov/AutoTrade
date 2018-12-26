@@ -5,6 +5,7 @@ using System.Text;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db;
 using AutoTrade.Db.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoTrade.Services.VehicleService
 {
@@ -54,12 +55,13 @@ namespace AutoTrade.Services.VehicleService
 		public IEnumerable<VehicleMakeJsonModel> GetMakes()
 		{
 			return DbContext.VehicleMakes?
-			.Select(m => (VehicleMakeJsonModel)this.Map(m, new VehicleMakeJsonModel()));
+							.OrderBy(m => m.Name)
+							.Select(m => (VehicleMakeJsonModel)this.Map(m, new VehicleMakeJsonModel()));
 		}
 
 		public bool AddModel(VehicleModelJsonModel model)
 		{
-			var vehicleModel = DbContext.VehicleModels
+			var vehicleModel = DbContext.VehicleModels.OrderBy(m => m.Name)
 				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
 
 			if (vehicleModel == null)
@@ -87,8 +89,13 @@ namespace AutoTrade.Services.VehicleService
 
 		public IEnumerable<VehicleModelJsonModel> GetModels(int makeId)
 		{
-			return DbContext.VehicleMakes.SingleOrDefault(m => m.Id == makeId)?.Models
-			.Select(m => (VehicleModelJsonModel)this.Map(m, new VehicleModelJsonModel()));
+			var make = DbContext.VehicleMakes
+								.Include(m => m.Models)
+								.SingleOrDefault(m => m.Id == makeId);
+
+			return make?.Models
+						.OrderBy(m => m.Name)
+						.Select(m => (VehicleModelJsonModel)this.Map(m, new VehicleModelJsonModel()));
 		}
 
 		public bool AddTown(TownJsonModel model)
@@ -122,7 +129,8 @@ namespace AutoTrade.Services.VehicleService
 		public IEnumerable<TownJsonModel> GetTowns()
 		{
 			return DbContext.Towns?
-			.Select(m => (TownJsonModel)this.Map(m, new TownJsonModel()));
+							.OrderBy(m => m.Name)
+							.Select(m => (TownJsonModel)this.Map(m, new TownJsonModel()));
 		}
 
 		public bool AddColor(ColorJsonModel model)
@@ -156,8 +164,8 @@ namespace AutoTrade.Services.VehicleService
 		public IEnumerable<ColorJsonModel> GetColors()
 		{
 			return DbContext.Colors?
-			.Select(m => (ColorJsonModel)this.Map(m, new ColorJsonModel()));
+							.OrderBy(m => m.Name)
+							.Select(m => (ColorJsonModel)this.Map(m, new ColorJsonModel()));
 		}
-
 	}
 }

@@ -3,6 +3,8 @@ import * as types from './types';
 
 const initialState = {
 	user: {},
+	users: [],
+	isLoading: true,
 };
 
 export const actionCreators = {
@@ -23,11 +25,14 @@ export const actionCreators = {
 };
 
 export const reducer = (state = initialState, action) => {
-	if (action.type === types.UPDATE_USER) {
-		return {
-			...state,
-			user: action.user
-		};
+	switch (action.type) {
+		case types.UPDATE_USER:
+			return {
+				...state,
+				user: action.user,
+				isLoading: false,
+			};
+
+		default: return state;
 	}
-	return state;
 };
