@@ -12,6 +12,7 @@ class VehicleModels extends Component {
 	state = {
 		errors: [],
 		isFormVisible: false,
+		makeId: 0,
 	};
 
 	componentDidMount() {
@@ -25,7 +26,7 @@ class VehicleModels extends Component {
 			.then(response => {
 				if (response.succeeded) {
 					this.setState({ errors: ['Entity added successfully'] });
-					window.location.reload();
+					this.props[types.GET_VEHICLE_MODELS](this.state.makeId);
 				} else {
 					this.setState({ errors: ['Entity already exists'] });
 				}
@@ -39,7 +40,7 @@ class VehicleModels extends Component {
 		}).then(response => {
 			if (response.succeeded) {
 				this.setState({ errors: ['Entity deleted successfully'] });
-				window.location.reload();
+				this.props[types.GET_VEHICLE_MODELS](this.state.makeId);
 			} else {
 				this.setState({ errors: ['We have a problem with deleting'] });
 			}
@@ -47,10 +48,11 @@ class VehicleModels extends Component {
 	}
 
 	selectMake(e) {
-		let makeId = e.target.value;
-		if (makeId > 0) {
-			this.props[types.GET_VEHICLE_MODELS](makeId);
+		let id = e.target.value;
+		if (id > 0) {
+			this.props[types.GET_VEHICLE_MODELS](id);
 			this.setState({ isFormVisible: true });
+			this.setState({ makeId: id });
 		} else {
 			this.setState({ isFormVisible: false });
 		}
@@ -60,7 +62,7 @@ class VehicleModels extends Component {
 		let vehicleModels;
 		let vehicleMakes;
 
-		vehicleMakes = <select onChange={this.selectMake.bind(this)} name="makeId">
+		vehicleMakes = <select onChange={this.selectMake.bind(this)} name="makeId" className="form-control spacer">
 			<option>Select Vehicle Make</option>
 			{this.props.vehicleMakes.map((make, i) => {
 				return (<option key={i} value={make.id}>{make.name}</option>)
@@ -92,14 +94,13 @@ class VehicleModels extends Component {
 						<br />
 						{vehicleMakes}
 						<br />
-						<br />
 						{this.state.isFormVisible &&
 							<React.Fragment>
 								<label>Model Name:</label>
 								<br />
-								<input name="name" type="text" autoComplete="off" required />
+								<input name="name" type="text" autoComplete="off" required className="form-control spacer" />
 								<br />
-								<button type="submit" className="spacer">Add Model</button>
+								<button type="submit" className="btn btn-primary">Add Model</button>
 							</React.Fragment>}
 					</form>
 					<br />

@@ -39,7 +39,7 @@ namespace AutoTrade
 			services.AddDbContext<AppDbContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-			services.AddIdentity<User, IdentityRole>()
+			services.AddIdentity<User, Role>(options => options.Stores.MaxLengthForKeys = 128)
 				.AddDefaultUI()
 				.AddDefaultTokenProviders()
 				.AddEntityFrameworkStores<AppDbContext>();

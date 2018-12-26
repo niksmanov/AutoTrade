@@ -12,17 +12,17 @@ namespace AutoTrade.Infrastructure
 		public static async void SeedDatabase(this IApplicationBuilder app)
 
 		{
-			IdentityRole[] roles =
+			Role[] roles =
 			{
-				 new IdentityRole(UserRoles.User.ToString()),
-				 new IdentityRole(UserRoles.Admin.ToString())
+				 new Role { Name = UserRoles.User.ToString() },
+				 new Role { Name = UserRoles.Admin.ToString() }
 			};
 
 			var serviceFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
 
 			using (var scope = serviceFactory.CreateScope())
 			{
-				var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+				var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 				var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 				var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 

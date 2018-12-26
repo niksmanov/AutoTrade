@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoTrade.Core;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db.Enums;
+using AutoTrade.Services.UserService;
 using AutoTrade.Services.VehicleService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,15 @@ namespace AutoTrade.Controllers
 	[Route("[controller]")]
 	public class AdminController : Controller
 	{
+		private readonly IUserService _userService;
 		private readonly IVehicleService _vehicleService;
 
-		public AdminController(IVehicleService vehicleService)
+
+		public AdminController(
+			IUserService userService,
+			IVehicleService vehicleService)
 		{
+			_userService = userService;
 			_vehicleService = vehicleService;
 		}
 
@@ -102,6 +109,27 @@ namespace AutoTrade.Controllers
 		{
 			bool isDeleted = _vehicleService.RemoveColor(id);
 			return Json(new ResponseJsonModel(isDeleted));
+		}
+
+		[HttpPost("[action]")]
+		public IActionResult ChangeRole(UserJsonModel model)
+		{
+			bool isChanged = _userService.ChangeRole(model);
+			return Json(new ResponseJsonModel(isChanged));
+		}
+
+		[HttpGet("[action]")]
+		public IActionResult RemoveUser(string id)
+		{
+			bool isDeleted = _userService.RemoveUser(id);
+			return Json(new ResponseJsonModel(isDeleted));
+		}
+
+		[HttpGet("[action]")]
+		public IActionResult GetUsers()
+		{
+			var users = _userService.GetUsers();
+			return Json(new ResponseJsonModel(true, users));
 		}
 	}
 }

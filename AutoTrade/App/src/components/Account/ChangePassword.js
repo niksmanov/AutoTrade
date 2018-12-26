@@ -1,4 +1,5 @@
 ﻿import React, { PureComponent } from 'react';
+import { Redirect } from 'react-router';
 import axios from 'axios';
 import DisplayErrors from '../Shared/Error/Error';
 import Navigation from '../Profile/Navigation';
@@ -13,11 +14,7 @@ class ChangePassword extends PureComponent {
 		axios.post('/user/resetpassword', new FormData(e.target))
 			.then(r => { return r.data })
 			.then(response => {
-				if (response.succeeded) {
-					window.location.href = '/';
-				} else {
-					this.setState({ errors: response.errors });
-				}
+				this.setState({ errors: response.errors });
 			});
 	}
 
@@ -27,14 +24,13 @@ class ChangePassword extends PureComponent {
 
 			<form onSubmit={this.handleSubmit.bind(this)}>
 				<label>Email:</label>
-				<br />
-				<input name="email" type="email" autoComplete="off" required />
-				<br />
+				<input name="email" type="email" autoComplete="off" required className="form-control spacer" />
+				<label>Old Password:</label>
+				<input name="oldPassword" type="password" required className="form-control spacer" />
 				<label>New Password:</label>
+				<input name="password" type="password" required className="form-control spacer" />
 				<br />
-				<input name="password" type="password" required />
-				<br />
-				<button type="submit" className="spacer">Submit</button>
+				<button type="submit" className="btn btn-primary">Submit </button>
 			</form>
 			<br />
 

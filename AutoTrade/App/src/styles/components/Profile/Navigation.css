@@ -1,5 +1,13 @@
-﻿.profile-nav ul li {
+﻿.profile-nav .container {
+	border-radius: 5px;
+}
+
+.profile-nav ul li {
 	float: left;
+}
+
+.profile-nav li:not(.active) a {
+	color: #ffffff !important;
 }
 
 .profile-nav ul .active a {
@@ -7,6 +15,6 @@
 }
 
 .profile-nav .container {
-	background-color: #f3f3f3;
+	background-color: #404040;
 	width: unset;
 }

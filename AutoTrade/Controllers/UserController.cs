@@ -166,6 +166,10 @@ namespace AutoTrade.Controllers
 
 			if (ModelState.IsValid && user != null && loggedUserId == user.Id)
 			{
+				bool isOldPasswordValid = await _userManager.CheckPasswordAsync(user, model.OldPassword);
+				if (!isOldPasswordValid)
+					return Json(new ResponseJsonModel(error: Messages.ERROR_INVALID_PASSWORD));
+
 				model.Code = await _userManager.GeneratePasswordResetTokenAsync(user);
 				await this.ChangePassword(model);
 				return Json(new ResponseJsonModel(error: Messages.INFO_PASSWORD_CHANGED));
@@ -182,20 +186,6 @@ namespace AutoTrade.Controllers
 			var user = await _userManager.FindByEmailAsync(model.Email);
 			await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
 			return model.Password;
-		}
-
-		[Authorize(Roles = "Admin")]
-		[HttpPost("[action]")]
-		public async Task<IActionResult> ChangeRole(UserJsonModel model)
-		{
-			var user = await _userManager.FindByEmailAsync(model.Email);
-			if (user != null)
-			{
-				string role = model.IsAdmin ? UserRoles.Admin.ToString() : UserRoles.User.ToString();
-				await _userManager.AddToRoleAsync(user, role);
-				return Json(new ResponseJsonModel(true, error: Messages.INFO_USER_ROLE_CHANGED));
-			}
-			return Json(new ResponseJsonModel(error: Messages.ERROR_INVALID_EMAIL));
 		}
 	}
 }

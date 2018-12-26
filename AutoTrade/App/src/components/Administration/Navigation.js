@@ -1,9 +1,11 @@
 ﻿import React from 'react';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import '../../styles/components/Administration/Navigation.css';
+import '../../styles/components/Administration/Common.css';
+import '../../styles/components/Profile/Navigation.css';
 
-export default props => (<Navbar className="admin-nav">
+
+export default props => (<Navbar className="profile-nav">
 	<Nav>
 		<LinkContainer to={'/admin/users'}>
 			<NavItem>

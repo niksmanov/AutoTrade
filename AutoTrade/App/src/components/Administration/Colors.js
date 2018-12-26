@@ -24,7 +24,7 @@ class Colors extends Component {
 			.then(response => {
 				if (response.succeeded) {
 					this.setState({ errors: ['Entity added successfully'] });
-					window.location.reload();
+					this.props[types.GET_COLORS]();
 				} else {
 					this.setState({ errors: ['Entity already exists'] });
 				}
@@ -38,7 +38,7 @@ class Colors extends Component {
 		}).then(response => {
 			if (response.succeeded) {
 				this.setState({ errors: ['Entity deleted successfully'] });
-				window.location.reload();
+				this.props[types.GET_COLORS]();
 			} else {
 				this.setState({ errors: ['We have a problem with deleting'] });
 			}
@@ -70,9 +70,9 @@ class Colors extends Component {
 					<form onSubmit={this.handleSubmit.bind(this)}>
 						<label>Color Name:</label>
 						<br />
-						<input name="name" type="text" autoComplete="off" required />
+						<input name="name" type="text" autoComplete="off" required className="form-control spacer" />
 						<br />
-						<button type="submit" className="spacer">Add Color</button>
+						<button type="submit" className="btn btn-primary">Add Color</button>
 					</form>
 					<br />
 					<DisplayErrors errors={this.state.errors} />

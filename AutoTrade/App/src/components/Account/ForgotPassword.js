@@ -25,9 +25,9 @@ class ForgotPassword extends PureComponent {
 			<form onSubmit={this.handleSubmit.bind(this)}>
 				<label>Email:</label>
 				<br />
-				<input name="email" type="email" autoComplete="off" required />
+				<input name="email" type="email" autoComplete="off" required className="form-control spacer" />
 				<br />
-				<button type="submit" className="spacer">Submit</button>
+				<button type="submit" className="btn btn-primary">Submit</button>
 			</form>
 			<br />
 

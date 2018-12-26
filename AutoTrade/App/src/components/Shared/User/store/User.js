@@ -22,6 +22,20 @@ export const actionCreators = {
 				});
 		}
 	},
+	[types.GET_ALL_USERS]: () => {
+		return (dispatch) => {
+			axios.get('/admin/getusers')
+				.then(r => { return r.data })
+				.then(response => {
+					if (response.succeeded) {
+						dispatch({
+							type: types.UPDATE_ALL_USERS,
+							users: response.data
+						});
+					}
+				});
+		}
+	},
 };
 
 export const reducer = (state = initialState, action) => {
@@ -30,6 +44,12 @@ export const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				user: action.user,
+				isLoading: false,
+			};
+		case types.UPDATE_ALL_USERS:
+			return {
+				...state,
+				users: action.users,
 				isLoading: false,
 			};
 

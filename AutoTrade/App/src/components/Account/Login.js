@@ -24,20 +24,16 @@ class Login extends PureComponent {
 		return (<React.Fragment>
 			<form onSubmit={this.handleSubmit.bind(this)}>
 				<label>Email:</label>
-				<br />
-				<input name="email" type="email" autoComplete="off" required />
-				<br />
+				<input name="email" type="email" autoComplete="off" required className="form-control spacer" />
 				<label>Password:</label>
-				<br />
-				<input name="password" type="password" required />
-				<br />
+				<input name="password" type="password" required className="form-control spacer" />
 				<label className="spacer">Remember me: </label>
 				<span> Yes </span>
 				<input type="radio" name="rememberMe" value="true" defaultChecked />
 				<span> No </span>
 				<input type="radio" name="rememberMe" value="false" />
 				<br />
-				<button type="submit">Submit</button>
+				<button type="submit" className="btn btn-primary spacer">Submit</button>
 			</form>
 			<br />
 

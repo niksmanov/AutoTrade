@@ -14,11 +14,14 @@ namespace AutoTrade.Db.Entities
 		public int? TownId { get; set; }
 		public virtual Town Town { get; set; }
 
+		public virtual ICollection<UserRole> UserRoles { get; set; }
+
 		public virtual ICollection<Vehicle> Vehicles { get; set; }
 
 		public User()
 		{
 			this.Vehicles = new HashSet<Vehicle>();
+			this.UserRoles = new HashSet<UserRole>();
 		}
 	}
 }
