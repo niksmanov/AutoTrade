@@ -22,9 +22,9 @@ export const actionCreators = {
 				});
 		}
 	},
-	[types.GET_ALL_USERS]: () => {
+	[types.GET_ALL_USERS]: (search = '') => {
 		return (dispatch) => {
-			axios.get('/admin/getusers')
+			axios.get(`/admin/getusers?search=${search}`)
 				.then(r => { return r.data })
 				.then(response => {
 					if (response.succeeded) {

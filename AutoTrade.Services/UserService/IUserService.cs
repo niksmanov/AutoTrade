@@ -10,7 +10,7 @@ namespace AutoTrade.Services.UserService
 		bool IsExists(string email);
 		string GetUserName(string email);
 		bool RemoveUser(string id);
-		IEnumerable<UserJsonModel> GetUsers();
+		IEnumerable<UserJsonModel> GetUsers(string search);
 		bool ChangeRole(UserJsonModel model);
 	}
 }

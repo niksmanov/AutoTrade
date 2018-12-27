@@ -17,9 +17,9 @@ class Users extends Component {
 		this.props[types.GET_ALL_USERS]();
 	}
 
-	handleSubmit(e) {
+	changeRole(e) {
 		e.preventDefault();
-		axios.post('/user/changerole', new FormData(e.target))
+		axios.post('/admin/changerole', new FormData(e.target))
 			.then(r => { return r.data })
 			.then(response => {
 				if (response.succeeded) {
@@ -45,20 +45,36 @@ class Users extends Component {
 		});
 	}
 
+	searchUser(e) {
+		let search = e.target.value;
+		this.props[types.GET_ALL_USERS](search);
+	}
+
 	render() {
 		let users;
+		let isLoading;
 		if (this.props.isLoading) {
-			users =
+			isLoading =
 				<React.Fragment>
 					<div className="loading-app"></div>
 				</React.Fragment>;
 		} else {
 			users = this.props.users.map((user, i) => {
-				return (<div key={i} className="admin-entity">
-					<button className="btn btn-danger" onClick={this.deleteUser.bind(this, user.id)}>X</button>
-					<span>{user.email}</span>
-					<hr />
-				</div>);
+				return (<tr key={i}>
+					<td>{user.email}</td>
+					<td>{user.userName}</td>
+					<td>{user.isAdmin ? 'Admin' : 'User'}</td>
+					<td>
+						<form onSubmit={this.changeRole.bind(this)} >
+							<input type="hidden" name="isAdmin" value={!user.isAdmin} />
+							<input type="hidden" name="id" value={user.id} />
+							<button type="submit" className="btn btn-default">{user.isAdmin ? 'Make User' : 'Make Admin'}</button>
+						</form>
+					</td>
+					<td>
+						<button className="btn btn-danger" onClick={this.deleteUser.bind(this, user.id)}>X</button>
+					</td>
+				</tr>);
 			});
 		}
 
@@ -67,21 +83,33 @@ class Users extends Component {
 
 			<Row>
 				<Col sm={3}>
-					<form onSubmit={this.handleSubmit.bind(this)}>
-						<label>User Email or Name:</label>
+					<form>
+						<label>Username or Email:</label>
 						<br />
-						<input name="name" type="text" autoComplete="off" required className="form-control spacer" />
-						<br />
-						<button type="submit" className="btn btn-primary">Search User</button>
+						<input onChange={this.searchUser.bind(this)} type="text" autoComplete="off" required className="form-control spacer" />
 					</form>
 					<br />
 					<DisplayErrors errors={this.state.errors} />
 				</Col>
-				<Col sm={9}>
-					{users}
+				<Col sm={9} style={{ overflowX: 'scroll' }}>
+					<table className="table">
+						<thead>
+							<tr>
+								<th scope="col">Email</th>
+								<th scope="col">Username</th>
+								<th scope="col">Role</th>
+								<th scope="col">Change Role</th>
+								<th scope="col">Delete?</th>
+							</tr>
+						</thead>
+						<tbody>
+							{users}
+						</tbody>
+					</table>
+					{isLoading}
 				</Col>
 			</Row>
-		</React.Fragment>);
+		</React.Fragment >);
 	}
 }
 

@@ -54,36 +54,46 @@ namespace AutoTrade.Services.UserService
 			return false;
 		}
 
-		public IEnumerable<UserJsonModel> GetUsers()
-		{
-			return DbContext.Users
-							.OrderBy(u => u.UserRoles.Count)
-							.ThenBy(u => u.Email)
-							.Select(u => (UserJsonModel)this.Map(u, new UserJsonModel
-							{
-								IsAdmin = u.UserRoles
-										   .SingleOrDefault(x => x.UserId == u.Id)
-										   .Role.Name == UserRoles.Admin.ToString()
-							}));
-		}
-
 		public bool ChangeRole(UserJsonModel model)
 		{
-			var user = DbContext.Users.SingleOrDefault(c => c.Id == model.Id);
+			var user = DbContext.Users
+								.Include(u => u.UserRoles)
+								.SingleOrDefault(c => c.Id == model.Id);
 
 			if (user != null)
 			{
 				user.UserRoles.Clear();
+				if (model.IsAdmin)
+				{
+					var adminRole = DbContext.Roles.SingleOrDefault(r => r.Name == UserRoles.Admin.ToString());
+					var userRole = new UserRole { UserId = user.Id, RoleId = adminRole.Id };
 
-				string roleName = model.IsAdmin ? UserRoles.Admin.ToString() : UserRoles.User.ToString();
-				var role = DbContext.Roles.SingleOrDefault(r => r.Name == roleName);
-				var userRole = new UserRole { UserId = user.Id, RoleId = role.Id };
-
-				DbContext.UserRoles.Add(userRole);
+					DbContext.UserRoles.Add(userRole);
+				}
 				DbContext.SaveChanges();
 				return true;
 			}
 			return false;
+		}
+
+		public IEnumerable<UserJsonModel> GetUsers(string search)
+		{
+			var query = DbContext.Users
+								 .Include(u => u.UserRoles)
+								 .AsQueryable();
+
+			if (!string.IsNullOrEmpty(search))
+			{
+				query = query.Where(u => u.Email.Contains(search) ||
+									     u.UserName.Contains(search));
+			}
+
+			return query.OrderByDescending(u => u.UserRoles.Count)
+						.ThenBy(u => u.Email)
+						.Select(u => (UserJsonModel)this.Map(u, new UserJsonModel
+						{
+							IsAdmin = u.UserRoles.Count > 0
+						}));
 		}
 	}
 }
