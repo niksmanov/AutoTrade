@@ -81,7 +81,7 @@ namespace AutoTrade.Services.UserService
 		{
 			var query = DbContext.Users
 								 .Include(u => u.UserRoles)
-								 .AsQueryable();
+								 .AsNoTracking();
 
 			if (!string.IsNullOrEmpty(search))
 			{

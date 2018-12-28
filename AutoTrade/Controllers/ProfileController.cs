@@ -34,11 +34,19 @@ namespace AutoTrade.Controllers
 			return Json(new ResponseJsonModel(true, id));
 		}
 
+		[HttpPost("[action]")]
+		public IActionResult RemoveVehicle(Guid id)
+		{
+			bool isDeleted = _vehicleService.RemoveVehicle(id);
+			return Json(new ResponseJsonModel(isDeleted));
+		}
+
 
 		[HttpGet("[action]")]
-		public IActionResult GetVehicleForm()
+		public IActionResult GetVehicles(string userId)
 		{
-			return Json(new ResponseJsonModel(true));
+			var vehicles = _vehicleService.GetVehicles(userId);
+			return Json(new ResponseJsonModel(true, vehicles));
 		}
 	}
 }

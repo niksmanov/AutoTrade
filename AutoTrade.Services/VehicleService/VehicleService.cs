@@ -31,6 +31,19 @@ namespace AutoTrade.Services.VehicleService
 			return vehicle.Id;
 		}
 
+
+		public Guid EditVehicle(VehicleJsonModel model)
+		{
+
+			var dbVehicle = DbContext.Vehicles
+								     .SingleOrDefault(c => c.Id == model.Id);
+
+			dbVehicle = (Vehicle)this.Map(model, dbVehicle);
+			DbContext.SaveChanges();
+
+			return dbVehicle.Id;
+		}
+
 		public bool RemoveVehicle(Guid id)
 		{
 			var vehicle = DbContext.Vehicles
@@ -52,7 +65,7 @@ namespace AutoTrade.Services.VehicleService
 												.ThenInclude(v => v.Models)
 								 .Include(v => v.Color)
 								 .Include(v => v.Images)
-								 .AsQueryable();
+								 .AsNoTracking();
 
 			if (!string.IsNullOrEmpty(userId))
 			{
@@ -107,6 +120,7 @@ namespace AutoTrade.Services.VehicleService
 		public IEnumerable<VehicleMakeJsonModel> GetMakes()
 		{
 			return DbContext.VehicleMakes?
+							.AsNoTracking()
 							.OrderBy(m => m.Name)
 							.Select(m => (VehicleMakeJsonModel)this.Map(m, new VehicleMakeJsonModel()));
 		}
@@ -144,6 +158,7 @@ namespace AutoTrade.Services.VehicleService
 		{
 			var make = DbContext.VehicleMakes
 								.Include(m => m.Models)
+								.AsNoTracking()
 								.SingleOrDefault(m => m.Id == makeId);
 
 			return make?.Models
@@ -183,6 +198,7 @@ namespace AutoTrade.Services.VehicleService
 		public IEnumerable<TownJsonModel> GetTowns()
 		{
 			return DbContext.Towns?
+							.AsNoTracking()
 							.OrderBy(m => m.Name)
 							.Select(m => (TownJsonModel)this.Map(m, new TownJsonModel()));
 		}
@@ -219,6 +235,7 @@ namespace AutoTrade.Services.VehicleService
 		public IEnumerable<ColorJsonModel> GetColors()
 		{
 			return DbContext.Colors?
+							.AsNoTracking()
 							.OrderBy(m => m.Name)
 							.Select(m => (ColorJsonModel)this.Map(m, new ColorJsonModel()));
 		}

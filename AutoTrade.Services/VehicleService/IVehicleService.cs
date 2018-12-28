@@ -7,6 +7,7 @@ namespace AutoTrade.Services.VehicleService
 	public interface IVehicleService
 	{
 		Guid AddVehicle(VehicleJsonModel model);
+		Guid EditVehicle(VehicleJsonModel model);
 		bool RemoveVehicle(Guid id);
 		bool AddColor(ColorJsonModel model);
 		bool RemoveColor(int id);

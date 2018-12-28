@@ -49,5 +49,19 @@ namespace AutoTrade.Controllers
 			var result = _vehicleService.GetColors();
 			return Json(new ResponseJsonModel(true, result));
 		}
+
+		[HttpGet("[action]")]
+		public IActionResult GetVehicle(Guid id)
+		{
+			var vehicle = _vehicleService.GetVehicle(id);
+			return Json(new ResponseJsonModel(true, vehicle));
+		}
+
+		[HttpGet("[action]")]
+		public IActionResult GetVehicles()
+		{
+			var vehicles = _vehicleService.GetVehicles(null);
+			return Json(new ResponseJsonModel(true, vehicles));
+		}
 	}
 }
