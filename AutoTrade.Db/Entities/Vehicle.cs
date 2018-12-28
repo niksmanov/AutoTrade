@@ -22,9 +22,8 @@ namespace AutoTrade.Db.Entities
 		public FuelType FuelType { get; set; }
 		public GearboxType Gearbox { get; set; }
 
-
+		public DateTime ProductionDate { get; set; }
 		public int HorsePower { get; set; }
-		public int Year { get; set; }
 		public decimal Price { get; set; }
 		public int CubicCapacity { get; set; }
 		public int Airbag { get; set; }
@@ -35,6 +34,7 @@ namespace AutoTrade.Db.Entities
 		public bool AirConditioning { get; set; }
 		public bool AutoPilot { get; set; }
 
+		public DateTime DateCreated { get; set; }
 
 		public virtual ICollection<Image> Images { get; set; }
 

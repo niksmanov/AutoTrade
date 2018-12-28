@@ -31,18 +31,19 @@ class Colors extends Component {
 			});
 	}
 
-	deleteColor(colorId) {
-		axios.get(`/admin/removecolor?id=${colorId}`
-		).then(r => {
-			return r.data
-		}).then(response => {
-			if (response.succeeded) {
-				this.setState({ errors: ['Entity deleted successfully'] });
-				this.props[types.GET_COLORS]();
-			} else {
-				this.setState({ errors: ['We have a problem with deleting'] });
-			}
-		});
+	deleteColor(e) {
+		e.preventDefault();
+		axios.post('/admin/removecolor', new FormData(e.target))
+			.then(r => {
+				return r.data
+			}).then(response => {
+				if (response.succeeded) {
+					this.setState({ errors: ['Entity deleted successfully'] });
+					this.props[types.GET_COLORS]();
+				} else {
+					this.setState({ errors: ['We have a problem with deleting'] });
+				}
+			});
 	}
 
 	render() {
@@ -55,7 +56,10 @@ class Colors extends Component {
 		} else {
 			colors = this.props.colors.map((color, i) => {
 				return (<div key={i} className="admin-entity">
-					<button className="btn btn-danger" onClick={this.deleteColor.bind(this, color.id)}>X</button>
+					<form onSubmit={this.deleteColor.bind(this)} className="delete-btn-form">
+						<input name="id" type="hidden" value={color.id} />
+						<button type="submit" className="btn btn-danger">X</button>
+					</form>
 					<span>{color.name}</span>
 					<hr />
 				</div>);

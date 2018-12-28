@@ -43,7 +43,8 @@ namespace AutoTrade.Services.UserService
 
 		public bool RemoveUser(string id)
 		{
-			var user = DbContext.Users.SingleOrDefault(c => c.Id == id);
+			var user = DbContext.Users
+				                .SingleOrDefault(c => c.Id == id);
 
 			if (user != null)
 			{

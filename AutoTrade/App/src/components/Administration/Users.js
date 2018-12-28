@@ -10,7 +10,7 @@ import DisplayErrors from '../Shared/Error/Error';
 
 class Users extends Component {
 	state = {
-		errors: []
+		errors: [],
 	};
 
 	componentDidMount() {
@@ -31,18 +31,19 @@ class Users extends Component {
 			});
 	}
 
-	deleteUser(userId) {
-		axios.get(`/admin/removeuser?id=${userId}`
-		).then(r => {
-			return r.data
-		}).then(response => {
-			if (response.succeeded) {
-				this.setState({ errors: ['Entity deleted successfully'] });
-				this.props[types.GET_ALL_USERS]();
-			} else {
-				this.setState({ errors: ['We have a problem with deleting'] });
-			}
-		});
+	deleteUser(e) {
+		e.preventDefault();
+		axios.post('/admin/removeuser', new FormData(e.target))
+			.then(r => {
+				return r.data
+			}).then(response => {
+				if (response.succeeded) {
+					this.setState({ errors: ['Entity deleted successfully'] });
+					this.props[types.GET_ALL_USERS]();
+				} else {
+					this.setState({ errors: ['We have a problem with deleting'] });
+				}
+			});
 	}
 
 	searchUser(e) {
@@ -72,7 +73,10 @@ class Users extends Component {
 						</form>
 					</td>
 					<td>
-						<button className="btn btn-danger" onClick={this.deleteUser.bind(this, user.id)}>X</button>
+						<form onSubmit={this.deleteUser.bind(this)} className="delete-btn-form">
+							<input name="id" type="hidden" value={user.id} />
+							<button type="submit" className="btn btn-danger">X</button>
+						</form>
 					</td>
 				</tr>);
 			});
@@ -86,7 +90,7 @@ class Users extends Component {
 					<form>
 						<label>Username or Email:</label>
 						<br />
-						<input onChange={this.searchUser.bind(this)} type="text" autoComplete="off" required className="form-control spacer" />
+						<input onChange={this.searchUser.bind(this)} type="text" autoComplete="off" className="form-control spacer" />
 					</form>
 					<br />
 					<DisplayErrors errors={this.state.errors} />

@@ -33,18 +33,19 @@ class VehicleModels extends Component {
 			});
 	}
 
-	deleteModel(modelId) {
-		axios.get(`/admin/removevehiclemodel?id=${modelId}`
-		).then(r => {
-			return r.data
-		}).then(response => {
-			if (response.succeeded) {
-				this.setState({ errors: ['Entity deleted successfully'] });
-				this.props[types.GET_VEHICLE_MODELS](this.state.makeId);
-			} else {
-				this.setState({ errors: ['We have a problem with deleting'] });
-			}
-		});
+	deleteModel(e) {
+		e.preventDefault();
+		axios.post('/admin/removevehiclemodel', new FormData(e.target))
+			.then(r => {
+				return r.data
+			}).then(response => {
+				if (response.succeeded) {
+					this.setState({ errors: ['Entity deleted successfully'] });
+					this.props[types.GET_VEHICLE_MODELS](this.state.makeId);
+				} else {
+					this.setState({ errors: ['We have a problem with deleting'] });
+				}
+			});
 	}
 
 	selectMake(e) {
@@ -77,7 +78,10 @@ class VehicleModels extends Component {
 		} else {
 			vehicleModels = this.props.vehicleModels.map((model, i) => {
 				return (<div key={i} className="admin-entity">
-					<button className="btn btn-danger" onClick={this.deleteModel.bind(this, model.id)}>X</button>
+					<form onSubmit={this.deleteModel.bind(this)} className="delete-btn-form">
+						<input name="id" type="hidden" value={model.id} />
+						<button type="submit" className="btn btn-danger">X</button>
+					</form>
 					<span>{model.name}</span>
 					<hr />
 				</div>);

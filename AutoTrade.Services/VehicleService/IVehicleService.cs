@@ -6,6 +6,8 @@ namespace AutoTrade.Services.VehicleService
 {
 	public interface IVehicleService
 	{
+		Guid AddVehicle(VehicleJsonModel model);
+		bool RemoveVehicle(Guid id);
 		bool AddColor(ColorJsonModel model);
 		bool RemoveColor(int id);
 		bool AddMake(VehicleMakeJsonModel model);
@@ -14,7 +16,10 @@ namespace AutoTrade.Services.VehicleService
 		bool RemoveModel(int id);
 		bool AddTown(TownJsonModel model);
 		bool RemoveTown(int id);
-		Guid AddVehicle(VehicleJsonModel model);
+
+		IEnumerable<VehicleJsonModel> SearchVehicles();
+		IEnumerable<VehicleJsonModel> GetVehicles(string userId);
+		VehicleJsonModel GetVehicle(Guid id);
 		IEnumerable<ColorJsonModel> GetColors();
 		IEnumerable<VehicleMakeJsonModel> GetMakes();
 		IEnumerable<VehicleModelJsonModel> GetModels(int makeId);

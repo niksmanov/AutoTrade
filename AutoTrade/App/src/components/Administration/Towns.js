@@ -31,18 +31,19 @@ class Towns extends Component {
 			});
 	}
 
-	deleteTown(townId) {
-		axios.get(`/admin/removetown?id=${townId}`
-		).then(r => {
-			return r.data
-		}).then(response => {
-			if (response.succeeded) {
-				this.setState({ errors: ['Entity deleted successfully'] });
-				this.props[types.GET_TOWNS]();
-			} else {
-				this.setState({ errors: ['We have a problem with deleting'] });
-			}
-		});
+	deleteTown(e) {
+		e.preventDefault();
+		axios.post('/admin/removetown', new FormData(e.target))
+			.then(r => {
+				return r.data
+			}).then(response => {
+				if (response.succeeded) {
+					this.setState({ errors: ['Entity deleted successfully'] });
+					this.props[types.GET_TOWNS]();
+				} else {
+					this.setState({ errors: ['We have a problem with deleting'] });
+				}
+			});
 	}
 
 	render() {
@@ -55,7 +56,10 @@ class Towns extends Component {
 		} else {
 			towns = this.props.towns.map((town, i) => {
 				return (<div key={i} className="admin-entity">
-					<button className="btn btn-danger" onClick={this.deleteTown.bind(this, town.id)}>X</button>
+					<form onSubmit={this.deleteTown.bind(this)} className="delete-btn-form">
+						<input name="id" type="hidden" value={town.id} />
+						<button type="submit" className="btn btn-danger">X</button>
+					</form>
 					<span>{town.name}</span>
 					<hr />
 				</div>);

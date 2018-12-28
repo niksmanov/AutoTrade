@@ -50,6 +50,12 @@ namespace AutoTrade.Db
 				   .WithOne(e => e.User)
 				   .HasForeignKey(e => e.UserId);
 
+			builder.Entity<Vehicle>()
+				   .HasOne(e => e.User)
+				   .WithMany(e => e.Vehicles)
+				   .HasForeignKey(e => e.UserId)
+				   .IsRequired();
+
 			builder.Entity<VehicleMake>()
 				   .HasMany(e => e.Models)
 				   .WithOne(e => e.Make)

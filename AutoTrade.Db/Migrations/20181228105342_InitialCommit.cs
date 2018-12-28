@@ -225,7 +225,7 @@ namespace AutoTrade.Db.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false),
                     MakeId = table.Column<int>(nullable: false),
                     ModelId = table.Column<int>(nullable: false),
                     ColorId = table.Column<int>(nullable: false),
@@ -233,7 +233,7 @@ namespace AutoTrade.Db.Migrations
                     FuelType = table.Column<int>(nullable: false),
                     Gearbox = table.Column<int>(nullable: false),
                     HorsePower = table.Column<int>(nullable: false),
-                    Year = table.Column<int>(nullable: false),
+                    ProductionDate = table.Column<DateTime>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     CubicCapacity = table.Column<int>(nullable: false),
                     Airbag = table.Column<int>(nullable: false),
@@ -241,7 +241,8 @@ namespace AutoTrade.Db.Migrations
                     ESP = table.Column<bool>(nullable: false),
                     CentralLocking = table.Column<bool>(nullable: false),
                     AirConditioning = table.Column<bool>(nullable: false),
-                    AutoPilot = table.Column<bool>(nullable: false)
+                    AutoPilot = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,7 +264,7 @@ namespace AutoTrade.Db.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

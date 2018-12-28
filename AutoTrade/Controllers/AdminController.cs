@@ -42,7 +42,7 @@ namespace AutoTrade.Controllers
 			return Json(new ResponseJsonModel(isAdded));
 		}
 
-		[HttpGet("[action]")]
+		[HttpPost("[action]")]
 		public IActionResult RemoveVehicleMake(int id)
 		{
 			bool isDeleted = _vehicleService.RemoveMake(id);
@@ -63,7 +63,7 @@ namespace AutoTrade.Controllers
 			return Json(new ResponseJsonModel(isAdded));
 		}
 
-		[HttpGet("[action]")]
+		[HttpPost("[action]")]
 		public IActionResult RemoveVehicleModel(int id)
 		{
 			bool isDeleted = _vehicleService.RemoveModel(id);
@@ -84,7 +84,7 @@ namespace AutoTrade.Controllers
 			return Json(new ResponseJsonModel(isAdded));
 		}
 
-		[HttpGet("[action]")]
+		[HttpPost("[action]")]
 		public IActionResult RemoveTown(int id)
 		{
 			bool isDeleted = _vehicleService.RemoveTown(id);
@@ -104,7 +104,7 @@ namespace AutoTrade.Controllers
 			return Json(new ResponseJsonModel(isAdded));
 		}
 
-		[HttpGet("[action]")]
+		[HttpPost("[action]")]
 		public IActionResult RemoveColor(int id)
 		{
 			bool isDeleted = _vehicleService.RemoveColor(id);
@@ -118,7 +118,7 @@ namespace AutoTrade.Controllers
 			return Json(new ResponseJsonModel(isChanged));
 		}
 
-		[HttpGet("[action]")]
+		[HttpPost("[action]")]
 		public IActionResult RemoveUser(string id)
 		{
 			bool isDeleted = _userService.RemoveUser(id);

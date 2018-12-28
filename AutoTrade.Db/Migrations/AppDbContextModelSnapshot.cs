@@ -177,6 +177,8 @@ namespace AutoTrade.Db.Migrations
 
                     b.Property<int>("CubicCapacity");
 
+                    b.Property<DateTime>("DateCreated");
+
                     b.Property<bool>("ESP");
 
                     b.Property<int>("FuelType");
@@ -191,11 +193,12 @@ namespace AutoTrade.Db.Migrations
 
                     b.Property<decimal>("Price");
 
+                    b.Property<DateTime>("ProductionDate");
+
                     b.Property<int>("Type");
 
-                    b.Property<string>("UserId");
-
-                    b.Property<int>("Year");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -357,7 +360,8 @@ namespace AutoTrade.Db.Migrations
 
                     b.HasOne("AutoTrade.Db.Entities.User", "User")
                         .WithMany("Vehicles")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AutoTrade.Db.Entities.VehicleModel", b =>

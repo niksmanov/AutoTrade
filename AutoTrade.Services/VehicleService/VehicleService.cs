@@ -14,9 +14,16 @@ namespace AutoTrade.Services.VehicleService
 		public VehicleService(AppDbContext dbContext) : base(dbContext)
 		{ }
 
+
+		public IEnumerable<VehicleJsonModel> SearchVehicles()
+		{
+			throw new NotImplementedException();
+		}
+
 		public Guid AddVehicle(VehicleJsonModel model)
 		{
 			var vehicle = (Vehicle)this.Map(model, new Vehicle());
+			vehicle.DateCreated = DateTime.UtcNow;
 
 			DbContext.Vehicles.Add(vehicle);
 			DbContext.SaveChanges();
@@ -24,10 +31,54 @@ namespace AutoTrade.Services.VehicleService
 			return vehicle.Id;
 		}
 
+		public bool RemoveVehicle(Guid id)
+		{
+			var vehicle = DbContext.Vehicles
+								   .SingleOrDefault(c => c.Id == id);
+
+			if (vehicle != null)
+			{
+				DbContext.Vehicles.Remove(vehicle);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
+		}
+
+		public IEnumerable<VehicleJsonModel> GetVehicles(string userId)
+		{
+			var query = DbContext.Vehicles
+								 .Include(v => v.Make)
+												.ThenInclude(v => v.Models)
+								 .Include(v => v.Color)
+								 .Include(v => v.Images)
+								 .AsQueryable();
+
+			if (!string.IsNullOrEmpty(userId))
+			{
+				query = query.Where(u => u.UserId == userId);
+			}
+
+			return query.OrderByDescending(u => u.DateCreated)
+						.Select(v => (VehicleJsonModel)this.Map(v, new VehicleJsonModel()));
+		}
+
+		public VehicleJsonModel GetVehicle(Guid id)
+		{
+			var dbModel = DbContext.Vehicles
+								   .Include(v => v.Make)
+												  .ThenInclude(v => v.Models)
+								   .Include(v => v.Color)
+								   .Include(v => v.Images)
+								   .SingleOrDefault(v => v.Id == id);
+
+			return (VehicleJsonModel)this.Map(dbModel, new VehicleJsonModel());
+		}
+
 		public bool AddMake(VehicleMakeJsonModel model)
 		{
 			var make = DbContext.VehicleMakes
-				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
+								.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
 
 			if (make == null)
 			{
@@ -41,7 +92,8 @@ namespace AutoTrade.Services.VehicleService
 
 		public bool RemoveMake(int id)
 		{
-			var make = DbContext.VehicleMakes.SingleOrDefault(c => c.Id == id);
+			var make = DbContext.VehicleMakes
+								.SingleOrDefault(c => c.Id == id);
 
 			if (make != null)
 			{
@@ -61,8 +113,8 @@ namespace AutoTrade.Services.VehicleService
 
 		public bool AddModel(VehicleModelJsonModel model)
 		{
-			var vehicleModel = DbContext.VehicleModels.OrderBy(m => m.Name)
-				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
+			var vehicleModel = DbContext.VehicleModels
+										.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
 
 			if (vehicleModel == null)
 			{
@@ -76,7 +128,8 @@ namespace AutoTrade.Services.VehicleService
 
 		public bool RemoveModel(int id)
 		{
-			var vehicleModel = DbContext.VehicleModels.SingleOrDefault(c => c.Id == id);
+			var vehicleModel = DbContext.VehicleModels
+										.SingleOrDefault(c => c.Id == id);
 
 			if (vehicleModel != null)
 			{
@@ -101,7 +154,7 @@ namespace AutoTrade.Services.VehicleService
 		public bool AddTown(TownJsonModel model)
 		{
 			var town = DbContext.Towns
-				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
+								.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
 
 			if (town == null)
 			{
@@ -115,7 +168,8 @@ namespace AutoTrade.Services.VehicleService
 
 		public bool RemoveTown(int id)
 		{
-			var town = DbContext.Towns.SingleOrDefault(c => c.Id == id);
+			var town = DbContext.Towns
+								.SingleOrDefault(c => c.Id == id);
 
 			if (town != null)
 			{
@@ -136,7 +190,7 @@ namespace AutoTrade.Services.VehicleService
 		public bool AddColor(ColorJsonModel model)
 		{
 			var color = DbContext.Colors
-				.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
+								 .SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
 
 			if (color == null)
 			{
@@ -150,7 +204,8 @@ namespace AutoTrade.Services.VehicleService
 
 		public bool RemoveColor(int id)
 		{
-			var color = DbContext.Colors.SingleOrDefault(c => c.Id == id);
+			var color = DbContext.Colors
+								 .SingleOrDefault(c => c.Id == id);
 
 			if (color != null)
 			{

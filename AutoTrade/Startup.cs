@@ -36,6 +36,12 @@ namespace AutoTrade
 				configuration.RootPath = "App/build";
 			});
 
+			services.Configure<SecurityStampValidatorOptions>(options =>
+			{
+				// enables immediate user role change
+				options.ValidationInterval = TimeSpan.Zero;
+			});
+
 			services.AddDbContext<AppDbContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

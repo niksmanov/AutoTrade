@@ -10,18 +10,20 @@ namespace AutoTrade.Core.JsonModels
 		public string UserId { get; set; }
 
 		public int MakeId { get; set; }
-		public ICollection<VehicleMakeJsonModel> Makes { get; set; }
-
 		public int ModelId { get; set; }
-		public ICollection<VehicleModelJsonModel> Models { get; set; }
+
+		public IEnumerable<VehicleMakeJsonModel> Makes { get; set; } = new List<VehicleMakeJsonModel>();
+		public IEnumerable<VehicleModelJsonModel> Models { get; set; } = new List<VehicleModelJsonModel>();
+		public IEnumerable<ImageJsonModel> Images { get; set; } = new List<ImageJsonModel>();
+
 
 		public string Type { get; set; }
 		public string FuelType { get; set; }
 		public string Color { get; set; }
 		public string Gearbox { get; set; }
 
+		public DateTime ProductionDate { get; set; }
 		public int HorsePower { get; set; }
-		public int Year { get; set; }
 		public decimal Price { get; set; }
 		public int CubicCapacity { get; set; }
 		public int Airbag { get; set; }
@@ -32,8 +34,7 @@ namespace AutoTrade.Core.JsonModels
 		public bool AirConditioning { get; set; }
 		public bool AutoPilot { get; set; }
 
-
-		public ICollection<ImageJsonModel> Images { get; set; }
+		public DateTime DateCreated { get; set; }
 
 		public string Url { get; set; }
 	}
