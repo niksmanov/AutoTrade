@@ -1,14 +1,27 @@
-﻿import React, { PureComponent } from 'react';
+﻿import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../Shared/Vehicle/store/Vehicle';
+import * as types from '../Shared/Vehicle/store/types';
 import axios from 'axios';
 import { UserContext } from '../Shared/User/UserContext';
 import DisplayErrors from '../Shared/Error/Error';
 import Navigation from './Navigation';
 
-class Profile extends PureComponent {
+class Profile extends Component {
 	state = {
 		errors: [],
 		sendEmail: false,
+		selectValue: null,
 	};
+
+	componentDidMount() {
+		this.props[types.GET_TOWNS]();
+	}
+
+	selectTown(e) {
+		this.setState({ selectValue: e.target.value });
+	}
 
 	reSendEmail(userId) {
 		axios.get(`/user/resendconfirmationemail?id=${userId}`
@@ -20,6 +33,19 @@ class Profile extends PureComponent {
 				this.setState({ sendEmail: true });
 			}
 		});
+	}
+
+	editInfo(e) {
+		e.preventDefault();
+		axios.post('/profile/editinfo', new FormData(e.target))
+			.then(r => { return r.data })
+			.then(response => {
+				if (response.succeeded) {
+					this.setState({ errors: ['Entity edited successfully'] });
+				} else {
+					this.setState({ errors: ['Entity already exists'] });
+				}
+			});
 	}
 
 	render() {
@@ -38,10 +64,27 @@ class Profile extends PureComponent {
 				<React.Fragment>
 					<Navigation />
 
-					<p> Hello, {user.userName} </p>
+					<form onSubmit={this.editInfo.bind(this)}>
+						<label>Username:</label>
+						<span className="form-control spacer"> {user.userName} </span>
+						<label>Town:</label>
+						<select value={this.state.selectValue || user.townId} onChange={this.selectTown.bind(this)} name="townId" className="form-control spacer">
+							<option>Select Town</option>
+							{this.props.towns.map((town, i) => {
+								return (<option key={i} value={town.id}>{town.name}</option>)
+							})}
+						</select>
+						<label>Address:</label>
+						<input name="address" type="text" defaultValue={user.address} required className="form-control spacer" autoComplete="off" />
+						<label>Phone number:</label>
+						<input name="phoneNumber" type="tel" defaultValue={user.phoneNumber} required className="form-control spacer" autoComplete="off" />
+						<input name="id" type="hidden" value={user.id} />
+						<br />
+						<button type="submit" className="btn btn-primary">Submit </button>
+					</form>
+					<br />
+
 					{emailConfirmed}
-
-
 					<DisplayErrors errors={this.state.errors} />
 				</React.Fragment>}
 		</UserContext.Consumer>);
@@ -49,4 +92,7 @@ class Profile extends PureComponent {
 }
 
 Profile.contextType = UserContext;
-export default Profile;
+export default connect(
+	state => state.vehicle,
+	dispatch => bindActionCreators(actionCreators, dispatch)
+)(Profile);

@@ -13,18 +13,15 @@ namespace AutoTrade.Services.UserService
 		public UserService(AppDbContext dbContext) : base(dbContext)
 		{ }
 
-		public UserJsonModel GetByEmail(string email)
-		{
-			var user = DbContext.Users
-								.SingleOrDefault(u => u.Email == email);
-			return (UserJsonModel)this.Map(user, new UserJsonModel());
-		}
-
 		public UserJsonModel GetById(string id)
 		{
 			var user = DbContext.Users
+								.Include(u => u.Town)
 								.SingleOrDefault(u => u.Id == id);
-			return (UserJsonModel)this.Map(user, new UserJsonModel());
+			if (user != null)
+				return (UserJsonModel)this.Map(user, new UserJsonModel { TownName = user.Town?.Name });
+
+			return null;
 		}
 
 		public bool IsExists(string email)
@@ -44,7 +41,7 @@ namespace AutoTrade.Services.UserService
 		public bool RemoveUser(string id)
 		{
 			var user = DbContext.Users
-				                .SingleOrDefault(c => c.Id == id);
+								.SingleOrDefault(c => c.Id == id);
 
 			if (user != null)
 			{
@@ -77,6 +74,23 @@ namespace AutoTrade.Services.UserService
 			return false;
 		}
 
+		public bool EditUser(UserJsonModel model)
+		{
+			var user = DbContext.Users
+								.SingleOrDefault(c => c.Id == model.Id);
+
+			if (user != null)
+			{
+				user.TownId = model.TownId;
+				user.Address = model.Address;
+				user.PhoneNumber = model.PhoneNumber;
+
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
+		}
+
 		public IEnumerable<UserJsonModel> GetUsers(string search)
 		{
 			var query = DbContext.Users
@@ -86,7 +100,7 @@ namespace AutoTrade.Services.UserService
 			if (!string.IsNullOrEmpty(search))
 			{
 				query = query.Where(u => u.Email.Contains(search) ||
-									     u.UserName.Contains(search));
+										 u.UserName.Contains(search));
 			}
 
 			return query.OrderByDescending(u => u.UserRoles.Count)

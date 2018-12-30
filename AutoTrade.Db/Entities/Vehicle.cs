@@ -18,7 +18,7 @@ namespace AutoTrade.Db.Entities
 		public virtual Color Color { get; set; }
 
 
-		public VehicleTypes Type { get; set; }
+		public VehicleType Type { get; set; }
 		public FuelType FuelType { get; set; }
 		public GearboxType Gearbox { get; set; }
 

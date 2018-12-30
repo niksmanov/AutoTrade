@@ -20,7 +20,7 @@ export default props => (<Navbar className="profile-nav">
 				Add Vehicle
           </NavItem>
 		</LinkContainer>
-		<LinkContainer to={'/profile/listvehicles'}>
+		<LinkContainer to={'/profile/vehicles'}>
 			<NavItem>
 				List Vehicles
           </NavItem>

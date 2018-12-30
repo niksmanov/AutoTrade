@@ -1,5 +1,4 @@
 ﻿import React, { PureComponent } from 'react';
-import { Redirect } from 'react-router';
 import axios from 'axios';
 import DisplayErrors from '../Shared/Error/Error';
 import Navigation from '../Profile/Navigation';

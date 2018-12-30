@@ -10,7 +10,7 @@ namespace AutoTrade.Controllers
 {
 	[Route("[controller]")]
 	public class VehicleController : Controller
-    {
+	{
 		private readonly IVehicleService _vehicleService;
 		public VehicleController(IVehicleService vehicleService)
 		{
@@ -26,11 +26,11 @@ namespace AutoTrade.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetVehicleModels(int makeId)
+		public IActionResult GetVehicleModels(int makeId, int? vehicleType)
 		{
 			if (makeId > 0)
 			{
-				var result = _vehicleService.GetModels(makeId);
+				var result = _vehicleService.GetModels(makeId, vehicleType);
 				return Json(new ResponseJsonModel(true, result));
 			}
 			return Json(new ResponseJsonModel());
@@ -51,16 +51,33 @@ namespace AutoTrade.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetVehicle(Guid id)
+		public IActionResult GetVehicleEnums()
 		{
-			var vehicle = _vehicleService.GetVehicle(id);
+			var vehicleEnums = _vehicleService.GetVehicleEnums();
+			return Json(new ResponseJsonModel(true, vehicleEnums));
+		}
+
+		[HttpGet("[action]")]
+		public IActionResult GetImages(Guid vehicleId)
+		{
+			var result = _vehicleService.GetImages(vehicleId);
+			return Json(new ResponseJsonModel(true, result));
+		}
+
+		[HttpGet("[action]")]
+		public IActionResult GetVehicle(Guid? id)
+		{
+			var vehicle = new VehicleJsonModel();
+			if (id.HasValue)
+				vehicle = _vehicleService.GetVehicle(id.Value);
+
 			return Json(new ResponseJsonModel(true, vehicle));
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetVehicles()
+		public IActionResult GetVehicles(string userId)
 		{
-			var vehicles = _vehicleService.GetVehicles(null);
+			var vehicles = _vehicleService.GetVehicles(userId);
 			return Json(new ResponseJsonModel(true, vehicles));
 		}
 	}

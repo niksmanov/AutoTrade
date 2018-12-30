@@ -1,6 +1,6 @@
 ﻿namespace AutoTrade.Db.Enums
 {
-	public enum VehicleTypes
+	public enum VehicleType
 	{
 		Car = 0,
 		SUV,

@@ -13,10 +13,12 @@ class VehicleModels extends Component {
 		errors: [],
 		isFormVisible: false,
 		makeId: 0,
+		typeId: null,
 	};
 
 	componentDidMount() {
 		this.props[types.GET_VEHICLE_MAKES]();
+		this.props[types.GET_VEHICLE_ENUMS]();
 	}
 
 	handleSubmit(e) {
@@ -26,7 +28,7 @@ class VehicleModels extends Component {
 			.then(response => {
 				if (response.succeeded) {
 					this.setState({ errors: ['Entity added successfully'] });
-					this.props[types.GET_VEHICLE_MODELS](this.state.makeId);
+					this.props[types.GET_VEHICLE_MODELS](this.state.makeId, this.state.typeId);
 				} else {
 					this.setState({ errors: ['Entity already exists'] });
 				}
@@ -41,7 +43,7 @@ class VehicleModels extends Component {
 			}).then(response => {
 				if (response.succeeded) {
 					this.setState({ errors: ['Entity deleted successfully'] });
-					this.props[types.GET_VEHICLE_MODELS](this.state.makeId);
+					this.props[types.GET_VEHICLE_MODELS](this.state.makeId, this.state.typeId);
 				} else {
 					this.setState({ errors: ['We have a problem with deleting'] });
 				}
@@ -59,16 +61,14 @@ class VehicleModels extends Component {
 		}
 	}
 
+	selectType(e) {
+		let type = e.target.value;
+		this.props[types.GET_VEHICLE_MODELS](this.state.makeId, type);
+		this.setState({ typeId: type });
+	}
+
 	render() {
 		let vehicleModels;
-		let vehicleMakes;
-
-		vehicleMakes = <select onChange={this.selectMake.bind(this)} name="makeId" className="form-control spacer">
-			<option>Select Vehicle Make</option>
-			{this.props.vehicleMakes.map((make, i) => {
-				return (<option key={i} value={make.id}>{make.name}</option>)
-			})}
-		</select>
 
 		if (this.props.isLoading) {
 			vehicleModels =
@@ -96,10 +96,24 @@ class VehicleModels extends Component {
 					<form onSubmit={this.handleSubmit.bind(this)}>
 						<label>Make Name:</label>
 						<br />
-						{vehicleMakes}
+						<select onChange={this.selectMake.bind(this)} name="makeId" required className="form-control spacer">
+							<option>Select Vehicle Make</option>
+							{this.props.vehicleMakes.map((make, i) => {
+								return (<option key={i} value={make.id}>{make.name}</option>)
+							})}
+						</select>
 						<br />
 						{this.state.isFormVisible &&
 							<React.Fragment>
+								<label>Vehicle Type:</label>
+								<br />
+								<select onChange={this.selectType.bind(this)} name="vehicleType" required className="form-control spacer">
+									<option>Select Vehicle Type</option>
+									{this.props.vehicleEnums.vehicleType.map((type, i) => {
+										return (<option key={i} value={type.id}>{type.name}</option>)
+									})}
+								</select>
+								<br />
 								<label>Model Name:</label>
 								<br />
 								<input name="name" type="text" autoComplete="off" required className="form-control spacer" />

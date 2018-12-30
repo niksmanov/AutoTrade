@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoTrade.Core.JsonModels;
+using AutoTrade.Services.UserService;
 using AutoTrade.Services.VehicleService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,19 +13,26 @@ namespace AutoTrade.Controllers
 	[Authorize]
 	[Route("[controller]")]
 	public class ProfileController : Controller
-    {
+	{
+		private readonly IUserService _userService;
 		private readonly IVehicleService _vehicleService;
 
-		public ProfileController(IVehicleService vehicleService)
+		public ProfileController(
+			IUserService userService,
+			IVehicleService vehicleService)
 		{
+			_userService = userService;
 			_vehicleService = vehicleService;
 		}
 
-		[HttpGet("[action]")]
-		public IActionResult Index()
-        {
-			//https://www.npmjs.com/package/react-infinite-scroller
-			return Json(new ResponseJsonModel(true));
+		//https://www.npmjs.com/package/react-infinite-scroller
+
+
+		[HttpPost("[action]")]
+		public IActionResult EditInfo(UserJsonModel model)
+		{
+			bool isEdited = _userService.EditUser(model);
+			return Json(new ResponseJsonModel(isEdited));
 		}
 
 		[HttpPost("[action]")]
@@ -35,18 +43,17 @@ namespace AutoTrade.Controllers
 		}
 
 		[HttpPost("[action]")]
+		public IActionResult EditVehicle(VehicleJsonModel model)
+		{
+			var id = _vehicleService.EditVehicle(model);
+			return Json(new ResponseJsonModel(true, id));
+		}
+
+		[HttpPost("[action]")]
 		public IActionResult RemoveVehicle(Guid id)
 		{
 			bool isDeleted = _vehicleService.RemoveVehicle(id);
 			return Json(new ResponseJsonModel(isDeleted));
-		}
-
-
-		[HttpGet("[action]")]
-		public IActionResult GetVehicles(string userId)
-		{
-			var vehicles = _vehicleService.GetVehicles(userId);
-			return Json(new ResponseJsonModel(true, vehicles));
 		}
 	}
 }

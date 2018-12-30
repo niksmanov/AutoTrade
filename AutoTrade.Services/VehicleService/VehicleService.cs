@@ -5,6 +5,7 @@ using System.Text;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db;
 using AutoTrade.Db.Entities;
+using AutoTrade.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoTrade.Services.VehicleService
@@ -36,7 +37,7 @@ namespace AutoTrade.Services.VehicleService
 		{
 
 			var dbVehicle = DbContext.Vehicles
-								     .SingleOrDefault(c => c.Id == model.Id);
+									 .SingleOrDefault(c => c.Id == model.Id);
 
 			dbVehicle = (Vehicle)this.Map(model, dbVehicle);
 			DbContext.SaveChanges();
@@ -61,9 +62,6 @@ namespace AutoTrade.Services.VehicleService
 		public IEnumerable<VehicleJsonModel> GetVehicles(string userId)
 		{
 			var query = DbContext.Vehicles
-								 .Include(v => v.Make)
-												.ThenInclude(v => v.Models)
-								 .Include(v => v.Color)
 								 .Include(v => v.Images)
 								 .AsNoTracking();
 
@@ -79,9 +77,6 @@ namespace AutoTrade.Services.VehicleService
 		public VehicleJsonModel GetVehicle(Guid id)
 		{
 			var dbModel = DbContext.Vehicles
-								   .Include(v => v.Make)
-												  .ThenInclude(v => v.Models)
-								   .Include(v => v.Color)
 								   .Include(v => v.Images)
 								   .SingleOrDefault(v => v.Id == id);
 
@@ -132,7 +127,8 @@ namespace AutoTrade.Services.VehicleService
 
 			if (vehicleModel == null)
 			{
-				vehicleModel = (VehicleModel)this.Map(model, new VehicleModel());
+				vehicleModel = (VehicleModel)this.Map(model,
+								new VehicleModel { VehicleType = (VehicleType)model.VehicleType });
 				DbContext.VehicleModels.Add(vehicleModel);
 				DbContext.SaveChanges();
 				return true;
@@ -154,16 +150,24 @@ namespace AutoTrade.Services.VehicleService
 			return false;
 		}
 
-		public IEnumerable<VehicleModelJsonModel> GetModels(int makeId)
+		public IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int? vehicleType)
 		{
 			var make = DbContext.VehicleMakes
 								.Include(m => m.Models)
 								.AsNoTracking()
 								.SingleOrDefault(m => m.Id == makeId);
 
+			if (make.Models.Any() && vehicleType.HasValue)
+			{
+				make.Models = make.Models
+								  .Where(m => (int)m.VehicleType == vehicleType.Value)
+								  .ToList();
+			}
+
 			return make?.Models
 						.OrderBy(m => m.Name)
-						.Select(m => (VehicleModelJsonModel)this.Map(m, new VehicleModelJsonModel()));
+						.Select(m => (VehicleModelJsonModel)this.Map(m,
+								new VehicleModelJsonModel { VehicleType = (int)m.VehicleType }));
 		}
 
 		public bool AddTown(TownJsonModel model)
@@ -238,6 +242,71 @@ namespace AutoTrade.Services.VehicleService
 							.AsNoTracking()
 							.OrderBy(m => m.Name)
 							.Select(m => (ColorJsonModel)this.Map(m, new ColorJsonModel()));
+		}
+
+		public bool AddImage(ImageJsonModel model)
+		{
+			var image = DbContext.Images
+								 .SingleOrDefault(i => i.Id == model.Id);
+
+			if (image == null)
+			{
+				image = (Image)this.Map(model, new Image());
+				DbContext.Images.Add(image);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
+		}
+
+		public bool RemoveImage(int id)
+		{
+			var image = DbContext.Images
+								 .SingleOrDefault(c => c.Id == id);
+
+			if (image != null)
+			{
+				DbContext.Images.Remove(image);
+				DbContext.SaveChanges();
+				return true;
+			}
+			return false;
+		}
+
+		public IEnumerable<ImageJsonModel> GetImages(Guid vehicleId)
+		{
+			return DbContext.Images
+							.Where(i => i.VehicleId == vehicleId)
+							.AsNoTracking()
+							.Select(i => (ImageJsonModel)this.Map(i, new ImageJsonModel()));
+		}
+
+		public VehicleEnumsJsonModel GetVehicleEnums()
+		{
+			var vehicleEnums = new VehicleEnumsJsonModel();
+
+			vehicleEnums.VehicleType = EnumToJsonModel(typeof(VehicleType));
+			vehicleEnums.FuelType = EnumToJsonModel(typeof(FuelType));
+			vehicleEnums.GearboxType = EnumToJsonModel(typeof(GearboxType));
+
+			return vehicleEnums;
+		}
+
+		private IEnumerable<EnumJsonModel> EnumToJsonModel(Type enumType)
+		{
+			var result = new List<EnumJsonModel>();
+			int[] values = (int[])Enum.GetValues(enumType);
+			string[] names = Enum.GetNames(enumType);
+
+			for (int i = 0; i < names.Length; i++)
+			{
+				result.Add(new EnumJsonModel
+				{
+					Id = values[i],
+					Name = names[i]
+				});
+			}
+			return result;
 		}
 	}
 }

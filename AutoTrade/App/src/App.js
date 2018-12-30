@@ -15,8 +15,7 @@ import SearchVehicle from './components/Shared/Vehicle/Search';
 //Private routes
 import Profile from './components/Profile/Profile';
 import ChangePassword from './components/Account/ChangePassword';
-import AddVehicle from './components/Shared/Vehicle/Add';
-import ListVehicles from './components/Shared/Vehicle/List';
+import AddVehicle from './components/Profile/AddVehicle';
 
 //Admin routes
 import Users from './components/Administration/Users';
@@ -71,7 +70,6 @@ class App extends Component {
 						<PrivateRoute isAuth={isAuth} path="/profile/home" component={Profile} />
 						<PrivateRoute isAuth={isAuth} path="/profile/changepassword" component={ChangePassword} />
 						<PrivateRoute isAuth={isAuth} path="/profile/addvehicle" component={AddVehicle} />
-						<PrivateRoute isAuth={isAuth} path="/profile/listvehicles" component={ListVehicles} />
 
 						<Route component={NotFound} />
 					</Switch>

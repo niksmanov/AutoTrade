@@ -17,13 +17,17 @@ namespace AutoTrade.Services.VehicleService
 		bool RemoveModel(int id);
 		bool AddTown(TownJsonModel model);
 		bool RemoveTown(int id);
+		bool AddImage(ImageJsonModel model);
+		bool RemoveImage(int id);
 
 		IEnumerable<VehicleJsonModel> SearchVehicles();
 		IEnumerable<VehicleJsonModel> GetVehicles(string userId);
 		VehicleJsonModel GetVehicle(Guid id);
 		IEnumerable<ColorJsonModel> GetColors();
 		IEnumerable<VehicleMakeJsonModel> GetMakes();
-		IEnumerable<VehicleModelJsonModel> GetModels(int makeId);
+		IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int? vehicleType);
 		IEnumerable<TownJsonModel> GetTowns();
+		IEnumerable<ImageJsonModel> GetImages(Guid vehicleId);
+		VehicleEnumsJsonModel GetVehicleEnums();
 	}
 }

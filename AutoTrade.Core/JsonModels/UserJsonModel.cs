@@ -12,6 +12,9 @@ namespace AutoTrade.Core.JsonModels
 		public string Code { get; set; }
 		public string UserName { get; set; }
 		public string PhoneNumber { get; set; }
+		public string Address { get; set; }
+		public int? TownId { get; set; }
+		public string TownName { get; set; }
 		public bool RememberMe { get; set; }
 		public bool EmailConfirmed { get; set; }
 		public bool IsAdmin { get; set; }

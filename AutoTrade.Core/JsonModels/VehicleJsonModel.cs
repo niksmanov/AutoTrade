@@ -10,18 +10,20 @@ namespace AutoTrade.Core.JsonModels
 		public string UserId { get; set; }
 
 		public int MakeId { get; set; }
+		public string Make { get; set; }
 		public int ModelId { get; set; }
+		public string Model { get; set; }
 		public int ColorId { get; set; }
-
-		public IEnumerable<VehicleMakeJsonModel> Makes { get; set; } = new List<VehicleMakeJsonModel>();
-		public IEnumerable<VehicleModelJsonModel> Models { get; set; } = new List<VehicleModelJsonModel>();
-		public IEnumerable<ImageJsonModel> Images { get; set; } = new List<ImageJsonModel>();
-		public IEnumerable<ColorJsonModel> Colors { get; set; } = new List<ColorJsonModel>();
+		public string Color { get; set; }
 
 
+		public int TypeId { get; set; }
 		public string Type { get; set; }
+		public int FuelTypeId { get; set; }
 		public string FuelType { get; set; }
-		public string Gearbox { get; set; }
+		public int GearboxTypeId { get; set; }
+		public string GearboxType { get; set; }
+
 
 		public DateTime ProductionDate { get; set; }
 		public int HorsePower { get; set; }
