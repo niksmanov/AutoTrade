@@ -32,13 +32,39 @@ namespace AutoTrade.Db.Migrations
                     b.ToTable("Colors");
                 });
 
+            modelBuilder.Entity("AutoTrade.Db.Entities.FuelType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FuelTypes");
+                });
+
+            modelBuilder.Entity("AutoTrade.Db.Entities.GearboxType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GearboxTypes");
+                });
+
             modelBuilder.Entity("AutoTrade.Db.Entities.Image", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Name");
+                    b.Property<Guid>("Name");
 
                     b.Property<Guid>("VehicleId");
 
@@ -138,9 +164,7 @@ namespace AutoTrade.Db.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("TownId")
-                        .IsUnique()
-                        .HasFilter("[TownId] IS NOT NULL");
+                    b.HasIndex("TownId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -181,9 +205,9 @@ namespace AutoTrade.Db.Migrations
 
                     b.Property<bool>("ESP");
 
-                    b.Property<int>("FuelType");
+                    b.Property<int>("FuelTypeId");
 
-                    b.Property<int>("Gearbox");
+                    b.Property<int>("GearBoxTypeId");
 
                     b.Property<int>("HorsePower");
 
@@ -195,7 +219,7 @@ namespace AutoTrade.Db.Migrations
 
                     b.Property<DateTime>("ProductionDate");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("TypeId");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -204,7 +228,13 @@ namespace AutoTrade.Db.Migrations
 
                     b.HasIndex("ColorId");
 
+                    b.HasIndex("FuelTypeId");
+
+                    b.HasIndex("GearBoxTypeId");
+
                     b.HasIndex("MakeId");
+
+                    b.HasIndex("TypeId");
 
                     b.HasIndex("UserId");
 
@@ -234,13 +264,28 @@ namespace AutoTrade.Db.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("VehicleType");
+                    b.Property<int>("VehicleTypeId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MakeId");
 
+                    b.HasIndex("VehicleTypeId");
+
                     b.ToTable("VehicleModels");
+                });
+
+            modelBuilder.Entity("AutoTrade.Db.Entities.VehicleType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VehicleTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -331,8 +376,8 @@ namespace AutoTrade.Db.Migrations
             modelBuilder.Entity("AutoTrade.Db.Entities.User", b =>
                 {
                     b.HasOne("AutoTrade.Db.Entities.Town", "Town")
-                        .WithOne()
-                        .HasForeignKey("AutoTrade.Db.Entities.User", "TownId");
+                        .WithMany()
+                        .HasForeignKey("TownId");
                 });
 
             modelBuilder.Entity("AutoTrade.Db.Entities.UserRole", b =>
@@ -355,9 +400,24 @@ namespace AutoTrade.Db.Migrations
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("AutoTrade.Db.Entities.FuelType", "FuelType")
+                        .WithMany()
+                        .HasForeignKey("FuelTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AutoTrade.Db.Entities.GearboxType", "GearboxType")
+                        .WithMany()
+                        .HasForeignKey("GearBoxTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("AutoTrade.Db.Entities.VehicleMake", "Make")
                         .WithMany()
                         .HasForeignKey("MakeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AutoTrade.Db.Entities.VehicleType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AutoTrade.Db.Entities.User", "User")
@@ -371,6 +431,11 @@ namespace AutoTrade.Db.Migrations
                     b.HasOne("AutoTrade.Db.Entities.VehicleMake", "Make")
                         .WithMany("Models")
                         .HasForeignKey("MakeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AutoTrade.Db.Entities.VehicleType", "VehicleType")
+                        .WithMany()
+                        .HasForeignKey("VehicleTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

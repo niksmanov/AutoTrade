@@ -19,6 +19,9 @@ namespace AutoTrade.Db
 		public DbSet<Image> Images { get; set; }
 		public DbSet<Color> Colors { get; set; }
 		public DbSet<Town> Towns { get; set; }
+		public DbSet<VehicleType> VehicleTypes { get; set; }
+		public DbSet<GearboxType> GearboxTypes { get; set; }
+		public DbSet<FuelType> FuelTypes { get; set; }
 
 
 		protected override void OnModelCreating(ModelBuilder builder)
@@ -26,35 +29,36 @@ namespace AutoTrade.Db
 			base.OnModelCreating(builder);
 
 
-			builder.Entity<UserRole>()
-				   .HasKey(ur => new { ur.UserId, ur.RoleId });
+			builder.Entity<UserRole>(userRole =>
+			{
+				userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-			builder.Entity<UserRole>()
-				   .HasOne(ur => ur.Role)
-				   .WithMany(r => r.UserRoles)
-				   .HasForeignKey(ur => ur.RoleId)
-				   .IsRequired();
+				userRole.HasOne(ur => ur.Role)
+						.WithMany(r => r.UserRoles)
+						.HasForeignKey(ur => ur.RoleId)
+						.IsRequired();
 
-			builder.Entity<UserRole>()
-				   .HasOne(ur => ur.User)
-				   .WithMany(r => r.UserRoles)
-				   .HasForeignKey(ur => ur.UserId)
-				   .IsRequired();
+				userRole.HasOne(ur => ur.User)
+						.WithMany(r => r.UserRoles)
+						.HasForeignKey(ur => ur.UserId)
+						.IsRequired();
+			});
 
-			builder.Entity<User>()
-				   .HasOne(e => e.Town)
-				   .WithOne();
+			builder.Entity<User>(user =>
+			{
+				user.HasMany(e => e.Vehicles)
+					.WithOne(e => e.User)
+					.HasForeignKey(e => e.UserId);
 
-			builder.Entity<User>()
-				   .HasMany(e => e.Vehicles)
-				   .WithOne(e => e.User)
-				   .HasForeignKey(e => e.UserId);
+			});
 
-			builder.Entity<Vehicle>()
-				   .HasOne(e => e.User)
-				   .WithMany(e => e.Vehicles)
-				   .HasForeignKey(e => e.UserId)
-				   .IsRequired();
+			builder.Entity<Vehicle>(vehicle =>
+			{
+				vehicle.HasOne(e => e.User)
+					   .WithMany(e => e.Vehicles)
+					   .HasForeignKey(e => e.UserId)
+					   .IsRequired();
+			});
 
 			builder.Entity<VehicleMake>()
 				   .HasMany(e => e.Models)

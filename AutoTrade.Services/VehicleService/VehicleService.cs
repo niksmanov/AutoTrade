@@ -8,7 +8,7 @@ using AutoTrade.Db.Entities;
 using AutoTrade.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace AutoTrade.Services.VehicleService
+namespace AutoTrade.Services
 {
 	public class VehicleService : BaseService, IVehicleService
 	{
@@ -128,7 +128,7 @@ namespace AutoTrade.Services.VehicleService
 			if (vehicleModel == null)
 			{
 				vehicleModel = (VehicleModel)this.Map(model,
-								new VehicleModel { VehicleType = (VehicleType)model.VehicleType });
+								new VehicleModel { VehicleTypeId = model.VehicleTypeId });
 				DbContext.VehicleModels.Add(vehicleModel);
 				DbContext.SaveChanges();
 				return true;
@@ -150,163 +150,24 @@ namespace AutoTrade.Services.VehicleService
 			return false;
 		}
 
-		public IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int? vehicleType)
+		public IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int? vehicleTypeId)
 		{
 			var make = DbContext.VehicleMakes
 								.Include(m => m.Models)
 								.AsNoTracking()
 								.SingleOrDefault(m => m.Id == makeId);
 
-			if (make.Models.Any() && vehicleType.HasValue)
+			if (make.Models.Any() && vehicleTypeId.HasValue)
 			{
 				make.Models = make.Models
-								  .Where(m => (int)m.VehicleType == vehicleType.Value)
+								  .Where(m => m.VehicleTypeId == vehicleTypeId.Value)
 								  .ToList();
 			}
 
 			return make?.Models
 						.OrderBy(m => m.Name)
 						.Select(m => (VehicleModelJsonModel)this.Map(m,
-								new VehicleModelJsonModel { VehicleType = (int)m.VehicleType }));
-		}
-
-		public bool AddTown(TownJsonModel model)
-		{
-			var town = DbContext.Towns
-								.SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
-
-			if (town == null)
-			{
-				town = (Town)this.Map(model, new Town());
-				DbContext.Towns.Add(town);
-				DbContext.SaveChanges();
-				return true;
-			}
-			return false;
-		}
-
-		public bool RemoveTown(int id)
-		{
-			var town = DbContext.Towns
-								.SingleOrDefault(c => c.Id == id);
-
-			if (town != null)
-			{
-				DbContext.Towns.Remove(town);
-				DbContext.SaveChanges();
-				return true;
-			}
-			return false;
-		}
-
-		public IEnumerable<TownJsonModel> GetTowns()
-		{
-			return DbContext.Towns?
-							.AsNoTracking()
-							.OrderBy(m => m.Name)
-							.Select(m => (TownJsonModel)this.Map(m, new TownJsonModel()));
-		}
-
-		public bool AddColor(ColorJsonModel model)
-		{
-			var color = DbContext.Colors
-								 .SingleOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
-
-			if (color == null)
-			{
-				color = (Color)this.Map(model, new Color());
-				DbContext.Colors.Add(color);
-				DbContext.SaveChanges();
-				return true;
-			}
-			return false;
-		}
-
-		public bool RemoveColor(int id)
-		{
-			var color = DbContext.Colors
-								 .SingleOrDefault(c => c.Id == id);
-
-			if (color != null)
-			{
-				DbContext.Colors.Remove(color);
-				DbContext.SaveChanges();
-				return true;
-			}
-			return false;
-		}
-
-		public IEnumerable<ColorJsonModel> GetColors()
-		{
-			return DbContext.Colors?
-							.AsNoTracking()
-							.OrderBy(m => m.Name)
-							.Select(m => (ColorJsonModel)this.Map(m, new ColorJsonModel()));
-		}
-
-		public bool AddImage(ImageJsonModel model)
-		{
-			var image = DbContext.Images
-								 .SingleOrDefault(i => i.Id == model.Id);
-
-			if (image == null)
-			{
-				image = (Image)this.Map(model, new Image());
-				DbContext.Images.Add(image);
-				DbContext.SaveChanges();
-				return true;
-			}
-			return false;
-		}
-
-		public bool RemoveImage(int id)
-		{
-			var image = DbContext.Images
-								 .SingleOrDefault(c => c.Id == id);
-
-			if (image != null)
-			{
-				DbContext.Images.Remove(image);
-				DbContext.SaveChanges();
-				return true;
-			}
-			return false;
-		}
-
-		public IEnumerable<ImageJsonModel> GetImages(Guid vehicleId)
-		{
-			return DbContext.Images
-							.Where(i => i.VehicleId == vehicleId)
-							.AsNoTracking()
-							.Select(i => (ImageJsonModel)this.Map(i, new ImageJsonModel()));
-		}
-
-		public VehicleEnumsJsonModel GetVehicleEnums()
-		{
-			var vehicleEnums = new VehicleEnumsJsonModel();
-
-			vehicleEnums.VehicleType = EnumToJsonModel(typeof(VehicleType));
-			vehicleEnums.FuelType = EnumToJsonModel(typeof(FuelType));
-			vehicleEnums.GearboxType = EnumToJsonModel(typeof(GearboxType));
-
-			return vehicleEnums;
-		}
-
-		private IEnumerable<EnumJsonModel> EnumToJsonModel(Type enumType)
-		{
-			var result = new List<EnumJsonModel>();
-			int[] values = (int[])Enum.GetValues(enumType);
-			string[] names = Enum.GetNames(enumType);
-
-			for (int i = 0; i < names.Length; i++)
-			{
-				result.Add(new EnumJsonModel
-				{
-					Id = values[i],
-					Name = names[i]
-				});
-			}
-			return result;
+								new VehicleModelJsonModel { VehicleTypeId = m.VehicleTypeId }));
 		}
 	}
 }

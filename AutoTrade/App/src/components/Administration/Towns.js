@@ -2,8 +2,8 @@
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from '../Shared/Vehicle/store/Vehicle';
-import * as types from '../Shared/Vehicle/store/types';
+import { commonActionCreators } from '../Shared/Common/store/Common';
+import * as types from '../Shared/Common/store/types';
 import axios from 'axios';
 import Navigation from '../Administration/Navigation';
 import DisplayErrors from '../Shared/Error/Error';
@@ -90,6 +90,6 @@ class Towns extends Component {
 }
 
 export default connect(
-	state => state.vehicle,
-	dispatch => bindActionCreators(actionCreators, dispatch)
+	state => state.common,
+	dispatch => bindActionCreators(commonActionCreators, dispatch)
 )(Towns);

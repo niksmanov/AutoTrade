@@ -6,7 +6,7 @@ using AutoTrade.Core;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db.Entities;
 using AutoTrade.Db.Enums;
-using AutoTrade.Services.UserService;
+using AutoTrade.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;

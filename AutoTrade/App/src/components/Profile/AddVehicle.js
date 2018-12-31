@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from '../Shared/Vehicle/store/Vehicle';
+import { vehicleActionCreators } from '../Shared/Vehicle/store/Vehicle';
 import axios from 'axios';
 import { UserContext } from '../Shared/User/UserContext';
 import DisplayErrors from '../Shared/Error/Error';
@@ -46,5 +46,5 @@ class AddVehicle extends Component {
 
 export default connect(
 	state => state.vehicle,
-	dispatch => bindActionCreators(actionCreators, dispatch)
+	dispatch => bindActionCreators(vehicleActionCreators, dispatch)
 )(AddVehicle);

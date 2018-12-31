@@ -9,6 +9,6 @@ namespace AutoTrade.Core.JsonModels
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public int MakeId { get; set; }
-		public int VehicleType { get; set; }
+		public int VehicleTypeId { get; set; }
 	}
 }

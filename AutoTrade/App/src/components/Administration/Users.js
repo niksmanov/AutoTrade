@@ -2,7 +2,7 @@
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from '../Shared/User/store/User';
+import { userActionCreators } from '../Shared/User/store/User';
 import * as types from '../Shared/User/store/types';
 import axios from 'axios';
 import Navigation from '../Administration/Navigation';
@@ -119,5 +119,5 @@ class Users extends Component {
 
 export default connect(
 	state => state.user,
-	dispatch => bindActionCreators(actionCreators, dispatch)
+	dispatch => bindActionCreators(userActionCreators, dispatch)
 )(Users);

@@ -4,11 +4,9 @@ using System.Text;
 
 namespace AutoTrade.Db.Entities
 {
-	public class Image
+	public class FuelType
 	{
 		public int Id { get; set; }
-		public Guid Name { get; set; }
-		public virtual Vehicle Vehicle { get; set; }
-		public Guid VehicleId { get; set; }
+		public string Name { get; set; }
 	}
 }

@@ -22,6 +22,21 @@ export default props => (<Navbar className="profile-nav">
 				Vehicle Models
           </NavItem>
 		</LinkContainer>
+		<LinkContainer to={'/admin/vehicletypes'}>
+			<NavItem>
+				Vehicle Types
+          </NavItem>
+		</LinkContainer>
+		<LinkContainer to={'/admin/fueltypes'}>
+			<NavItem>
+				Fuel Types
+          </NavItem>
+		</LinkContainer>
+		<LinkContainer to={'/admin/gearboxtypes'}>
+			<NavItem>
+				Gearbox Types
+          </NavItem>
+		</LinkContainer>
 		<LinkContainer to={'/admin/towns'}>
 			<NavItem>
 				Towns

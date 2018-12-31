@@ -1,7 +1,7 @@
 ﻿using AutoTrade.Core.JsonModels;
 using System.Collections.Generic;
 
-namespace AutoTrade.Services.UserService
+namespace AutoTrade.Services
 {
 	public interface IUserService
 	{

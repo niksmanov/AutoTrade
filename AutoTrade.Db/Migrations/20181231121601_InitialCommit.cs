@@ -36,6 +36,32 @@ namespace AutoTrade.Db.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FuelTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FuelTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GearboxTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GearboxTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Towns",
                 columns: table => new
                 {
@@ -59,6 +85,19 @@ namespace AutoTrade.Db.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VehicleMakes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VehicleTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VehicleTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -122,6 +161,7 @@ namespace AutoTrade.Db.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
+                    VehicleTypeId = table.Column<int>(nullable: false),
                     MakeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -131,6 +171,12 @@ namespace AutoTrade.Db.Migrations
                         name: "FK_VehicleModels_VehicleMakes_MakeId",
                         column: x => x.MakeId,
                         principalTable: "VehicleMakes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VehicleModels_VehicleTypes_VehicleTypeId",
+                        column: x => x.VehicleTypeId,
+                        principalTable: "VehicleTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -229,11 +275,11 @@ namespace AutoTrade.Db.Migrations
                     MakeId = table.Column<int>(nullable: false),
                     ModelId = table.Column<int>(nullable: false),
                     ColorId = table.Column<int>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
-                    FuelType = table.Column<int>(nullable: false),
-                    Gearbox = table.Column<int>(nullable: false),
-                    HorsePower = table.Column<int>(nullable: false),
+                    TypeId = table.Column<int>(nullable: false),
+                    FuelTypeId = table.Column<int>(nullable: false),
+                    GearBoxTypeId = table.Column<int>(nullable: false),
                     ProductionDate = table.Column<DateTime>(nullable: false),
+                    HorsePower = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     CubicCapacity = table.Column<int>(nullable: false),
                     Airbag = table.Column<int>(nullable: false),
@@ -254,9 +300,27 @@ namespace AutoTrade.Db.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Vehicles_FuelTypes_FuelTypeId",
+                        column: x => x.FuelTypeId,
+                        principalTable: "FuelTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Vehicles_GearboxTypes_GearBoxTypeId",
+                        column: x => x.GearBoxTypeId,
+                        principalTable: "GearboxTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Vehicles_VehicleMakes_MakeId",
                         column: x => x.MakeId,
                         principalTable: "VehicleMakes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Vehicles_VehicleTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "VehicleTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -273,7 +337,7 @@ namespace AutoTrade.Db.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<int>(nullable: false),
+                    Name = table.Column<Guid>(nullable: false),
                     VehicleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -329,9 +393,7 @@ namespace AutoTrade.Db.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_TownId",
                 table: "AspNetUsers",
-                column: "TownId",
-                unique: true,
-                filter: "[TownId] IS NOT NULL");
+                column: "TownId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_VehicleId",
@@ -344,14 +406,34 @@ namespace AutoTrade.Db.Migrations
                 column: "MakeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_VehicleModels_VehicleTypeId",
+                table: "VehicleModels",
+                column: "VehicleTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_ColorId",
                 table: "Vehicles",
                 column: "ColorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_FuelTypeId",
+                table: "Vehicles",
+                column: "FuelTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_GearBoxTypeId",
+                table: "Vehicles",
+                column: "GearBoxTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_MakeId",
                 table: "Vehicles",
                 column: "MakeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_TypeId",
+                table: "Vehicles",
+                column: "TypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_UserId",
@@ -392,7 +474,16 @@ namespace AutoTrade.Db.Migrations
                 name: "Colors");
 
             migrationBuilder.DropTable(
+                name: "FuelTypes");
+
+            migrationBuilder.DropTable(
+                name: "GearboxTypes");
+
+            migrationBuilder.DropTable(
                 name: "VehicleMakes");
+
+            migrationBuilder.DropTable(
+                name: "VehicleTypes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

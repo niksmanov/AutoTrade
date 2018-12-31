@@ -14,13 +14,16 @@ namespace AutoTrade.Db.Entities
 		public int MakeId { get; set; }
 		public virtual VehicleMake Make { get; set; }
 		public int ModelId { get; set; }
+
+
 		public int ColorId { get; set; }
 		public virtual Color Color { get; set; }
-
-
-		public VehicleType Type { get; set; }
-		public FuelType FuelType { get; set; }
-		public GearboxType Gearbox { get; set; }
+		public int TypeId { get; set; }
+		public virtual VehicleType Type { get; set; }
+		public int FuelTypeId { get; set; }
+		public virtual FuelType FuelType { get; set; }
+		public int GearBoxTypeId { get; set; }
+		public virtual GearboxType GearboxType { get; set; }
 
 		public DateTime ProductionDate { get; set; }
 		public int HorsePower { get; set; }

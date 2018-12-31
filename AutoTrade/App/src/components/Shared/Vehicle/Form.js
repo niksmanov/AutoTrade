@@ -1,8 +1,10 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from './store/Vehicle';
+import { vehicleActionCreators } from './store/Vehicle';
+import { commonActionCreators } from '../Common/store/Common';
 import * as types from './store/types';
+import * as commonTypes from '../Common/store/types';
 import axios from 'axios';
 
 const EMPTY_VEHICLE_ID = '00000000-0000-0000-0000-000000000000';
@@ -19,8 +21,7 @@ class Form extends Component {
 
 	componentDidMount() {
 		this.props[types.GET_VEHICLE_MAKES]();
-		this.props[types.GET_COLORS]();
-		this.props[types.GET_VEHICLE_ENUMS]();
+		this.props[commonTypes.GET_ALL_COMMONS]();
 	}
 
 	handleSubmit(e) {
@@ -65,14 +66,14 @@ class Form extends Component {
 				<div className="loading-app"></div>
 			</React.Fragment>;
 
-		if (this.props.vehicleEnums.vehicleType) {
+		if (this.props.allCommons.vehicleTypes) {
 			vehicleForm =
 				<form onSubmit={this.handleSubmit.bind(this)}>
 
 					<label>Fuel Type:</label>
 					<br />
 					<select value={this.state.selectFuel || this.props.vehicle.fuelTypeId} onChange={this.selectEvent.bind(this, 'selectFuel')} name="fuelTypeId" required className="form-control spacer">
-						{this.props.vehicleEnums.fuelType.map((type, i) => {
+						{this.props.allCommons.fuelTypes.map((type, i) => {
 							return (<option key={i} value={type.id}>{type.name}</option>)
 						})}
 					</select>
@@ -80,7 +81,7 @@ class Form extends Component {
 					<label>Gearbox Type:</label>
 					<br />
 					<select value={this.state.selectGearbox || this.props.vehicle.gearboxTypeId} onChange={this.selectEvent.bind(this, 'selectGearbox')} name="gearboxTypeId" required className="form-control spacer">
-						{this.props.vehicleEnums.gearboxType.map((type, i) => {
+						{this.props.allCommons.gearboxTypes.map((type, i) => {
 							return (<option key={i} value={type.id}>{type.name}</option>)
 						})}
 					</select>
@@ -97,7 +98,7 @@ class Form extends Component {
 					<br />
 					<select value={this.state.selectType || this.props.vehicle.typeId} onChange={this.selectType.bind(this)} name="typeId" required className="form-control spacer">
 						<option>Select Type</option>
-						{this.props.vehicleEnums.vehicleType.map((type, i) => {
+						{this.props.allCommons.vehicleTypes.map((type, i) => {
 							return (<option key={i} value={type.id}>{type.name}</option>)
 						})}
 					</select>
@@ -113,7 +114,7 @@ class Form extends Component {
 					<label>Colors:</label>
 					<select value={this.state.selectColor || this.props.vehicle.colorId} onChange={this.selectEvent.bind(this, 'selectColor')} name="colorId" required className="form-control spacer">
 						<option>Select Color</option>
-						{this.props.colors.map((color, i) => {
+						{this.props.allCommons.colors.map((color, i) => {
 							return (<option key={i} value={color.id}>{color.name}</option>)
 						})}
 					</select>
@@ -132,6 +133,6 @@ class Form extends Component {
 }
 
 export default connect(
-	state => state.vehicle,
-	dispatch => bindActionCreators(actionCreators, dispatch)
+	state => Object.assign({}, state.vehicle, state.common),
+	dispatch => bindActionCreators(Object.assign({}, vehicleActionCreators, commonActionCreators), dispatch)
 )(Form);

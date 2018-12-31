@@ -2,8 +2,10 @@
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from '../Shared/Vehicle/store/Vehicle';
+import { vehicleActionCreators } from '../Shared/Vehicle/store/Vehicle';
+import { commonActionCreators } from '../Shared/Common/store/Common';
 import * as types from '../Shared/Vehicle/store/types';
+import * as commonTypes from '../Shared/Common/store/types';
 import axios from 'axios';
 import Navigation from '../Administration/Navigation';
 import DisplayErrors from '../Shared/Error/Error';
@@ -13,12 +15,12 @@ class VehicleModels extends Component {
 		errors: [],
 		isFormVisible: false,
 		makeId: 0,
-		typeId: null,
+		typeId: 0,
 	};
 
 	componentDidMount() {
 		this.props[types.GET_VEHICLE_MAKES]();
-		this.props[types.GET_VEHICLE_ENUMS]();
+		this.props[commonTypes.GET_VEHICLE_TYPES]();
 	}
 
 	handleSubmit(e) {
@@ -107,9 +109,9 @@ class VehicleModels extends Component {
 							<React.Fragment>
 								<label>Vehicle Type:</label>
 								<br />
-								<select onChange={this.selectType.bind(this)} name="vehicleType" required className="form-control spacer">
+								<select onChange={this.selectType.bind(this)} name="vehicleTypeId" required className="form-control spacer">
 									<option>Select Vehicle Type</option>
-									{this.props.vehicleEnums.vehicleType.map((type, i) => {
+									{this.props.vehicleTypes.map((type, i) => {
 										return (<option key={i} value={type.id}>{type.name}</option>)
 									})}
 								</select>
@@ -133,6 +135,6 @@ class VehicleModels extends Component {
 }
 
 export default connect(
-	state => state.vehicle,
-	dispatch => bindActionCreators(actionCreators, dispatch)
+	state => Object.assign({}, state.vehicle, state.common),
+	dispatch => bindActionCreators(Object.assign({}, vehicleActionCreators, commonActionCreators), dispatch)
 )(VehicleModels);

@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from '../Shared/Vehicle/store/Vehicle';
-import * as types from '../Shared/Vehicle/store/types';
+import { commonActionCreators } from '../Shared/Common/store/Common';
+import * as types from '../Shared/Common/store/types';
 import axios from 'axios';
 import { UserContext } from '../Shared/User/UserContext';
 import DisplayErrors from '../Shared/Error/Error';
@@ -12,7 +12,7 @@ class Profile extends Component {
 	state = {
 		errors: [],
 		sendEmail: false,
-		selectValue: null,
+		selectTown: null,
 	};
 
 	componentDidMount() {
@@ -20,7 +20,7 @@ class Profile extends Component {
 	}
 
 	selectTown(e) {
-		this.setState({ selectValue: e.target.value });
+		this.setState({ selectTown: e.target.value });
 	}
 
 	reSendEmail(userId) {
@@ -50,7 +50,6 @@ class Profile extends Component {
 
 	render() {
 		let emailConfirmed;
-
 		if (!this.context.emailConfirmed && !this.state.sendEmail) {
 			emailConfirmed = <div className="alert alert-info">
 				<p>Please check your email and confirm this account.</p>
@@ -68,16 +67,16 @@ class Profile extends Component {
 						<label>Username:</label>
 						<span className="form-control spacer"> {user.userName} </span>
 						<label>Town:</label>
-						<select value={this.state.selectValue || user.townId} onChange={this.selectTown.bind(this)} name="townId" className="form-control spacer">
+						<select value={this.state.selectTown || user.townId} onChange={this.selectTown.bind(this)} name="townId" className="form-control spacer">
 							<option>Select Town</option>
 							{this.props.towns.map((town, i) => {
 								return (<option key={i} value={town.id}>{town.name}</option>)
 							})}
 						</select>
 						<label>Address:</label>
-						<input name="address" type="text" defaultValue={user.address} required className="form-control spacer" autoComplete="off" />
+						<input name="address" type="text" defaultValue={user.address} className="form-control spacer" autoComplete="off" />
 						<label>Phone number:</label>
-						<input name="phoneNumber" type="tel" defaultValue={user.phoneNumber} required className="form-control spacer" autoComplete="off" />
+						<input name="phoneNumber" type="tel" defaultValue={user.phoneNumber} className="form-control spacer" autoComplete="off" />
 						<input name="id" type="hidden" value={user.id} />
 						<br />
 						<button type="submit" className="btn btn-primary">Submit </button>
@@ -93,6 +92,6 @@ class Profile extends Component {
 
 Profile.contextType = UserContext;
 export default connect(
-	state => state.vehicle,
-	dispatch => bindActionCreators(actionCreators, dispatch)
+	state => state.common,
+	dispatch => bindActionCreators(commonActionCreators, dispatch)
 )(Profile);

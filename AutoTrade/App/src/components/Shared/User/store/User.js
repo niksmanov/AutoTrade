@@ -7,7 +7,7 @@ const initialState = {
 	isLoading: true,
 };
 
-export const actionCreators = {
+export const userActionCreators = {
 	[types.GET_USER]: () => {
 		return (dispatch) => {
 			axios.get('/user/current')

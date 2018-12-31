@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoTrade.Core.JsonModels;
-using AutoTrade.Services.VehicleService;
+using AutoTrade.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoTrade.Controllers
@@ -12,6 +12,7 @@ namespace AutoTrade.Controllers
 	public class VehicleController : Controller
 	{
 		private readonly IVehicleService _vehicleService;
+
 		public VehicleController(IVehicleService vehicleService)
 		{
 			_vehicleService = vehicleService;
@@ -26,42 +27,14 @@ namespace AutoTrade.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetVehicleModels(int makeId, int? vehicleType)
+		public IActionResult GetVehicleModels(int makeId, int? vehicleTypeId)
 		{
 			if (makeId > 0)
 			{
-				var result = _vehicleService.GetModels(makeId, vehicleType);
+				var result = _vehicleService.GetModels(makeId, vehicleTypeId);
 				return Json(new ResponseJsonModel(true, result));
 			}
 			return Json(new ResponseJsonModel());
-		}
-
-		[HttpGet("[action]")]
-		public IActionResult GetTowns()
-		{
-			var result = _vehicleService.GetTowns();
-			return Json(new ResponseJsonModel(true, result));
-		}
-
-		[HttpGet("[action]")]
-		public IActionResult GetColors()
-		{
-			var result = _vehicleService.GetColors();
-			return Json(new ResponseJsonModel(true, result));
-		}
-
-		[HttpGet("[action]")]
-		public IActionResult GetVehicleEnums()
-		{
-			var vehicleEnums = _vehicleService.GetVehicleEnums();
-			return Json(new ResponseJsonModel(true, vehicleEnums));
-		}
-
-		[HttpGet("[action]")]
-		public IActionResult GetImages(Guid vehicleId)
-		{
-			var result = _vehicleService.GetImages(vehicleId);
-			return Json(new ResponseJsonModel(true, result));
 		}
 
 		[HttpGet("[action]")]

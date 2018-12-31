@@ -16,11 +16,15 @@ import SearchVehicle from './components/Shared/Vehicle/Search';
 import Profile from './components/Profile/Profile';
 import ChangePassword from './components/Account/ChangePassword';
 import AddVehicle from './components/Profile/AddVehicle';
+import Vehicles from './components/Profile/Vehicles';
 
 //Admin routes
 import Users from './components/Administration/Users';
 import VehicleMakes from './components/Administration/VehicleMakes';
 import VehicleModels from './components/Administration/VehicleModels';
+import VehicleTypes from './components/Administration/VehicleTypes';
+import FuelTypes from './components/Administration/FuelTypes';
+import GearboxTypes from './components/Administration/GearboxTypes';
 import Towns from './components/Administration/Towns';
 import Colors from './components/Administration/Colors';
 
@@ -29,7 +33,7 @@ const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
 	return <Route {...rest} render={(props) =>
 		isAuth ?
 			<Component {...props} /> :
-			<Redirect to='/login' />
+			<Redirect to='/' />
 	} />
 };
 
@@ -64,12 +68,16 @@ class App extends Component {
 						<PrivateRoute isAuth={isAdmin} path="/admin/users" component={Users} />
 						<PrivateRoute isAuth={isAdmin} path="/admin/makes" component={VehicleMakes} />
 						<PrivateRoute isAuth={isAdmin} path="/admin/models" component={VehicleModels} />
+						<PrivateRoute isAuth={isAdmin} path="/admin/vehicletypes" component={VehicleTypes} />
+						<PrivateRoute isAuth={isAdmin} path="/admin/fueltypes" component={FuelTypes} />
+						<PrivateRoute isAuth={isAdmin} path="/admin/gearboxtypes" component={GearboxTypes} />
 						<PrivateRoute isAuth={isAdmin} path="/admin/towns" component={Towns} />
 						<PrivateRoute isAuth={isAdmin} path="/admin/colors" component={Colors} />
 
 						<PrivateRoute isAuth={isAuth} path="/profile/home" component={Profile} />
 						<PrivateRoute isAuth={isAuth} path="/profile/changepassword" component={ChangePassword} />
 						<PrivateRoute isAuth={isAuth} path="/profile/addvehicle" component={AddVehicle} />
+						<PrivateRoute isAuth={isAuth} path="/profile/vehicles" component={Vehicles} />
 
 						<Route component={NotFound} />
 					</Switch>
@@ -81,9 +89,9 @@ class App extends Component {
 				<Switch>
 					<Route exact path='/' component={Home} />
 					<Route path='/search' component={SearchVehicle} />
-					<Route path='/register' component={Register} />
-					<Route path='/login' component={Login} />
-					<Route path='/forgotpassword' component={ForgotPassword} />
+					<PrivateRoute isAuth={!isAuth} path='/register' component={Register} />
+					<PrivateRoute isAuth={!isAuth} path='/login' component={Login} />
+					<PrivateRoute isAuth={!isAuth} path='/forgotpassword' component={ForgotPassword} />
 					{privateRoutes}
 				</Switch>
 			</Layout >

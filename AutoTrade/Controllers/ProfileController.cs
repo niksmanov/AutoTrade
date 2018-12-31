@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoTrade.Core.JsonModels;
-using AutoTrade.Services.UserService;
-using AutoTrade.Services.VehicleService;
+using AutoTrade.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
