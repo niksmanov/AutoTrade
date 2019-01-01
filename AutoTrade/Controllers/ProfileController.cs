@@ -37,8 +37,14 @@ namespace AutoTrade.Controllers
 		[HttpPost("[action]")]
 		public IActionResult AddVehicle(VehicleJsonModel model)
 		{
-			var id = _vehicleService.AddVehicle(model);
-			return Json(new ResponseJsonModel(true, id));
+			if (ModelState.IsValid)
+			{
+				var id = _vehicleService.AddVehicle(model);
+				return Json(new ResponseJsonModel(true, id));
+			}
+
+			var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+			return Json(new ResponseJsonModel(errors: errors));
 		}
 
 		[HttpPost("[action]")]

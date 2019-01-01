@@ -14,7 +14,7 @@ namespace AutoTrade.Services
 
 		public object Map(object sourceObject, object destinationObject)
 		{
-			if (sourceObject != null & destinationObject != null)
+			if (sourceObject != null && destinationObject != null)
 			{
 				foreach (var sourceProperty in sourceObject.GetType().GetProperties())
 				{

@@ -2,6 +2,10 @@
 	body {
 		padding-top: 50px;
 	}
+
+	.vehicle-list-entity {
+		width: 100% !important;
+	}
 }
 
 body {
@@ -10,6 +14,14 @@ body {
 
 u {
 	cursor: pointer;
+}
+
+a {
+	color: unset;
+}
+
+.no-margin {
+	margin: 0;
 }
 
 .loading-app {
@@ -23,12 +35,18 @@ u {
 	margin: 10px 0;
 }
 
-.alert {
-	position: absolute;
-	max-width: 500px;
-}
-
-
+.alert,
 .form-control {
-	max-width: 300px;
+	max-width: 350px;
 }
+
+.vehicle-list-entity {
+	border: 1px solid #adadad;
+	padding: 5px;
+	margin: 5px;
+	width: 49%;
+}
+
+	.vehicle-list-entity span:not(:last-child)::after {
+		content: ', ';
+	}

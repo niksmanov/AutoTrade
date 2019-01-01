@@ -5,10 +5,10 @@ const initialState = {
 	allCommons: {},
 	towns: [],
 	colors: [],
-	images: [],
 	vehicleTypes: [],
 	gearboxTypes: [],
 	fuelTypes: [],
+	images: [],
 	isLoading: true,
 };
 
@@ -83,20 +83,6 @@ export const commonActionCreators = {
 				});
 		}
 	},
-	[types.GET_IMAGES]: (vehicleId = '') => {
-		return (dispatch) => {
-			axios.get(`/common/getimages?vehicleId=${vehicleId}`)
-				.then(r => { return r.data })
-				.then(response => {
-					if (response.succeeded) {
-						dispatch({
-							type: types.UPDATE_IMAGES,
-							images: response.data
-						});
-					}
-				});
-		}
-	},
 	[types.GET_ALL_COMMONS]: () => {
 		return (dispatch) => {
 			axios.get('/common/getallcommons')
@@ -106,6 +92,20 @@ export const commonActionCreators = {
 						dispatch({
 							type: types.UPDATE_ALL_COMMONS,
 							allCommons: response.data
+						});
+					}
+				});
+		}
+	},
+	[types.GET_IMAGES]: (vehicleId = '') => {
+		return (dispatch) => {
+			axios.get(`/common/getimages?vehicleId=${vehicleId}`)
+				.then(r => { return r.data })
+				.then(response => {
+					if (response.succeeded) {
+						dispatch({
+							type: types.UPDATE_IMAGES,
+							images: response.data
 						});
 					}
 				});
@@ -145,16 +145,16 @@ export const reducer = (state = initialState, action) => {
 				gearboxTypes: action.gearboxTypes,
 				isLoading: false,
 			};
-		case types.UPDATE_IMAGES:
-			return {
-				...state,
-				images: action.images,
-				isLoading: false,
-			};
 		case types.UPDATE_ALL_COMMONS:
 			return {
 				...state,
 				allCommons: action.allCommons,
+				isLoading: false,
+			};
+		case types.UPDATE_IMAGES:
+			return {
+				...state,
+				images: action.images,
 				isLoading: false,
 			};
 

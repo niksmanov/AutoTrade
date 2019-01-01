@@ -6,8 +6,8 @@ namespace AutoTrade.Db.Entities
 {
 	public class Image
 	{
-		public int Id { get; set; }
-		public Guid Name { get; set; }
+		public Guid Id { get; set; }
+
 		public virtual Vehicle Vehicle { get; set; }
 		public Guid VehicleId { get; set; }
 	}

@@ -7,16 +7,17 @@ import axios from 'axios';
 import Layout from './components/Layout/Layout';
 import NotFound from './components/NotFound/NotFound';
 import Home from './components/Home/Home';
+import Search from './components/Home/Search';
 import Register from './components/Account/Register';
 import Login from './components/Account/Login';
 import ForgotPassword from './components/Account/ForgotPassword';
-import SearchVehicle from './components/Shared/Vehicle/Search';
+import Vehicle from './components/Shared/Vehicle/Vehicle';
 
 //Private routes
 import Profile from './components/Profile/Profile';
 import ChangePassword from './components/Account/ChangePassword';
 import AddVehicle from './components/Profile/AddVehicle';
-import Vehicles from './components/Profile/Vehicles';
+import ListVehicles from './components/Profile/Vehicles';
 
 //Admin routes
 import Users from './components/Administration/Users';
@@ -77,7 +78,7 @@ class App extends Component {
 						<PrivateRoute isAuth={isAuth} path="/profile/home" component={Profile} />
 						<PrivateRoute isAuth={isAuth} path="/profile/changepassword" component={ChangePassword} />
 						<PrivateRoute isAuth={isAuth} path="/profile/addvehicle" component={AddVehicle} />
-						<PrivateRoute isAuth={isAuth} path="/profile/vehicles" component={Vehicles} />
+						<PrivateRoute isAuth={isAuth} path="/profile/vehicles" component={ListVehicles} />
 
 						<Route component={NotFound} />
 					</Switch>
@@ -88,7 +89,8 @@ class App extends Component {
 			<Layout>
 				<Switch>
 					<Route exact path='/' component={Home} />
-					<Route path='/search' component={SearchVehicle} />
+					<Route path='/search' component={Search} />
+					<Route path='/vehicle/:id' component={Vehicle} />
 					<PrivateRoute isAuth={!isAuth} path='/register' component={Register} />
 					<PrivateRoute isAuth={!isAuth} path='/login' component={Login} />
 					<PrivateRoute isAuth={!isAuth} path='/forgotpassword' component={ForgotPassword} />

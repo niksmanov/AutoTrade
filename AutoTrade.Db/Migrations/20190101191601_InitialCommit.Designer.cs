@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoTrade.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20181231121601_InitialCommit")]
+    [Migration("20190101191601_InitialCommit")]
     partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,11 +62,8 @@ namespace AutoTrade.Db.Migrations
 
             modelBuilder.Entity("AutoTrade.Db.Entities.Image", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<Guid>("Name");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("VehicleId");
 
@@ -193,7 +190,7 @@ namespace AutoTrade.Db.Migrations
 
                     b.Property<bool>("AirConditioning");
 
-                    b.Property<int>("Airbag");
+                    b.Property<bool>("Airbags");
 
                     b.Property<bool>("AutoPilot");
 
@@ -209,7 +206,7 @@ namespace AutoTrade.Db.Migrations
 
                     b.Property<int>("FuelTypeId");
 
-                    b.Property<int>("GearBoxTypeId");
+                    b.Property<int>("GearboxTypeId");
 
                     b.Property<int>("HorsePower");
 
@@ -232,7 +229,7 @@ namespace AutoTrade.Db.Migrations
 
                     b.HasIndex("FuelTypeId");
 
-                    b.HasIndex("GearBoxTypeId");
+                    b.HasIndex("GearboxTypeId");
 
                     b.HasIndex("MakeId");
 
@@ -409,7 +406,7 @@ namespace AutoTrade.Db.Migrations
 
                     b.HasOne("AutoTrade.Db.Entities.GearboxType", "GearboxType")
                         .WithMany()
-                        .HasForeignKey("GearBoxTypeId")
+                        .HasForeignKey("GearboxTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AutoTrade.Db.Entities.VehicleMake", "Make")

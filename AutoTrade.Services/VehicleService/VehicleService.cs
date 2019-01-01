@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AutoTrade.Core;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db;
 using AutoTrade.Db.Entities;
@@ -63,6 +64,12 @@ namespace AutoTrade.Services
 		{
 			var query = DbContext.Vehicles
 								 .Include(v => v.Images)
+								 .Include(v => v.Make)
+												.ThenInclude(m => m.Models)
+								 .Include(v => v.Color)
+								 .Include(v => v.Type)
+								 .Include(v => v.FuelType)
+								 .Include(v => v.GearboxType)
 								 .AsNoTracking();
 
 			if (!string.IsNullOrEmpty(userId))
@@ -71,17 +78,49 @@ namespace AutoTrade.Services
 			}
 
 			return query.OrderByDescending(u => u.DateCreated)
-						.Select(v => (VehicleJsonModel)this.Map(v, new VehicleJsonModel()));
+						.Select(v => (VehicleJsonModel)this.Map(v, MapRelatedEntities(v)));
 		}
 
 		public VehicleJsonModel GetVehicle(Guid id)
 		{
 			var dbModel = DbContext.Vehicles
+								   .Include(v => v.User)
+												  .ThenInclude(u => u.Town)
 								   .Include(v => v.Images)
+								   .Include(v => v.Make)
+												  .ThenInclude(m => m.Models)
+								   .Include(v => v.Color)
+								   .Include(v => v.Type)
+								   .Include(v => v.FuelType)
+								   .Include(v => v.GearboxType)
 								   .SingleOrDefault(v => v.Id == id);
 
-			return (VehicleJsonModel)this.Map(dbModel, new VehicleJsonModel());
+			return (VehicleJsonModel)this.Map(dbModel, MapRelatedEntities(dbModel));
 		}
+
+		private VehicleJsonModel MapRelatedEntities(Vehicle vehicle)
+		{
+			if (vehicle != null)
+			{
+				var imageUrl = vehicle.Images.Any() ?
+					UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault().Id) : null;
+
+				return new VehicleJsonModel
+				{
+					User = (UserJsonModel)this.Map(vehicle.User, new UserJsonModel { TownName = vehicle.User?.Town?.Name }),
+					Make = vehicle.Make.Name,
+					Model = vehicle.Make.Models.SingleOrDefault(x => x.Id == vehicle.MakeId).Name,
+					Color = vehicle.Color.Name,
+					Type = vehicle.Type.Name,
+					FuelType = vehicle.FuelType.Name,
+					GearboxType = vehicle.GearboxType.Name,
+					Url = UrlHelper.GenerateVehicleUrl(vehicle.Id),
+					CoverImageUrl = imageUrl,
+				};
+			}
+			return null;
+		}
+
 
 		public bool AddMake(VehicleMakeJsonModel model)
 		{

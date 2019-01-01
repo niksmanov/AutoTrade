@@ -15,27 +15,26 @@ namespace AutoTrade.Db.Entities
 		public virtual VehicleMake Make { get; set; }
 		public int ModelId { get; set; }
 
-
 		public int ColorId { get; set; }
 		public virtual Color Color { get; set; }
 		public int TypeId { get; set; }
 		public virtual VehicleType Type { get; set; }
 		public int FuelTypeId { get; set; }
 		public virtual FuelType FuelType { get; set; }
-		public int GearBoxTypeId { get; set; }
+		public int GearboxTypeId { get; set; }
 		public virtual GearboxType GearboxType { get; set; }
 
-		public DateTime ProductionDate { get; set; }
 		public int HorsePower { get; set; }
 		public decimal Price { get; set; }
 		public int CubicCapacity { get; set; }
-		public int Airbag { get; set; }
 
+		public bool Airbags { get; set; }
 		public bool ABS { get; set; }
 		public bool ESP { get; set; }
 		public bool CentralLocking { get; set; }
 		public bool AirConditioning { get; set; }
 		public bool AutoPilot { get; set; }
+		public DateTime ProductionDate { get; set; }
 
 		public DateTime DateCreated { get; set; }
 

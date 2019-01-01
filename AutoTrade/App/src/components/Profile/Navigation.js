@@ -15,14 +15,14 @@ export default props => (<Navbar className="profile-nav">
 				Change Password
           </NavItem>
 		</LinkContainer>
-		<LinkContainer to={'/profile/addvehicle'}>
-			<NavItem>
-				Add Vehicle
-          </NavItem>
-		</LinkContainer>
 		<LinkContainer to={'/profile/vehicles'}>
 			<NavItem>
 				List Vehicles
+          </NavItem>
+		</LinkContainer>
+		<LinkContainer to={'/profile/addvehicle'}>
+			<NavItem>
+				Add Vehicle
           </NavItem>
 		</LinkContainer>
 	</Nav>

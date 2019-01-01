@@ -277,17 +277,17 @@ namespace AutoTrade.Db.Migrations
                     ColorId = table.Column<int>(nullable: false),
                     TypeId = table.Column<int>(nullable: false),
                     FuelTypeId = table.Column<int>(nullable: false),
-                    GearBoxTypeId = table.Column<int>(nullable: false),
-                    ProductionDate = table.Column<DateTime>(nullable: false),
+                    GearboxTypeId = table.Column<int>(nullable: false),
                     HorsePower = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     CubicCapacity = table.Column<int>(nullable: false),
-                    Airbag = table.Column<int>(nullable: false),
+                    Airbags = table.Column<bool>(nullable: false),
                     ABS = table.Column<bool>(nullable: false),
                     ESP = table.Column<bool>(nullable: false),
                     CentralLocking = table.Column<bool>(nullable: false),
                     AirConditioning = table.Column<bool>(nullable: false),
                     AutoPilot = table.Column<bool>(nullable: false),
+                    ProductionDate = table.Column<DateTime>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -306,8 +306,8 @@ namespace AutoTrade.Db.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vehicles_GearboxTypes_GearBoxTypeId",
-                        column: x => x.GearBoxTypeId,
+                        name: "FK_Vehicles_GearboxTypes_GearboxTypeId",
+                        column: x => x.GearboxTypeId,
                         principalTable: "GearboxTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -335,9 +335,7 @@ namespace AutoTrade.Db.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     VehicleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -421,9 +419,9 @@ namespace AutoTrade.Db.Migrations
                 column: "FuelTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vehicles_GearBoxTypeId",
+                name: "IX_Vehicles_GearboxTypeId",
                 table: "Vehicles",
-                column: "GearBoxTypeId");
+                column: "GearboxTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_MakeId",

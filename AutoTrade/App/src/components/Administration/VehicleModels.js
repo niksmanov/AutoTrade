@@ -96,29 +96,37 @@ class VehicleModels extends Component {
 			<Row>
 				<Col sm={3}>
 					<form onSubmit={this.handleSubmit.bind(this)}>
-						<label>Make Name:</label>
-						<br />
-						<select onChange={this.selectMake.bind(this)} name="makeId" required className="form-control spacer">
-							<option>Select Vehicle Make</option>
-							{this.props.vehicleMakes.map((make, i) => {
-								return (<option key={i} value={make.id}>{make.name}</option>)
-							})}
-						</select>
+						<div>
+							<label>Make Name:</label>
+							<br />
+							<select onChange={this.selectMake.bind(this)} name="makeId" required className="form-control spacer">
+								<option>Select Vehicle Make</option>
+								{this.props.vehicleMakes.map((make, i) => {
+									return (<option key={i} value={make.id}>{make.name}</option>)
+								})}
+							</select>
+						</div>
 						<br />
 						{this.state.isFormVisible &&
 							<React.Fragment>
-								<label>Vehicle Type:</label>
+								<div>
+									<label>Vehicle Type:</label>
+									<br />
+									<select onChange={this.selectType.bind(this)} name="vehicleTypeId" required className="form-control spacer">
+										<option>Select Vehicle Type</option>
+										{this.props.vehicleTypes.map((type, i) => {
+											return (<option key={i} value={type.id}>{type.name}</option>)
+										})}
+									</select>
+								</div>
+
 								<br />
-								<select onChange={this.selectType.bind(this)} name="vehicleTypeId" required className="form-control spacer">
-									<option>Select Vehicle Type</option>
-									{this.props.vehicleTypes.map((type, i) => {
-										return (<option key={i} value={type.id}>{type.name}</option>)
-									})}
-								</select>
-								<br />
-								<label>Model Name:</label>
-								<br />
-								<input name="name" type="text" autoComplete="off" required className="form-control spacer" />
+								<div>
+									<label>Model Name:</label>
+									<br />
+									<input name="name" type="text" autoComplete="off" required className="form-control spacer" />
+								</div>
+
 								<br />
 								<button type="submit" className="btn btn-primary">Add Model</button>
 							</React.Fragment>}

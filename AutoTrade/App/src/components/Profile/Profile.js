@@ -12,7 +12,7 @@ class Profile extends Component {
 	state = {
 		errors: [],
 		sendEmail: false,
-		selectTown: null,
+		selectTown: 0,
 	};
 
 	componentDidMount() {
@@ -67,7 +67,7 @@ class Profile extends Component {
 						<label>Username:</label>
 						<span className="form-control spacer"> {user.userName} </span>
 						<label>Town:</label>
-						<select value={this.state.selectTown || user.townId} onChange={this.selectTown.bind(this)} name="townId" className="form-control spacer">
+						<select value={user.townId === null ? this.state.selectTown : user.townId} onChange={this.selectTown.bind(this)} name="townId" className="form-control spacer">
 							<option>Select Town</option>
 							{this.props.towns.map((town, i) => {
 								return (<option key={i} value={town.id}>{town.name}</option>)

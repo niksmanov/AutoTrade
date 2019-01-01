@@ -1,6 +1,6 @@
 ﻿import React, { PureComponent } from 'react';
 import axios from 'axios';
-import DisplayErrors from '../Error/Error';
+import DisplayErrors from '../Shared/Error/Error';
 
 class Search extends PureComponent {
 	state = {
