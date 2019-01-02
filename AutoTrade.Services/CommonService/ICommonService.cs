@@ -19,7 +19,7 @@ namespace AutoTrade.Services
 		bool RemoveVehicleType(int id);
 		bool RemoveFuelType(int id);
 		bool RemoveGearboxType(int id);
-		bool RemoveImage(Guid id);
+		bool RemoveImage(int id);
 
 
 		IEnumerable<CommonJsonModel> GetColors();

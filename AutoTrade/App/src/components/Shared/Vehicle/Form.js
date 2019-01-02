@@ -1,14 +1,13 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { UserContext } from '../User/UserContext';
 import { vehicleActionCreators } from './store/Vehicle';
 import { commonActionCreators } from '../Common/store/Common';
 import * as types from './store/types';
 import * as commonTypes from '../Common/store/types';
 import DisplayErrors from '../Error/Error';
 import axios from 'axios';
-
-const EMPTY_VEHICLE_ID = '00000000-0000-0000-0000-000000000000';
 
 class Form extends Component {
 	state = {
@@ -32,21 +31,19 @@ class Form extends Component {
 		this.props[commonTypes.GET_ALL_COMMONS]();
 	}
 
-	handleSubmit(e) {
+	deleteVehicle(vehicleId, e) {
 		e.preventDefault();
-		let actionName = 'edit';
-		if (this.props.vehicle.id === EMPTY_VEHICLE_ID) {
-			actionName = 'add'
-		}
+		var formdata = new FormData();
+		formdata.append('id', vehicleId);
 
-		axios.post(`/profile/${actionName}vehicle`, new FormData(e.target))
+		axios.post('/profile/removevehicle', formdata)
 			.then(r => { return r.data })
 			.then(response => {
 				if (response.succeeded) {
-					this.setState({ errors: [`Entity ${actionName}ed successfully`] });
+					this.setState({ errors: ['Entity deleted successfully'] });
+					window.location.href = '/profile/vehicles';
 				} else {
-					response.errors.push(`We have a problem with ${actionName}ing`);
-					this.setState({ errors: response.errors });
+					this.setState({ errors: ['We have a problem with deleting'] });
 				}
 			});
 	}
@@ -76,13 +73,29 @@ class Form extends Component {
 			</React.Fragment>;
 
 		if (this.props.allCommons.vehicleTypes) {
+
+			let deleteButton;
+			if (this.props.vehicle.user === null) {
+				deleteButton =
+					<button type="submit" className="btn btn-primary">Submit </button>
+			} else if (this.context.id === this.props.vehicle.userId) {
+				deleteButton =
+					<React.Fragment>
+						<input type="hidden" name="userId" value={this.props.vehicle.userId} />
+						<button type="submit" className="btn btn-primary" style={{ marginRight: '50px' }}>Submit </button>
+						<button onClick={this.deleteVehicle.bind(this, this.props.vehicle.id)} className="btn btn-danger">Delete</button>
+					</React.Fragment>
+			} else {
+				window.location.href = '/';
+			}
+
 			vehicleForm =
 				<React.Fragment>
-					<form onSubmit={this.handleSubmit.bind(this)} className="row">
+					<form onSubmit={this.props.handleSubmit.bind(this)} className="row">
 						<div className="col-sm-6 col-xs-12">
 							<div>
 								<label>Vehicle Type:</label>
-								<select value={this.state.selectType || this.props.vehicle.typeId} onChange={this.selectType.bind(this)} name="typeId" required className="form-control spacer">
+								<select value={this.state.selectType} onChange={this.selectType.bind(this)} name="typeId" required className="form-control spacer">
 									<option>Select Vehicle Type</option>
 									{this.props.allCommons.vehicleTypes.map((type, i) => {
 										return (<option key={i} value={type.id}>{type.name}</option>)
@@ -111,7 +124,7 @@ class Form extends Component {
 							</div>
 
 							<label>Makes:</label>
-							<select value={this.state.selectMake || this.props.vehicle.makeId} onChange={this.selectMake.bind(this)} name="makeId" required className="form-control spacer">
+							<select value={this.state.selectMake} onChange={this.selectMake.bind(this)} name="makeId" required className="form-control spacer">
 								<option>Select Make</option>
 								{this.props.vehicleMakes.map((make, i) => {
 									return (<option key={i} value={make.id}>{make.name}</option>)
@@ -152,7 +165,7 @@ class Form extends Component {
 						<div className="col-sm-6 col-xs-12">
 							<div className="spacer">
 								<label>Cubic capacity (cm3):</label>
-								<input type="number" name="cubicCapacity" defaultValue={this.props.vehicle.cubicCapacity} required min="1" className="form-control" />
+								<input type="number" name="cubicCapacity" defaultValue={this.props.vehicle.cubicCapacity} required min="50" className="form-control" />
 							</div>
 
 							<div>
@@ -197,7 +210,7 @@ class Form extends Component {
 
 							<div>
 								<label>Auto Pilot:</label>
-								<select value={this.state.selectAutoPilot || this.props.vehicle.autoPilot} onChange={this.selectEvent.bind(this, 'selectAutoPilot')} name="selectAutoPilot" required className="form-control spacer">
+								<select value={this.state.selectAutoPilot || this.props.vehicle.autoPilot} onChange={this.selectEvent.bind(this, 'selectAutoPilot')} name="autoPilot" required className="form-control spacer">
 									<option value="true">Yes</option>
 									<option value="false">No</option>
 								</select>
@@ -205,14 +218,12 @@ class Form extends Component {
 
 							<div className="spacer">
 								<label>Production Date:</label>
-								<input type="date" name="productionDate" defaultValue={this.props.vehicle.prodDateFormatted} required className="form-control" />
+								<input type="date" name="productionDate" defaultValue={this.props.vehicle.displayDate} required className="form-control" />
 							</div>
-
-							<input name="userId" type="hidden" value={this.props.userId} />
 							<br />
-							<button type="submit" className="btn btn-primary">Submit </button>
-						</div>
 
+							{deleteButton}
+						</div>
 					</form>
 					<br />
 					<DisplayErrors errors={this.state.errors} />
@@ -225,6 +236,7 @@ class Form extends Component {
 	}
 }
 
+Form.contextType = UserContext;
 export default connect(
 	state => Object.assign({}, state.vehicle, state.common),
 	dispatch => bindActionCreators(Object.assign({}, vehicleActionCreators, commonActionCreators), dispatch)

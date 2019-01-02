@@ -18,6 +18,6 @@ namespace AutoTrade.Services
 		IEnumerable<VehicleJsonModel> GetVehicles(string userId);
 		VehicleJsonModel GetVehicle(Guid id);
 		IEnumerable<VehicleMakeJsonModel> GetMakes();
-		IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int? vehicleTypeId);
+		IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int vehicleTypeId);
 	}
 }

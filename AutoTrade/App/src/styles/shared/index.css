@@ -16,8 +16,10 @@ u {
 	cursor: pointer;
 }
 
-a {
+a,
+a:hover {
 	color: unset;
+	text-decoration: none;
 }
 
 .no-margin {
@@ -40,11 +42,16 @@ a {
 	max-width: 350px;
 }
 
+.alert {
+	margin: 10px;
+}
+
 .vehicle-list-entity {
 	border: 1px solid #adadad;
+	border-radius: 5px;
 	padding: 5px;
 	margin: 5px;
-	width: 49%;
+	width: 48%;
 }
 
 	.vehicle-list-entity span:not(:last-child)::after {

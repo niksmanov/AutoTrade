@@ -227,7 +227,7 @@ namespace AutoTrade.Services
 			return false;
 		}
 
-		public bool RemoveImage(Guid id)
+		public bool RemoveImage(int id)
 		{
 			var image = DbContext.Images
 								 .SingleOrDefault(c => c.Id == id);

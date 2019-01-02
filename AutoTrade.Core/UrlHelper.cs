@@ -11,10 +11,9 @@ namespace AutoTrade.Core
 			return $"/vehicle/{id}";
 		}
 
-		public static string GenerateVehicleImageUrl(Guid vehicleId, Guid imageId)
+		public static string GenerateVehicleImageUrl(Guid vehicleId, string imageName)
 		{
-			return $"";
+			return $"/{vehicleId}/{imageName}.png";
 		}
-
 	}
 }

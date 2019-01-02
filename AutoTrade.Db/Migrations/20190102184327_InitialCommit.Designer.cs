@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoTrade.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20190101191601_InitialCommit")]
+    [Migration("20190102184327_InitialCommit")]
     partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,8 +62,11 @@ namespace AutoTrade.Db.Migrations
 
             modelBuilder.Entity("AutoTrade.Db.Entities.Image", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
 
                     b.Property<Guid>("VehicleId");
 

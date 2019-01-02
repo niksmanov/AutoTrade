@@ -10,28 +10,28 @@ import DisplayErrors from '../Shared/Error/Error';
 import axios from 'axios';
 
 
-class AddVehicle extends Component {
+class EditVehicle extends Component {
 	state = {
 		errors: [],
 	};
 
 	componentDidMount() {
-		this.props[types.GET_VEHICLE]();
+		this.props[types.GET_VEHICLE](this.props.match.params.id);
 	}
 
 	handleSubmit(e) {
 		e.preventDefault();
 		var formdata = new FormData(e.target);
-		formdata.append('userId', this.context.id);
+		formdata.append('id', this.props.match.params.id);
 
-		axios.post('/profile/addvehicle', formdata)
+		axios.post('/profile/editvehicle', formdata)
 			.then(r => { return r.data })
 			.then(response => {
 				if (response.succeeded) {
-					this.setState({ errors: ['Entity added successfully'] });
+					this.setState({ errors: ['Entity edited successfully'] });
 					window.location.href = `/vehicle/${response.data}`;
 				} else {
-					response.errors.push('We have a problem with adding');
+					response.errors.push('We have a problem with editing');
 					this.setState({ errors: response.errors });
 				}
 			});
@@ -47,8 +47,8 @@ class AddVehicle extends Component {
 	}
 }
 
-AddVehicle.contextType = UserContext;
+EditVehicle.contextType = UserContext;
 export default connect(
 	state => state.vehicle,
 	dispatch => bindActionCreators(vehicleActionCreators, dispatch)
-)(AddVehicle);
+)(EditVehicle);

@@ -54,11 +54,13 @@ namespace AutoTrade.Core.JsonModels
 
 		[Required]
 		public DateTime ProductionDate { get; set; } = new DateTime(1900, 1, 1);
-		public string ProdDateFormatted { get { return this.ProductionDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture); } }
+		public string DisplayDate { get { return this.ProductionDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture); } }
 
 
 		public string Url { get; set; }
 		public string CoverImageUrl { get; set; }
+
+		public IEnumerable<ImageJsonModel> Images { get; set; } = new List<ImageJsonModel>();
 		public DateTime DateCreated { get; set; }
 	}
 }

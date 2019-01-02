@@ -60,8 +60,11 @@ namespace AutoTrade.Db.Migrations
 
             modelBuilder.Entity("AutoTrade.Db.Entities.Image", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
 
                     b.Property<Guid>("VehicleId");
 

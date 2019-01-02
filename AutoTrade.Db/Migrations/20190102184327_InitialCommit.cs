@@ -335,7 +335,9 @@ namespace AutoTrade.Db.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
                     VehicleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>

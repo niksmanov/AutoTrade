@@ -27,7 +27,7 @@ namespace AutoTrade.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetVehicleModels(int makeId, int? vehicleTypeId)
+		public IActionResult GetVehicleModels(int makeId, int vehicleTypeId)
 		{
 			if (makeId > 0)
 			{

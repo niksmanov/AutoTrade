@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 const initialState = {
+	vehicle: {},
 	vehicles: [],
 	vehicleMakes: [],
 	vehicleModels: [],
@@ -9,6 +10,20 @@ const initialState = {
 };
 
 export const vehicleActionCreators = {
+	[types.GET_VEHICLE]: (id = '') => {
+		return (dispatch) => {
+			axios.get(`/vehicle/getvehicle?id=${id}`)
+				.then(r => { return r.data })
+				.then(response => {
+					if (response.succeeded) {
+						dispatch({
+							type: types.UPDATE_VEHICLE,
+							vehicle: response.data
+						});
+					}
+				});
+		}
+	},
 	[types.GET_VEHICLES]: (userId = '') => {
 		return (dispatch) => {
 			axios.get(`/vehicle/getvehicles?userId=${userId}`)
@@ -37,7 +52,7 @@ export const vehicleActionCreators = {
 				});
 		}
 	},
-	[types.GET_VEHICLE_MODELS]: (makeId, vehicleTypeId = '') => {
+	[types.GET_VEHICLE_MODELS]: (makeId, vehicleTypeId) => {
 		return (dispatch) => {
 			axios.get('/vehicle/getvehiclemodels', {
 				params: {
@@ -60,6 +75,12 @@ export const vehicleActionCreators = {
 
 export const reducer = (state = initialState, action) => {
 	switch (action.type) {
+		case types.UPDATE_VEHICLE:
+			return {
+				...state,
+				vehicle: action.vehicle,
+				isLoading: false,
+			};
 		case types.UPDATE_VEHICLES:
 			return {
 				...state,

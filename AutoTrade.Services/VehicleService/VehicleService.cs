@@ -36,7 +36,6 @@ namespace AutoTrade.Services
 
 		public Guid EditVehicle(VehicleJsonModel model)
 		{
-
 			var dbVehicle = DbContext.Vehicles
 									 .SingleOrDefault(c => c.Id == model.Id);
 
@@ -103,13 +102,13 @@ namespace AutoTrade.Services
 			if (vehicle != null)
 			{
 				var imageUrl = vehicle.Images.Any() ?
-					UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault().Id) : null;
+					UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault().Name) : null;
 
 				return new VehicleJsonModel
 				{
 					User = (UserJsonModel)this.Map(vehicle.User, new UserJsonModel { TownName = vehicle.User?.Town?.Name }),
 					Make = vehicle.Make.Name,
-					Model = vehicle.Make.Models.SingleOrDefault(x => x.Id == vehicle.MakeId).Name,
+					Model = vehicle.Make.Models.SingleOrDefault(x => x.Id == vehicle.ModelId).Name,
 					Color = vehicle.Color.Name,
 					Type = vehicle.Type.Name,
 					FuelType = vehicle.FuelType.Name,
@@ -189,17 +188,17 @@ namespace AutoTrade.Services
 			return false;
 		}
 
-		public IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int? vehicleTypeId)
+		public IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int vehicleTypeId)
 		{
 			var make = DbContext.VehicleMakes
 								.Include(m => m.Models)
 								.AsNoTracking()
 								.SingleOrDefault(m => m.Id == makeId);
 
-			if (make.Models.Any() && vehicleTypeId.HasValue)
+			if (make.Models.Any() && vehicleTypeId > 0)
 			{
 				make.Models = make.Models
-								  .Where(m => m.VehicleTypeId == vehicleTypeId.Value)
+								  .Where(m => m.VehicleTypeId == vehicleTypeId)
 								  .ToList();
 			}
 

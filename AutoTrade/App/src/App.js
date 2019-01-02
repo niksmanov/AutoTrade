@@ -17,6 +17,7 @@ import Vehicle from './components/Shared/Vehicle/Vehicle';
 import Profile from './components/Profile/Profile';
 import ChangePassword from './components/Account/ChangePassword';
 import AddVehicle from './components/Profile/AddVehicle';
+import EditVehicle from './components/Profile/EditVehicle';
 import ListVehicles from './components/Profile/Vehicles';
 
 //Admin routes
@@ -78,6 +79,7 @@ class App extends Component {
 						<PrivateRoute isAuth={isAuth} path="/profile/home" component={Profile} />
 						<PrivateRoute isAuth={isAuth} path="/profile/changepassword" component={ChangePassword} />
 						<PrivateRoute isAuth={isAuth} path="/profile/addvehicle" component={AddVehicle} />
+						<PrivateRoute isAuth={isAuth} path="/profile/editvehicle/:id" component={EditVehicle} />
 						<PrivateRoute isAuth={isAuth} path="/profile/vehicles" component={ListVehicles} />
 
 						<Route component={NotFound} />

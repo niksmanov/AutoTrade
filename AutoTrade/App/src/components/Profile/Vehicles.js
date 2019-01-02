@@ -1,22 +1,29 @@
 ﻿import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { vehicleActionCreators } from '../Shared/Vehicle/store/Vehicle';
+import * as types from '../Shared/Vehicle/store/types';
 import { UserContext } from '../Shared/User/UserContext';
 import Navigation from './Navigation';
 import VehicleList from '../Shared/Vehicle/List';
 
+
 class Vehicles extends Component {
-	state = {
-		errors: []
-	};
+	componentDidMount() {
+		this.props[types.GET_VEHICLES](this.context.id);
+	}
 
 	render() {
-		return (<UserContext.Consumer>
-			{user =>
-				<React.Fragment>
-					<Navigation />
-					<VehicleList userId={user.id} />
-				</React.Fragment>}
-		</UserContext.Consumer>);
+		return (<React.Fragment>
+			<Navigation />
+			<VehicleList vehicles={this.props.vehicles} />
+		</React.Fragment>);
 	}
 }
 
-export default Vehicles;
+Vehicles.contextType = UserContext;
+export default connect(
+	state => state.vehicle,
+	dispatch => bindActionCreators(vehicleActionCreators, dispatch)
+)(Vehicles);
+

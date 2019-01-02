@@ -1,0 +1,17 @@
+﻿.vehicle-specs {
+	border: 1px solid #adadad;
+	border-radius: 5px;
+	padding: 20px;
+}
+
+.vehicle-heading {
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+.vehicle-edit {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
