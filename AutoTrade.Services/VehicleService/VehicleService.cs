@@ -25,7 +25,7 @@ namespace AutoTrade.Services
 
 		public Guid AddVehicle(VehicleJsonModel model)
 		{
-			var vehicle = (Vehicle)this.Map(model, new Vehicle());
+			var vehicle = (Vehicle)Map(model, new Vehicle());
 			vehicle.DateCreated = DateTime.UtcNow;
 
 			DbContext.Vehicles.Add(vehicle);
@@ -42,7 +42,7 @@ namespace AutoTrade.Services
 
 			if (dbVehicle != null)
 			{
-				dbVehicle = (Vehicle)this.Map(model, dbVehicle);
+				dbVehicle = (Vehicle)Map(model, dbVehicle);
 				DbContext.Images.RemoveRange(dbVehicle.Images);
 				DbContext.SaveChanges();
 			}
@@ -87,7 +87,7 @@ namespace AutoTrade.Services
 			}
 
 			return query.OrderByDescending(u => u.DateCreated)
-						.Select(v => (VehicleJsonModel)this.Map(v, MapRelatedEntities(v)));
+						.Select(v => (VehicleJsonModel)Map(v, MapRelatedEntities(v)));
 		}
 
 		public VehicleJsonModel GetVehicle(Guid id)
@@ -104,29 +104,8 @@ namespace AutoTrade.Services
 								   .Include(v => v.GearboxType)
 								   .SingleOrDefault(v => v.Id == id);
 
-			return (VehicleJsonModel)this.Map(dbModel, MapRelatedEntities(dbModel));
+			return (VehicleJsonModel)Map(dbModel, MapRelatedEntities(dbModel));
 		}
-
-		private VehicleJsonModel MapRelatedEntities(Vehicle vehicle)
-		{
-			if (vehicle != null)
-			{
-				return new VehicleJsonModel
-				{
-					User = (UserJsonModel)this.Map(vehicle.User, new UserJsonModel { TownName = vehicle.User?.Town?.Name }),
-					Make = vehicle.Make.Name,
-					Model = vehicle.Make.Models.SingleOrDefault(x => x.Id == vehicle.ModelId).Name,
-					Color = vehicle.Color.Name,
-					Type = vehicle.Type.Name,
-					FuelType = vehicle.FuelType.Name,
-					GearboxType = vehicle.GearboxType.Name,
-					Url = UrlHelper.GenerateVehicleUrl(vehicle.Id),
-					CoverImageUrl = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault()?.Name),
-				};
-			}
-			return null;
-		}
-
 
 		public bool AddMake(VehicleMakeJsonModel model)
 		{
@@ -135,7 +114,7 @@ namespace AutoTrade.Services
 
 			if (make == null)
 			{
-				make = (VehicleMake)this.Map(model, new VehicleMake());
+				make = (VehicleMake)Map(model, new VehicleMake());
 				DbContext.VehicleMakes.Add(make);
 				DbContext.SaveChanges();
 				return true;
@@ -162,7 +141,7 @@ namespace AutoTrade.Services
 			return DbContext.VehicleMakes?
 							.AsNoTracking()
 							.OrderBy(m => m.Name)
-							.Select(m => (VehicleMakeJsonModel)this.Map(m, new VehicleMakeJsonModel()));
+							.Select(m => (VehicleMakeJsonModel)Map(m, new VehicleMakeJsonModel()));
 		}
 
 		public bool AddModel(VehicleModelJsonModel model)
@@ -172,7 +151,7 @@ namespace AutoTrade.Services
 
 			if (vehicleModel == null)
 			{
-				vehicleModel = (VehicleModel)this.Map(model,
+				vehicleModel = (VehicleModel)Map(model,
 								new VehicleModel { VehicleTypeId = model.VehicleTypeId });
 				DbContext.VehicleModels.Add(vehicleModel);
 				DbContext.SaveChanges();
@@ -211,8 +190,30 @@ namespace AutoTrade.Services
 
 			return make?.Models
 						.OrderBy(m => m.Name)
-						.Select(m => (VehicleModelJsonModel)this.Map(m,
+						.Select(m => (VehicleModelJsonModel)Map(m,
 								new VehicleModelJsonModel { VehicleTypeId = m.VehicleTypeId }));
+		}
+
+		private VehicleJsonModel MapRelatedEntities(Vehicle vehicle)
+		{
+			if (vehicle != null)
+			{
+				return new VehicleJsonModel
+				{
+					User = (UserJsonModel)Map(vehicle.User, new UserJsonModel { TownName = vehicle.User?.Town?.Name }),
+					Make = vehicle.Make.Name,
+					Model = vehicle.Make.Models.SingleOrDefault(x => x.Id == vehicle.ModelId).Name,
+					Color = vehicle.Color.Name,
+					Type = vehicle.Type.Name,
+					FuelType = vehicle.FuelType.Name,
+					GearboxType = vehicle.GearboxType.Name,
+					Url = UrlHelper.GenerateVehicleUrl(vehicle.Id),
+					CoverImageUrl = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault()?.Name),
+					Images = vehicle.Images.Select(i =>
+					(ImageJsonModel)Map(i, new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, i.Name) })),
+				};
+			}
+			return null;
 		}
 	}
 }

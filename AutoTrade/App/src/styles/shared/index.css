@@ -50,15 +50,3 @@ img {
 .alert {
 	margin: 10px;
 }
-
-.vehicle-list-entity {
-	border: 1px solid #adadad;
-	border-radius: 5px;
-	padding: 5px;
-	margin: 5px;
-	width: 48%;
-}
-
-	.vehicle-list-entity span:not(:last-child)::after {
-		content: ', ';
-	}

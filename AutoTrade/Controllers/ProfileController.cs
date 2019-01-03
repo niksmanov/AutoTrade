@@ -33,10 +33,8 @@ namespace AutoTrade.Controllers
 			_commonService = commonService;
 		}
 
-		//TO DO: IMAGES ADD AND PREVIEW
-		//Bootstrap carousel, single vehicle page
-		//TO DO: SEARCH QUERY WITH FORM!!!
 		//TO DO: INFINITE SCROLL ON VEHICLES AND USERS https://www.npmjs.com/package/react-infinite-scroller
+		//TO DO: SEARCH QUERY WITH FORM!!!
 
 
 		[HttpPost("[action]")]

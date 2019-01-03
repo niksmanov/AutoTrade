@@ -62,7 +62,6 @@ namespace AutoTrade.Core.JsonModels
 		public string CoverImageUrl { get; set; }
 
 		public IEnumerable<IFormFile> UploadImages { get; set; } = new List<IFormFile>();
-
 		public IEnumerable<ImageJsonModel> Images { get; set; } = new List<ImageJsonModel>();
 		public DateTime DateCreated { get; set; }
 	}

@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { Carousel } from 'react-responsive-carousel';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
@@ -7,6 +8,7 @@ import DisplayErrors from '../Error/Error';
 import { UserContext } from '../User/UserContext';
 import { vehicleActionCreators } from './store/Vehicle';
 import * as types from './store/types';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '../../../styles/components/Vehicle/vehicle.css';
 
 class Vehicle extends Component {
@@ -64,7 +66,7 @@ class Vehicle extends Component {
 								<p><span><b>Price:</b></span> {v.price} BGN</p>
 							</Col>
 						</Col>
-						
+
 						<Col sm={4} className="vehicle-specs seller spacer">
 							<Link to={'/profile/home'}>
 								<p className="vehicle-heading"> Seller </p>
@@ -79,17 +81,25 @@ class Vehicle extends Component {
 						</Col>
 					</Row>
 
-					<Row>
-						<Col sm={12}>
-							images
-						</Col>
-					</Row>
+					{v.images.length > 0 &&
+						<Row>
+							<br />
+							<Col sm={12} align="center">
+								<Carousel width="80%" showArrows={true} dynamicHeight={true} infiniteLoop={true}>
+									{v.images.map((img, i) => {
+										return (<div key={i}>
+											<img alt='vehicle' src={img.url} className="vehicle-image" />
+										</div>);
+									})}
+								</Carousel>
+							</Col>
+						</Row>}
 				</React.Fragment>
 		}
 
 		return (<React.Fragment>
 			{vehicle}
-			< DisplayErrors errors={this.state.errors} />
+			<DisplayErrors errors={this.state.errors} />
 		</React.Fragment >);
 	}
 }

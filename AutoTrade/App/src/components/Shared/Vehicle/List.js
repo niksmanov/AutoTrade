@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
+import '../../../styles/components/Vehicle/list.css';
 
 class List extends Component {
 	render() {

@@ -11,5 +11,7 @@ namespace AutoTrade.Core.JsonModels
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public Guid VehicleId { get; set; }
+
+		public string Url { get; set; }
 	}
 }
