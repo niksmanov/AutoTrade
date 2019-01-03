@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using AutoTrade.Core.JsonModels;
@@ -212,33 +213,20 @@ namespace AutoTrade.Services
 			};
 		}
 
-		public bool AddImage(ImageJsonModel model)
+		public bool AddImages(IEnumerable<ImageJsonModel> images)
 		{
-			var image = DbContext.Images
-								 .SingleOrDefault(i => i.Id == model.Id);
-
-			if (image == null)
-			{
-				image = (Image)this.Map(model, new Image());
-				DbContext.Images.Add(image);
-				DbContext.SaveChanges();
-				return true;
-			}
-			return false;
+			var dbImages = images.Select(i => (Image)this.Map(i, new Image()));
+			DbContext.Images.AddRange(dbImages);
+			DbContext.SaveChanges();
+			return true;
 		}
 
-		public bool RemoveImage(int id)
+		public bool RemoveImages(IEnumerable<ImageJsonModel> images)
 		{
-			var image = DbContext.Images
-								 .SingleOrDefault(c => c.Id == id);
-
-			if (image != null)
-			{
-				DbContext.Images.Remove(image);
-				DbContext.SaveChanges();
-				return true;
-			}
-			return false;
+			var dbImages = images.Select(i => (Image)this.Map(i, new Image()));
+			DbContext.Images.RemoveRange(dbImages);
+			DbContext.SaveChanges();
+			return true;
 		}
 
 		public IEnumerable<ImageJsonModel> GetImages(Guid vehicleId)
@@ -265,6 +253,30 @@ namespace AutoTrade.Services
 				});
 			}
 			return result;
+		}
+
+		public IEnumerable<ImageJsonModel> SaveImagesOnFileSystem(VehicleJsonModel model)
+		{
+			var images = new List<ImageJsonModel>();
+			string filePath = Path.Combine(Directory.GetCurrentDirectory(), "App", "public", "images", $"{model.Id}");
+
+			if (!Directory.Exists(filePath))
+				Directory.CreateDirectory(filePath);
+
+			foreach (var image in model.UploadImages.Take(10))
+			{
+				if (image.ContentType == "image/jpeg" ||
+					image.ContentType == "image/png")
+				{
+					string imageName = Guid.NewGuid().ToString();
+					var fileStream = new FileStream($"{filePath}\\{imageName}.png", FileMode.Create);
+					image.CopyTo(fileStream);
+					fileStream.Close();
+
+					images.Add(new ImageJsonModel { Name = imageName, VehicleId = model.Id });
+				}
+			}
+			return images;
 		}
 	}
 }

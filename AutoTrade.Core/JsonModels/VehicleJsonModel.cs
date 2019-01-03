@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -59,6 +60,8 @@ namespace AutoTrade.Core.JsonModels
 
 		public string Url { get; set; }
 		public string CoverImageUrl { get; set; }
+
+		public IEnumerable<IFormFile> UploadImages { get; set; } = new List<IFormFile>();
 
 		public IEnumerable<ImageJsonModel> Images { get; set; } = new List<ImageJsonModel>();
 		public DateTime DateCreated { get; set; }

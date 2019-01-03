@@ -1,8 +1,18 @@
-﻿.vehicle-specs {
+﻿@media (max-width: 767px) {
+	.vehicle-specs.seller {
+		margin-left: 0 !important;
+	}
+}
+
+.vehicle-specs {
 	border: 1px solid #adadad;
 	border-radius: 5px;
 	padding: 20px;
 }
+
+	.vehicle-specs.seller {
+		margin-left: 50px;
+	}
 
 .vehicle-heading {
 	text-align: center;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using AutoTrade.Core;
@@ -33,14 +34,18 @@ namespace AutoTrade.Services
 			return vehicle.Id;
 		}
 
-
 		public Guid EditVehicle(VehicleJsonModel model)
 		{
 			var dbVehicle = DbContext.Vehicles
+									 .Include(i => i.Images)
 									 .SingleOrDefault(c => c.Id == model.Id);
 
-			dbVehicle = (Vehicle)this.Map(model, dbVehicle);
-			DbContext.SaveChanges();
+			if (dbVehicle != null)
+			{
+				dbVehicle = (Vehicle)this.Map(model, dbVehicle);
+				DbContext.Images.RemoveRange(dbVehicle.Images);
+				DbContext.SaveChanges();
+			}
 
 			return dbVehicle.Id;
 		}
@@ -54,6 +59,11 @@ namespace AutoTrade.Services
 			{
 				DbContext.Vehicles.Remove(vehicle);
 				DbContext.SaveChanges();
+
+				string filePath = Path.Combine(Directory.GetCurrentDirectory(), "App", "public", "images", $"{vehicle.Id}");
+				if (Directory.Exists(filePath))
+					Directory.Delete(filePath, true);
+
 				return true;
 			}
 			return false;
@@ -101,9 +111,6 @@ namespace AutoTrade.Services
 		{
 			if (vehicle != null)
 			{
-				var imageUrl = vehicle.Images.Any() ?
-					UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault().Name) : null;
-
 				return new VehicleJsonModel
 				{
 					User = (UserJsonModel)this.Map(vehicle.User, new UserJsonModel { TownName = vehicle.User?.Town?.Name }),
@@ -114,7 +121,7 @@ namespace AutoTrade.Services
 					FuelType = vehicle.FuelType.Name,
 					GearboxType = vehicle.GearboxType.Name,
 					Url = UrlHelper.GenerateVehicleUrl(vehicle.Id),
-					CoverImageUrl = imageUrl,
+					CoverImageUrl = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault()?.Name),
 				};
 			}
 			return null;

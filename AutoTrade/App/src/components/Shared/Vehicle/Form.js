@@ -78,7 +78,7 @@ class Form extends Component {
 			if (this.props.vehicle.user === null) {
 				deleteButton =
 					<button type="submit" className="btn btn-primary">Submit </button>
-			} else if (this.context.id === this.props.vehicle.userId) {
+			} else if ((this.context.id === this.props.vehicle.userId) || this.context.isAdmin) {
 				deleteButton =
 					<React.Fragment>
 						<input type="hidden" name="userId" value={this.props.vehicle.userId} />
@@ -160,6 +160,14 @@ class Form extends Component {
 								<label>Price (BGN):</label>
 								<input type="number" name="price" defaultValue={this.props.vehicle.price} required min="1" className="form-control" />
 							</div>
+							<div className="spacer">
+								<label>Images (.png or .jpg):</label>
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+							</div>
 						</div>
 
 						<div className="col-sm-6 col-xs-12">
@@ -221,7 +229,14 @@ class Form extends Component {
 								<input type="date" name="productionDate" defaultValue={this.props.vehicle.displayDate} required className="form-control" />
 							</div>
 							<br />
-
+							<div className="spacer">
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+								<input type="file" name="uploadImages" accept="image/png, image/jpeg" className="spacer" />
+							</div>
+							<br />
 							{deleteButton}
 						</div>
 					</form>

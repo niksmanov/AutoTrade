@@ -11,7 +11,7 @@ namespace AutoTrade.Services
 		bool AddVehicleType(CommonJsonModel model);
 		bool AddFuelType(CommonJsonModel model);
 		bool AddGearboxType(CommonJsonModel model);
-		bool AddImage(ImageJsonModel model);
+		bool AddImages(IEnumerable<ImageJsonModel> images);
 
 
 		bool RemoveColor(int id);
@@ -19,7 +19,7 @@ namespace AutoTrade.Services
 		bool RemoveVehicleType(int id);
 		bool RemoveFuelType(int id);
 		bool RemoveGearboxType(int id);
-		bool RemoveImage(int id);
+		bool RemoveImages(IEnumerable<ImageJsonModel> images);
 
 
 		IEnumerable<CommonJsonModel> GetColors();
@@ -31,5 +31,6 @@ namespace AutoTrade.Services
 		IEnumerable<ImageJsonModel> GetImages(Guid vehicleId);
 		AllCommonsJsonModel GetAllCommons();
 
+		IEnumerable<ImageJsonModel> SaveImagesOnFileSystem(VehicleJsonModel model);
 	}
 }

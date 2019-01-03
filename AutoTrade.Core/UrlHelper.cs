@@ -13,7 +13,10 @@ namespace AutoTrade.Core
 
 		public static string GenerateVehicleImageUrl(Guid vehicleId, string imageName)
 		{
-			return $"/{vehicleId}/{imageName}.png";
+			if (!string.IsNullOrEmpty(imageName))
+				return $"/images/{vehicleId}/{imageName}.png";
+
+			return "/images/default-vehicle-logo.png";
 		}
 	}
 }

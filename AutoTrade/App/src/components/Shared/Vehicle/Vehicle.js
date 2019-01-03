@@ -21,7 +21,7 @@ class Vehicle extends Component {
 	render() {
 		let editButton;
 		if (this.context !== null &&
-			this.context.id === this.props.vehicle.userId) {
+			((this.context.id === this.props.vehicle.userId) || this.context.isAdmin)) {
 			editButton =
 				<button className="btn btn-default vehicle-edit">
 					<span className="glyphicon glyphicon-pencil"></span> Edit </button>
@@ -37,45 +37,51 @@ class Vehicle extends Component {
 			vehicle =
 				<React.Fragment>
 					<Row>
-						<Col sm={4} className="vehicle-specs spacer">
+						<Col sm={7} className="vehicle-specs spacer">
 							<Link to={`/profile/editvehicle/${v.id}`}>
 								<p className="vehicle-heading"> Vehicle</p>
 								{editButton}
 							</Link>
-
-							<p><span><b>Type:</b></span> {v.type}</p>
-							<p><span><b>Make:</b></span> {v.make}</p>
-							<p><span><b>Model:</b></span> {v.model}</p>
-							<p><span><b>Gearbox:</b></span> {v.gearboxType}</p>
-							<p><span><b>Fuel:</b></span> {v.fuelType}</p>
-							<p><span><b>Color:</b></span> {v.color}</p>
-							<p><span><b>Horse Power:</b></span> {v.horsePower}</p>
-							<p><span><b>Cubic Capacity:</b></span> {v.cubicCapacity}</p>
-							<p><span><b>Airbags:</b></span> {v.airbags ? "Yes" : "No"}</p>
-							<p><span><b>ABS:</b></span> {v.abs ? "Yes" : "No"}</p>
-							<p><span><b>ESP:</b></span> {v.esp ? "Yes" : "No"}</p>
-							<p><span><b>Central Locking:</b></span> {v.centralLocking ? "Yes" : "No"}</p>
-							<p><span><b>Air Conditioning:</b></span> {v.airConditioning ? "Yes" : "No"}</p>
-							<p><span><b>Auto Pilot:</b></span> {v.autoPilot ? "Yes" : "No"}</p>
-							<p><span><b>Production Date:</b> </span> {new Date(v.displayDate).toLocaleDateString()}</p>
-							<p><span><b>Price:</b></span> {v.price} BGN</p>
+							<br />
+							<Col sm={6}>
+								<p><span><b>Type:</b></span> {v.type}</p>
+								<p><span><b>Make:</b></span> {v.make}</p>
+								<p><span><b>Model:</b></span> {v.model}</p>
+								<p><span><b>Gearbox:</b></span> {v.gearboxType}</p>
+								<p><span><b>Fuel:</b></span> {v.fuelType}</p>
+								<p><span><b>Color:</b></span> {v.color}</p>
+								<p><span><b>Horse Power:</b></span> {v.horsePower}</p>
+								<p><span><b>Cubic Capacity:</b></span> {v.cubicCapacity}</p>
+							</Col>
+							<Col sm={6}>
+								<p><span><b>Airbags:</b></span> {v.airbags ? "Yes" : "No"}</p>
+								<p><span><b>ABS:</b></span> {v.abs ? "Yes" : "No"}</p>
+								<p><span><b>ESP:</b></span> {v.esp ? "Yes" : "No"}</p>
+								<p><span><b>Central Locking:</b></span> {v.centralLocking ? "Yes" : "No"}</p>
+								<p><span><b>Air Conditioning:</b></span> {v.airConditioning ? "Yes" : "No"}</p>
+								<p><span><b>Auto Pilot:</b></span> {v.autoPilot ? "Yes" : "No"}</p>
+								<p><span><b>Production Date:</b> </span> {new Date(v.displayDate).toLocaleDateString()}</p>
+								<p><span><b>Price:</b></span> {v.price} BGN</p>
+							</Col>
 						</Col>
-						<Col sm={8}>
-							images
-				</Col>
-					</Row>
-					<Row>
-						<Col sm={4} className="vehicle-specs spacer">
+						
+						<Col sm={4} className="vehicle-specs seller spacer">
 							<Link to={'/profile/home'}>
 								<p className="vehicle-heading"> Seller </p>
 								{editButton}
 							</Link>
-
+							<br />
 							<p><span><b>Username:</b></span> {v.user.userName}</p>
 							<p><span><b>Address:</b></span> {v.user.address}</p>
 							<p><span><b>Town:</b></span> {v.user.townName}</p>
 							<p><span><b>Email:</b></span> {v.user.email}</p>
 							<p><span><b>Phone:</b></span> {v.user.phoneNumber}</p>
+						</Col>
+					</Row>
+
+					<Row>
+						<Col sm={12}>
+							images
 						</Col>
 					</Row>
 				</React.Fragment>

@@ -9,10 +9,10 @@ class List extends Component {
 				{this.props.vehicles.map((vehicle, i) => {
 					return (<Col sm={6} key={i} className="vehicle-list-entity">
 						<Link to={vehicle.url}>
-							{vehicle.coverImageUrl && <Col sm={4}>
+							<Col sm={4} align="center">
 								<img alt='cover' src={vehicle.coverImageUrl} />
-							</Col>}
-							<Col sm={vehicle.coverImageUrl ? 8 : 12}>
+							</Col>
+							<Col sm={8}>
 								<span><span><b>Make:</b></span> {vehicle.make}</span>
 								<span><span><b>Model:</b></span> {vehicle.model}</span>
 								<span><span><b>Gearbox:</b></span> {vehicle.gearboxType}</span>
