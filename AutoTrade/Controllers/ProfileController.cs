@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoTrade.Core;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db.Entities;
 using AutoTrade.Db.Enums;
@@ -41,7 +42,8 @@ namespace AutoTrade.Controllers
 		public IActionResult EditInfo(UserJsonModel model)
 		{
 			bool isEdited = _userService.EditUser(model);
-			return Json(new ResponseJsonModel(isEdited));
+			string error = isEdited ? Messages.INFO_ENTITY_EDITED : Messages.ERROR_EDIT_PROBLEM;
+			return Json(new ResponseJsonModel(isEdited, error: error));
 		}
 
 		[HttpPost("[action]")]
@@ -59,7 +61,8 @@ namespace AutoTrade.Controllers
 					model.Images = _commonService.SaveImagesOnFileSystem(model);
 					isAdded = _commonService.AddImages(model.Images);
 				}
-				return Json(new ResponseJsonModel(isAdded, id));
+				string error = isAdded ? Messages.INFO_ENTITY_ADDED : Messages.ERROR_ADD_PROBLEM;
+				return Json(new ResponseJsonModel(isAdded, id, error: error));
 			}
 
 			var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -74,16 +77,17 @@ namespace AutoTrade.Controllers
 
 			if (ModelState.IsValid && (model.UserId == userId || isAdmin))
 			{
-				bool isAdded = false;
+				bool isEdited = false;
 				var id = _vehicleService.EditVehicle(model);
-				isAdded = model.Id == id;
-				if (model.UploadImages.Any() && isAdded)
+				isEdited = model.Id == id;
+				if (model.UploadImages.Any() && isEdited)
 				{
 					model.Id = id;
 					model.Images = _commonService.SaveImagesOnFileSystem(model);
-					isAdded = _commonService.AddImages(model.Images);
+					isEdited = _commonService.AddImages(model.Images);
 				}
-				return Json(new ResponseJsonModel(isAdded, id));
+				string error = isEdited ? Messages.INFO_ENTITY_EDITED : Messages.ERROR_EDIT_PROBLEM;
+				return Json(new ResponseJsonModel(isEdited, id, error: error));
 			}
 
 			var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -101,7 +105,8 @@ namespace AutoTrade.Controllers
 			if (vehicle.UserId == userId || isAdmin)
 				isDeleted = _vehicleService.RemoveVehicle(id);
 
-			return Json(new ResponseJsonModel(isDeleted));
+			string error = isDeleted ? Messages.INFO_ENTITY_DELETED : Messages.ERROR_DELETE_PROBLEM;
+			return Json(new ResponseJsonModel(isDeleted, error: error));
 		}
 	}
 }

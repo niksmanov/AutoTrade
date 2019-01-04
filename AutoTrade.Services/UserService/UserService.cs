@@ -35,7 +35,7 @@ namespace AutoTrade.Services
 		{
 			var user = DbContext.Users
 								.SingleOrDefault(u => u.Email == email);
-			return user != null ? user.UserName : null;
+			return user?.UserName;
 		}
 
 		public bool RemoveUser(string id)

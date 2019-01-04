@@ -22,27 +22,20 @@ class Users extends Component {
 		axios.post('/admin/changerole', new FormData(e.target))
 			.then(r => { return r.data })
 			.then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['User role has been changed!'] });
+				this.setState({ errors: response.errors });
+				if (response.succeeded)
 					this.props[types.GET_ALL_USERS]();
-				} else {
-					this.setState({ errors: ['We have a problem with role changing'] });
-				}
 			});
 	}
 
 	deleteUser(e) {
 		e.preventDefault();
 		axios.post('/admin/removeuser', new FormData(e.target))
-			.then(r => {
-				return r.data
-			}).then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['Entity deleted successfully'] });
+			.then(r => { return r.data })
+			.then(response => {
+				this.setState({ errors: response.errors });
+				if (response.succeeded)
 					this.props[types.GET_ALL_USERS]();
-				} else {
-					this.setState({ errors: ['We have a problem with deleting'] });
-				}
 			});
 	}
 

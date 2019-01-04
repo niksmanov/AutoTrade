@@ -1,9 +1,21 @@
-﻿.vehicle-list-entity {
+﻿@media (max-width: 767px) {
+	.vehicle-list-entity {
+		height: unset !important;
+	}
+
+		.vehicle-list-entity img {
+			margin-bottom: 20px;
+		}
+}
+
+.vehicle-list-entity {
 	border: 1px solid #adadad;
 	border-radius: 5px;
 	padding: 5px;
 	margin: 5px;
 	width: 48%;
+	height: 100px;
+	overflow: hidden;
 }
 
 	.vehicle-list-entity span:not(:last-child)::after {
@@ -12,4 +24,5 @@
 
 	.vehicle-list-entity img {
 		border-radius: 3px;
+		max-height: 90px;
 	}

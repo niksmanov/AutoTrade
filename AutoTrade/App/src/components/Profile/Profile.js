@@ -24,15 +24,14 @@ class Profile extends Component {
 	}
 
 	reSendEmail(userId) {
-		axios.get(`/user/resendconfirmationemail?id=${userId}`
-		).then(r => {
-			return r.data
-		}).then(response => {
-			if (response.errors.length > 0) {
-				this.setState({ errors: response.errors });
-				this.setState({ sendEmail: true });
-			}
-		});
+		axios.get(`/user/resendconfirmationemail?id=${userId}`)
+			.then(r => { return r.data })
+			.then(response => {
+				if (response.errors.length > 0) {
+					this.setState({ errors: response.errors });
+					this.setState({ sendEmail: true });
+				}
+			});
 	}
 
 	editInfo(e) {
@@ -40,11 +39,7 @@ class Profile extends Component {
 		axios.post('/profile/editinfo', new FormData(e.target))
 			.then(r => { return r.data })
 			.then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['Entity edited successfully'] });
-				} else {
-					this.setState({ errors: ['Entity already exists'] });
-				}
+				this.setState({ errors: response.errors });
 			});
 	}
 

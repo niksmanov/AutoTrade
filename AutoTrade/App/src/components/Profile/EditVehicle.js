@@ -27,13 +27,9 @@ class EditVehicle extends Component {
 		axios.post('/profile/editvehicle', formdata)
 			.then(r => { return r.data })
 			.then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['Entity edited successfully'] });
+				this.setState({ errors: response.errors });
+				if (response.succeeded)
 					window.location.href = `/vehicle/${response.data}`;
-				} else {
-					response.errors.push('We have a problem with editing');
-					this.setState({ errors: response.errors });
-				}
 			});
 	}
 

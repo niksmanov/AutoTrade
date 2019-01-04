@@ -22,27 +22,20 @@ class VehicleMakes extends Component {
 		axios.post('/admin/addvehiclemake', new FormData(e.target))
 			.then(r => { return r.data })
 			.then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['Entity added successfully'] });
+				this.setState({ errors: response.errors });
+				if (response.succeeded)
 					this.props[types.GET_VEHICLE_MAKES]();
-				} else {
-					this.setState({ errors: ['Entity already exists'] });
-				}
 			});
 	}
 
 	deleteMake(e) {
 		e.preventDefault();
 		axios.post('/admin/removevehiclemake', new FormData(e.target))
-			.then(r => {
-				return r.data
-			}).then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['Entity deleted successfully'] });
+			.then(r => { return r.data })
+			.then(response => {
+				this.setState({ errors: response.errors });
+				if (response.succeeded)
 					this.props[types.GET_VEHICLE_MAKES]();
-				} else {
-					this.setState({ errors: ['We have a problem with deleting'] });
-				}
 			});
 	}
 

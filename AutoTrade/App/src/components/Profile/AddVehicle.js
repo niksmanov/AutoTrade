@@ -27,13 +27,9 @@ class AddVehicle extends Component {
 		axios.post('/profile/addvehicle', formdata)
 			.then(r => { return r.data })
 			.then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['Entity added successfully'] });
+				this.setState({ errors: response.errors });
+				if (response.succeeded)
 					window.location.href = `/vehicle/${response.data}`;
-				} else {
-					response.errors.push('We have a problem with adding');
-					this.setState({ errors: response.errors });
-				}
 			});
 	}
 

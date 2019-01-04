@@ -22,27 +22,20 @@ class FuelTypes extends Component {
 		axios.post('/admin/addfueltype', new FormData(e.target))
 			.then(r => { return r.data })
 			.then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['Entity added successfully'] });
+				this.setState({ errors: response.errors });
+				if (response.succeeded)
 					this.props[types.GET_FUEL_TYPES]();
-				} else {
-					this.setState({ errors: ['Entity already exists'] });
-				}
 			});
 	}
 
 	deleteFuelType(e) {
 		e.preventDefault();
 		axios.post('/admin/removefueltype', new FormData(e.target))
-			.then(r => {
-				return r.data
-			}).then(response => {
-				if (response.succeeded) {
-					this.setState({ errors: ['Entity deleted successfully'] });
+			.then(r => { return r.data })
+			.then(response => {
+				this.setState({ errors: response.errors });
+				if (response.succeeded)
 					this.props[types.GET_FUEL_TYPES]();
-				} else {
-					this.setState({ errors: ['We have a problem with deleting'] });
-				}
 			});
 	}
 

@@ -64,6 +64,7 @@ class Vehicle extends Component {
 								<p><span><b>Auto Pilot:</b></span> {v.autoPilot ? "Yes" : "No"}</p>
 								<p><span><b>Production Date:</b> </span> {new Date(v.displayDate).toLocaleDateString()}</p>
 								<p><span><b>Price:</b></span> {v.price} BGN</p>
+								<p><b>Date Created: {new Date(v.dateCreated).toLocaleDateString()} </b></p>
 							</Col>
 						</Col>
 
