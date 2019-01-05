@@ -22,18 +22,28 @@ export const userActionCreators = {
 				});
 		}
 	},
-	[types.GET_ALL_USERS]: (search = '') => {
+	[types.GET_USERS]: (page, size, search = '') => {
 		return (dispatch) => {
-			axios.get(`/admin/getusers?search=${search}`)
-				.then(r => { return r.data })
+			axios.get('/admin/getusers', {
+				params: {
+					page: page,
+					size: size,
+					search: search,
+				}
+			}).then(r => { return r.data })
 				.then(response => {
 					if (response.succeeded) {
 						dispatch({
-							type: types.UPDATE_ALL_USERS,
-							users: response.data
+							type: types.UPDATE_USERS,
+							users: response.data,
 						});
 					}
 				});
+		}
+	},
+	[types.CLEAR_STATE]: () => {
+		return (dispatch) => {
+			dispatch({ type: types.UPDATE_CLEAR_STATE });
 		}
 	},
 };
@@ -46,12 +56,14 @@ export const reducer = (state = initialState, action) => {
 				user: action.user,
 				isLoading: false,
 			};
-		case types.UPDATE_ALL_USERS:
+		case types.UPDATE_USERS:
 			return {
 				...state,
-				users: action.users,
+				users: state.users.concat(action.users),
 				isLoading: false,
 			};
+		case types.UPDATE_CLEAR_STATE:
+			return initialState;
 
 		default: return state;
 	}

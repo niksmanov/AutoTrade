@@ -18,11 +18,6 @@ namespace AutoTrade.Services
 		{ }
 
 
-		public IEnumerable<VehicleJsonModel> SearchVehicles()
-		{
-			throw new NotImplementedException();
-		}
-
 		public Guid AddVehicle(VehicleJsonModel model)
 		{
 			var vehicle = (Vehicle)Map(model, new Vehicle());
@@ -69,7 +64,8 @@ namespace AutoTrade.Services
 			return false;
 		}
 
-		public IEnumerable<VehicleJsonModel> GetVehicles(string userId)
+		public IEnumerable<VehicleJsonModel> GetVehicles(int page, int size,
+			string userId, SearchVehiclesJsonModel search = null)
 		{
 			var query = DbContext.Vehicles
 								 .Include(v => v.Images)
@@ -82,11 +78,14 @@ namespace AutoTrade.Services
 								 .AsNoTracking();
 
 			if (!string.IsNullOrEmpty(userId))
-			{
 				query = query.Where(u => u.UserId == userId);
-			}
 
-			return query.OrderByDescending(u => u.DateCreated)
+			if (search != null)
+				query = BuildSearchQuery(query);
+
+			return query.Skip(page * size)
+						.Take(size)
+						.OrderByDescending(u => u.DateCreated)
 						.Select(v => (VehicleJsonModel)Map(v, MapRelatedEntities(v)));
 		}
 
@@ -182,11 +181,9 @@ namespace AutoTrade.Services
 								.SingleOrDefault(m => m.Id == makeId);
 
 			if (make.Models.Any() && vehicleTypeId > 0)
-			{
 				make.Models = make.Models
 								  .Where(m => m.VehicleTypeId == vehicleTypeId)
 								  .ToList();
-			}
 
 			return make?.Models
 						.OrderBy(m => m.Name)
@@ -214,6 +211,11 @@ namespace AutoTrade.Services
 				};
 			}
 			return null;
+		}
+
+		private IQueryable<Vehicle> BuildSearchQuery(IQueryable<Vehicle> query)
+		{
+			return query;
 		}
 	}
 }

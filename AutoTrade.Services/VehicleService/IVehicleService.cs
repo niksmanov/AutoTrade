@@ -14,8 +14,7 @@ namespace AutoTrade.Services
 		bool AddModel(VehicleModelJsonModel model);
 		bool RemoveModel(int id);
 
-		IEnumerable<VehicleJsonModel> SearchVehicles();
-		IEnumerable<VehicleJsonModel> GetVehicles(string userId);
+		IEnumerable<VehicleJsonModel> GetVehicles(int page, int size, string userId, SearchVehiclesJsonModel search = null);
 		VehicleJsonModel GetVehicle(Guid id);
 		IEnumerable<VehicleMakeJsonModel> GetMakes();
 		IEnumerable<VehicleModelJsonModel> GetModels(int makeId, int vehicleTypeId);

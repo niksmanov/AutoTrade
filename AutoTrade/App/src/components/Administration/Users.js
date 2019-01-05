@@ -5,16 +5,29 @@ import { bindActionCreators } from 'redux';
 import { userActionCreators } from '../Shared/User/store/User';
 import * as types from '../Shared/User/store/types';
 import axios from 'axios';
+import InfiniteScroll from 'react-infinite-scroller';
 import Navigation from '../Administration/Navigation';
 import DisplayErrors from '../Shared/Error/Error';
 
 class Users extends Component {
 	state = {
+		page: 0,
+		size: 10,
+		hasMore: true,
 		errors: [],
 	};
 
 	componentDidMount() {
-		this.props[types.GET_ALL_USERS]();
+		this.props[types.CLEAR_STATE]();
+		this.props[types.GET_USERS](this.state.page, this.state.size);
+	}
+
+	loadMore() {
+		if (this.props.users.length === (this.state.page + 1) * this.state.size) {
+			this.setState({ page: this.state.page + 1 }, () => {
+				this.props[types.GET_USERS](this.state.page, this.state.size);
+			});
+		}
 	}
 
 	changeRole(e) {
@@ -23,8 +36,12 @@ class Users extends Component {
 			.then(r => { return r.data })
 			.then(response => {
 				this.setState({ errors: response.errors });
-				if (response.succeeded)
-					this.props[types.GET_ALL_USERS]();
+				if (response.succeeded) {
+					this.setState({ page: 0 }, () => {
+						this.props[types.CLEAR_STATE]();
+						this.props[types.GET_USERS](this.state.page, this.state.size);
+					});
+				}
 			});
 	}
 
@@ -34,25 +51,27 @@ class Users extends Component {
 			.then(r => { return r.data })
 			.then(response => {
 				this.setState({ errors: response.errors });
-				if (response.succeeded)
-					this.props[types.GET_ALL_USERS]();
+				if (response.succeeded) {
+					this.setState({ page: 0 }, () => {
+						this.props[types.CLEAR_STATE]();
+						this.props[types.GET_USERS](this.state.page, this.state.size);
+					});
+				}
 			});
 	}
 
 	searchUser(e) {
-		let search = e.target.value;
-		this.props[types.GET_ALL_USERS](search);
+		e.preventDefault();
+		let search = new FormData(e.target).get('search');
+		this.setState({ page: 0 }, () => {
+			this.props[types.CLEAR_STATE]();
+			this.props[types.GET_USERS](this.state.page, this.state.size, search);
+		});
 	}
 
 	render() {
 		let users;
-		let isLoading;
-		if (this.props.isLoading) {
-			isLoading =
-				<React.Fragment>
-					<div className="loading-app"></div>
-				</React.Fragment>;
-		} else {
+		if (!this.props.isLoading) {
 			users = this.props.users.map((user, i) => {
 				return (<tr key={i}>
 					<td>{user.email}</td>
@@ -80,10 +99,11 @@ class Users extends Component {
 
 			<Row>
 				<Col sm={3}>
-					<form>
+					<form onSubmit={this.searchUser.bind(this)}>
 						<label>Username or Email:</label>
 						<br />
-						<input onChange={this.searchUser.bind(this)} type="text" autoComplete="off" className="form-control spacer" />
+						<input type="text" name="search" autoComplete="off" className="form-control spacer" />
+						<button type="submit" className="btn btn-primary">Submit</button>
 					</form>
 					<br />
 					<DisplayErrors errors={this.state.errors} />
@@ -99,11 +119,17 @@ class Users extends Component {
 								<th scope="col">Delete?</th>
 							</tr>
 						</thead>
-						<tbody>
-							{users}
-						</tbody>
+						<InfiniteScroll
+							element={'tbody'}
+							pageStart={0}
+							loadMore={this.loadMore.bind(this)}
+							hasMore={this.state.hasMore}
+							loader={<tr key={0}><td>Loading...</td></tr>}>
+							<React.Fragment>
+								{users}
+							</React.Fragment>
+						</InfiniteScroll>
 					</table>
-					{isLoading}
 				</Col>
 			</Row>
 		</React.Fragment >);

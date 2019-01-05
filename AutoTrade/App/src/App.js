@@ -7,7 +7,7 @@ import axios from 'axios';
 import Layout from './components/Layout/Layout';
 import NotFound from './components/NotFound/NotFound';
 import Home from './components/Home/Home';
-import Search from './components/Home/Search';
+import Search from './components/Search/Search';
 import Register from './components/Account/Register';
 import Login from './components/Account/Login';
 import ForgotPassword from './components/Account/ForgotPassword';

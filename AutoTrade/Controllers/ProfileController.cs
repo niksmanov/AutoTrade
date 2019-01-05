@@ -34,14 +34,16 @@ namespace AutoTrade.Controllers
 			_commonService = commonService;
 		}
 
-		//TO DO: INFINITE SCROLL ON VEHICLES AND USERS https://www.npmjs.com/package/react-infinite-scroller
-		//TO DO: SEARCH QUERY WITH FORM!!!
-
 
 		[HttpPost("[action]")]
 		public IActionResult EditInfo(UserJsonModel model)
 		{
-			bool isEdited = _userService.EditUser(model);
+			bool isEdited = false;
+			string userId = _userManager.GetUserId(HttpContext.User);
+
+			if (model.Id == userId)
+				isEdited = _userService.EditUser(model);
+
 			string error = isEdited ? Messages.INFO_ENTITY_EDITED : Messages.ERROR_EDIT_PROBLEM;
 			return Json(new ResponseJsonModel(isEdited, error: error));
 		}

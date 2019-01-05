@@ -91,19 +91,19 @@ namespace AutoTrade.Services
 			return false;
 		}
 
-		public IEnumerable<UserJsonModel> GetUsers(string search)
+		public IEnumerable<UserJsonModel> GetUsers(int page, int size, string search)
 		{
 			var query = DbContext.Users
 								 .Include(u => u.UserRoles)
 								 .AsNoTracking();
 
 			if (!string.IsNullOrEmpty(search))
-			{
 				query = query.Where(u => u.Email.Contains(search) ||
 										 u.UserName.Contains(search));
-			}
 
-			return query.OrderByDescending(u => u.UserRoles.Count)
+			return query.Skip(page * size)
+						.Take(size)
+						.OrderByDescending(u => u.UserRoles.Count)
 						.ThenBy(u => u.Email)
 						.Select(u => (UserJsonModel)Map(u, new UserJsonModel
 						{

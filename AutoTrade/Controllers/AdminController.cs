@@ -197,9 +197,9 @@ namespace AutoTrade.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetUsers(string search)
+		public IActionResult GetUsers(int page, int size, string search)
 		{
-			var users = _userService.GetUsers(search);
+			var users = _userService.GetUsers(page, size, search?.Trim());
 			return Json(new ResponseJsonModel(true, users));
 		}
 	}

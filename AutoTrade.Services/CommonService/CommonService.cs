@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AutoTrade.Core;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db;
 using AutoTrade.Db.Entities;
@@ -234,7 +235,8 @@ namespace AutoTrade.Services
 			return DbContext.Images
 							.Where(i => i.VehicleId == vehicleId)
 							.AsNoTracking()
-							.Select(i => (ImageJsonModel)Map(i, new ImageJsonModel()));
+							.Select(i =>
+							(ImageJsonModel)Map(i, new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicleId, i.Name) }));
 		}
 
 

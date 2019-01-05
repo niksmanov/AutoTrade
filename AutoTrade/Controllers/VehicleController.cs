@@ -18,6 +18,7 @@ namespace AutoTrade.Controllers
 			_vehicleService = vehicleService;
 		}
 
+		//TO DO: SEARCH QUERY WITH FORM!!!
 
 		[HttpGet("[action]")]
 		public IActionResult GetVehicleMakes()
@@ -48,9 +49,16 @@ namespace AutoTrade.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetVehicles(string userId)
+		public IActionResult GetVehicles(int page, int size, string userId)
 		{
-			var vehicles = _vehicleService.GetVehicles(userId);
+			var vehicles = _vehicleService.GetVehicles(page, size, userId);
+			return Json(new ResponseJsonModel(true, vehicles));
+		}
+
+		[HttpPost("[action]")]
+		public IActionResult SearchVehicles(int page, int size, SearchVehiclesJsonModel search)
+		{
+			var vehicles = _vehicleService.GetVehicles(page, size, null, search);
 			return Json(new ResponseJsonModel(true, vehicles));
 		}
 	}

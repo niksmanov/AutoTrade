@@ -24,15 +24,20 @@ export const vehicleActionCreators = {
 				});
 		}
 	},
-	[types.GET_VEHICLES]: (userId = '') => {
+	[types.GET_VEHICLES]: (page, size, userId = '') => {
 		return (dispatch) => {
-			axios.get(`/vehicle/getvehicles?userId=${userId}`)
-				.then(r => { return r.data })
+			axios.get('/vehicle/getvehicles', {
+				params: {
+					page: page,
+					size: size,
+					userId: userId,
+				}
+			}).then(r => { return r.data })
 				.then(response => {
 					if (response.succeeded) {
 						dispatch({
 							type: types.UPDATE_VEHICLES,
-							vehicles: response.data
+							vehicles: response.data,
 						});
 					}
 				});
@@ -70,6 +75,11 @@ export const vehicleActionCreators = {
 				});
 		}
 	},
+	[types.CLEAR_STATE]: () => {
+		return (dispatch) => {
+			dispatch({ type: types.UPDATE_CLEAR_STATE });
+		}
+	},
 };
 
 
@@ -84,7 +94,7 @@ export const reducer = (state = initialState, action) => {
 		case types.UPDATE_VEHICLES:
 			return {
 				...state,
-				vehicles: action.vehicles,
+				vehicles: state.vehicles.concat(action.vehicles),
 				isLoading: false,
 			};
 		case types.UPDATE_VEHICLE_MAKES:
@@ -99,6 +109,8 @@ export const reducer = (state = initialState, action) => {
 				vehicleModels: action.vehicleModels,
 				isLoading: false,
 			};
+		case types.UPDATE_CLEAR_STATE:
+			return initialState;
 
 		default: return state;
 	}
