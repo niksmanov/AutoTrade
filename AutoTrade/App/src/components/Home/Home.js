@@ -20,7 +20,7 @@ class Home extends Component {
 
 	render() {
 		return (<React.Fragment>
-			<h3 style={{ textAlign: 'center', fontWeight: '800' }}> Last 10 added vehicles </h3>
+			<h3 style={{ textAlign: 'center', fontWeight: '800' }}> Last added vehicles </h3>
 			<br />
 			<VehicleList vehicles={this.props.vehicles} />
 			<br />

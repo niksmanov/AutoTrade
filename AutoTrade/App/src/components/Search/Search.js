@@ -14,7 +14,7 @@ class Search extends Component {
 	state = {
 		page: 0,
 		size: 10,
-		hasMore: true,
+		responseCount: 1,
 		errors: [],
 		showVehicles: false,
 	};
@@ -29,6 +29,7 @@ class Search extends Component {
 		if (this.props.vehicles.length === (this.state.page + 1) * this.state.size) {
 			this.setState({ page: this.state.page + 1 }, () => {
 				this.props[types.GET_VEHICLES](this.state.page, this.state.size);
+				this.setState({ responseCount: this.state.responseCount + 1 });
 			});
 		}
 	}
@@ -58,7 +59,7 @@ class Search extends Component {
 				<InfiniteScroll
 					pageStart={0}
 					loadMore={this.loadMore.bind(this)}
-					hasMore={this.state.hasMore}
+					hasMore={this.props.vehicles.length === this.state.responseCount * this.state.size}
 					loader={<div key={0} className="loading-app"></div>}>
 					<VehicleList vehicles={this.props.vehicles} />
 				</InfiniteScroll>}

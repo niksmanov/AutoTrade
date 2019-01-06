@@ -12,8 +12,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 class Vehicles extends Component {
 	state = {
 		page: 0,
-		size: 1,
-		hasMore: true,
+		size: 10,
+		responseCount: 1,
 	};
 
 	componentDidMount() {
@@ -25,6 +25,7 @@ class Vehicles extends Component {
 		if (this.props.vehicles.length === (this.state.page + 1) * this.state.size) {
 			this.setState({ page: this.state.page + 1 }, () => {
 				this.props[types.GET_VEHICLES](this.state.page, this.state.size, this.context.id);
+				this.setState({ responseCount: this.state.responseCount + 1 });
 			});
 		}
 	}
@@ -35,7 +36,7 @@ class Vehicles extends Component {
 			<InfiniteScroll
 				pageStart={0}
 				loadMore={this.loadMore.bind(this)}
-				hasMore={this.state.hasMore}
+				hasMore={this.props.vehicles.length === this.state.responseCount * this.state.size}
 				loader={<div key={0} className="loading-app"></div>}>
 				<VehicleList vehicles={this.props.vehicles} />
 			</InfiniteScroll>

@@ -13,7 +13,7 @@ class Users extends Component {
 	state = {
 		page: 0,
 		size: 10,
-		hasMore: true,
+		responseCount: 1,
 		errors: [],
 	};
 
@@ -26,6 +26,7 @@ class Users extends Component {
 		if (this.props.users.length === (this.state.page + 1) * this.state.size) {
 			this.setState({ page: this.state.page + 1 }, () => {
 				this.props[types.GET_USERS](this.state.page, this.state.size);
+				this.setState({ responseCount: this.state.responseCount + 1 });
 			});
 		}
 	}
@@ -123,7 +124,7 @@ class Users extends Component {
 							element={'tbody'}
 							pageStart={0}
 							loadMore={this.loadMore.bind(this)}
-							hasMore={this.state.hasMore}
+							hasMore={this.props.users.length === this.state.responseCount * this.state.size}
 							loader={<tr key={0}><td>Loading...</td></tr>}>
 							<React.Fragment>
 								{users}
