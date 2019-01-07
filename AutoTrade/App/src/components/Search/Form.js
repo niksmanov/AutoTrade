@@ -13,12 +13,13 @@ import DisplayErrors from '../Shared/Error/Error';
 class Form extends Component {
 	state = {
 		errors: [],
-		selectFuel: 0,
-		selectGearbox: 0,
-		selectColor: 0,
+		selectTown: 0,
 		selectMake: 0,
 		selectModel: 0,
+		selectColor: 0,
 		selectType: 0,
+		selectFuel: 0,
+		selectGearbox: 0,
 		selectAirbags: false,
 		selectAbs: false,
 		selectEsp: false,
@@ -63,8 +64,18 @@ class Form extends Component {
 						<Row>
 							<Col sm={6}>
 								<div>
+									<label>Towns:</label>
+									<select value={this.state.selectTown} onChange={this.selectEvent.bind(this, 'selectTown')} name="townId" className="form-control spacer">
+										<option>Select Town</option>
+										{this.props.allCommons.towns.map((town, i) => {
+											return (<option key={i} value={town.id}>{town.name}</option>)
+										})}
+									</select>
+								</div>
+
+								<div>
 									<label>Vehicle Type:</label>
-									<select value={this.state.selectType} onChange={this.selectType.bind(this)} name="typeId" required className="form-control spacer">
+									<select value={this.state.selectType} onChange={this.selectType.bind(this)} name="typeId" className="form-control spacer">
 										<option>Select Vehicle Type</option>
 										{this.props.allCommons.vehicleTypes.map((type, i) => {
 											return (<option key={i} value={type.id}>{type.name}</option>)
@@ -74,7 +85,7 @@ class Form extends Component {
 
 								<div>
 									<label>Fuel Type:</label>
-									<select value={this.state.selectFuel || this.props.vehicle.fuelTypeId} onChange={this.selectEvent.bind(this, 'selectFuel')} name="fuelTypeId" required className="form-control spacer">
+									<select value={this.state.selectFuel} onChange={this.selectEvent.bind(this, 'selectFuel')} name="fuelTypeId" className="form-control spacer">
 										<option>Select Fuel Type</option>
 										{this.props.allCommons.fuelTypes.map((type, i) => {
 											return (<option key={i} value={type.id}>{type.name}</option>)
@@ -84,7 +95,7 @@ class Form extends Component {
 
 								<div>
 									<label>Gearbox Type:</label>
-									<select value={this.state.selectGearbox || this.props.vehicle.gearboxTypeId} onChange={this.selectEvent.bind(this, 'selectGearbox')} name="gearboxTypeId" required className="form-control spacer">
+									<select value={this.state.selectGearbox} onChange={this.selectEvent.bind(this, 'selectGearbox')} name="gearboxTypeId" className="form-control spacer">
 										<option>Select Gearbox Type</option>
 										{this.props.allCommons.gearboxTypes.map((type, i) => {
 											return (<option key={i} value={type.id}>{type.name}</option>)
@@ -93,7 +104,7 @@ class Form extends Component {
 								</div>
 
 								<label>Makes:</label>
-								<select value={this.state.selectMake} onChange={this.selectMake.bind(this)} name="makeId" required className="form-control spacer">
+								<select value={this.state.selectMake} onChange={this.selectMake.bind(this)} name="makeId" className="form-control spacer">
 									<option>Select Make</option>
 									{this.props.vehicleMakes.map((make, i) => {
 										return (<option key={i} value={make.id}>{make.name}</option>)
@@ -102,7 +113,7 @@ class Form extends Component {
 
 								<div>
 									<label>Models:</label>
-									<select value={this.state.selectModel || this.props.vehicle.modelId} onChange={this.selectEvent.bind(this, 'selectModel')} name="modelId" required className="form-control spacer">
+									<select value={this.state.selectModel} onChange={this.selectEvent.bind(this, 'selectModel')} name="modelId" className="form-control spacer">
 										<option>Select Model</option>
 										{this.props.vehicleModels.map((model, i) => {
 											return (<option key={i} value={model.id}>{model.name}</option>)
@@ -112,7 +123,7 @@ class Form extends Component {
 
 								<div>
 									<label>Colors:</label>
-									<select value={this.state.selectColor || this.props.vehicle.colorId} onChange={this.selectEvent.bind(this, 'selectColor')} name="colorId" required className="form-control spacer">
+									<select value={this.state.selectColor} onChange={this.selectEvent.bind(this, 'selectColor')} name="colorId" className="form-control spacer">
 										<option>Select Color</option>
 										{this.props.allCommons.colors.map((color, i) => {
 											return (<option key={i} value={color.id}>{color.name}</option>)
@@ -121,25 +132,41 @@ class Form extends Component {
 								</div>
 
 								<div className="spacer">
-									<label>Horse power:</label>
-									<input type="number" name="horsePower" defaultValue={this.props.vehicle.horsePower} required min="1" className="form-control" />
+									<div className="sm-input-first">
+										<label>From horse power:</label>
+										<input type="number" name="fromHorsePower" min="1" className="form-control sm" />
+									</div>
+									<div>
+										<label>To horse power:</label>
+										<input type="number" name="toHorsePower" min="1" className="form-control sm" />
+									</div>
 								</div>
 
 								<div className="spacer">
-									<label>Price (BGN):</label>
-									<input type="number" name="price" defaultValue={this.props.vehicle.price} required min="1" className="form-control" />
+									<div className="sm-input-first">
+										<label>From price (BGN):</label>
+										<input type="number" name="fromPrice" min="1" className="form-control sm" />
+									</div>
+									<div>
+										<label>To price (BGN):</label>
+										<input type="number" name="toPrice" min="1" className="form-control sm" />
+									</div>
 								</div>
 							</Col>
 
-							<Col sm={6}>
-								<div className="spacer">
-									<label>Cubic capacity (cm3):</label>
-									<input type="number" name="cubicCapacity" defaultValue={this.props.vehicle.cubicCapacity} required min="50" className="form-control" />
+							<Col sm={6} className="spacer">
+								<div className="sm-input-first">
+									<label>From cubic capacity (cm3):</label>
+									<input type="number" name="fromCubicCapacity" min="50" className="form-control sm" />
+								</div>
+								<div>
+									<label>To cubic capacity (cm3):</label>
+									<input type="number" name="toCubicCapacity" min="50" className="form-control sm" />
 								</div>
 
-								<div>
+								<div className="spacer">
 									<label>Airbags:</label>
-									<select value={this.state.selectAirbags || this.props.vehicle.airbags} onChange={this.selectEvent.bind(this, 'selectAirbags')} name="airbags" required className="form-control spacer">
+									<select value={this.state.selectAirbags} onChange={this.selectEvent.bind(this, 'selectAirbags')} name="airbags" className="form-control spacer">
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -147,7 +174,7 @@ class Form extends Component {
 
 								<div>
 									<label>ABS:</label>
-									<select value={this.state.selectAbs || this.props.vehicle.abs} onChange={this.selectEvent.bind(this, 'selectAbs')} name="abs" required className="form-control spacer">
+									<select value={this.state.selectAbs} onChange={this.selectEvent.bind(this, 'selectAbs')} name="abs" className="form-control spacer">
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -155,7 +182,7 @@ class Form extends Component {
 
 								<div>
 									<label>ESP:</label>
-									<select value={this.state.selectEsp || this.props.vehicle.esp} onChange={this.selectEvent.bind(this, 'selectEsp')} name="esp" required className="form-control spacer">
+									<select value={this.state.selectEsp} onChange={this.selectEvent.bind(this, 'selectEsp')} name="esp" className="form-control spacer">
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -163,7 +190,7 @@ class Form extends Component {
 
 								<div>
 									<label>Central Locking:</label>
-									<select value={this.state.selectCentralLocking || this.props.vehicle.centralLocking} onChange={this.selectEvent.bind(this, 'selectCentralLocking')} name="centralLocking" required className="form-control spacer">
+									<select value={this.state.selectCentralLocking} onChange={this.selectEvent.bind(this, 'selectCentralLocking')} name="centralLocking" className="form-control spacer">
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -171,7 +198,7 @@ class Form extends Component {
 
 								<div>
 									<label>Air Conditioning:</label>
-									<select value={this.state.selectAirConditioning || this.props.vehicle.airConditioning} onChange={this.selectEvent.bind(this, 'selectAirConditioning')} name="airConditioning" required className="form-control spacer">
+									<select value={this.state.selectAirConditioning} onChange={this.selectEvent.bind(this, 'selectAirConditioning')} name="airConditioning" className="form-control spacer">
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -179,19 +206,28 @@ class Form extends Component {
 
 								<div>
 									<label>Auto Pilot:</label>
-									<select value={this.state.selectAutoPilot || this.props.vehicle.autoPilot} onChange={this.selectEvent.bind(this, 'selectAutoPilot')} name="autoPilot" required className="form-control spacer">
+									<select value={this.state.selectAutoPilot} onChange={this.selectEvent.bind(this, 'selectAutoPilot')} name="autoPilot" className="form-control spacer">
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
 								</div>
 
 								<div className="spacer">
-									<label>Production Date:</label>
-									<input type="date" name="productionDate" defaultValue={this.props.vehicle.displayDate} required className="form-control" />
+									<div className="sm-input-first ">
+										<label>From production date:</label>
+										<input type="date" name="fromProductionDate" className="form-control sm" />
+									</div>
+									<div>
+										<label>To production date:</label>
+										<input type="date" name="toProductionDate" className="form-control sm" />
+									</div>
+								</div>
+								<div align="right" style={{ maxWidth: '350px' }}>
+									<br />
+									<button type="submit" className="btn btn-primary spacer">Submit </button>
 								</div>
 							</Col>
 						</Row>
-						<button type="submit" className="btn btn-primary">Submit </button>
 					</form>
 					<br />
 					<DisplayErrors errors={this.state.errors} />

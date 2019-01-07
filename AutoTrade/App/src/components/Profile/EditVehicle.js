@@ -21,7 +21,7 @@ class EditVehicle extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		var formdata = new FormData(e.target);
+		let formdata = new FormData(e.target);
 		formdata.append('id', this.props.match.params.id);
 
 		axios.post('/profile/editvehicle', formdata)

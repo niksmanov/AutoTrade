@@ -34,7 +34,7 @@ class Form extends Component {
 
 	deleteVehicle(vehicleId, e) {
 		e.preventDefault();
-		var formdata = new FormData();
+		let formdata = new FormData();
 		formdata.append('id', vehicleId);
 
 		axios.post('/profile/removevehicle', formdata)

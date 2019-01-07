@@ -21,7 +21,7 @@ class AddVehicle extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		var formdata = new FormData(e.target);
+		let formdata = new FormData(e.target);
 		formdata.append('userId', this.context.id);
 
 		axios.post('/profile/addvehicle', formdata)

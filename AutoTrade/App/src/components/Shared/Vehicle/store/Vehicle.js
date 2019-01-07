@@ -43,6 +43,20 @@ export const vehicleActionCreators = {
 				});
 		}
 	},
+	[types.GET_SEARCHED_VEHICLES]: (input) => {
+		return (dispatch) => {
+			axios.post('/vehicle/searchvehicles', input)
+				.then(r => { return r.data })
+				.then(response => {
+					if (response.succeeded) {
+						dispatch({
+							type: types.UPDATE_VEHICLES,
+							vehicles: response.data,
+						});
+					}
+				});
+		}
+	},
 	[types.GET_VEHICLE_MAKES]: () => {
 		return (dispatch) => {
 			axios.get('/vehicle/getvehiclemakes')

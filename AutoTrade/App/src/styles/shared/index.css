@@ -47,6 +47,15 @@ img {
 	max-width: 350px;
 }
 
+.sm-input-first {
+	float: left;
+	margin-right: 10px;
+}
+
+.form-control.sm {
+	max-width: 170px;
+}
+
 .alert {
 	margin: 10px;
 }
