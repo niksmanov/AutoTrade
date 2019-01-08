@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { vehicleActionCreators } from '../Shared/Vehicle/store/Vehicle';
 import * as types from '../Shared/Vehicle/store/types';
-import DisplayErrors from '../Shared/Error/Error';
 import VehicleList from '../Shared/Vehicle/List';
 import SearchForm from './Form';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -14,7 +13,6 @@ class Search extends Component {
 		page: 0,
 		size: 10,
 		responseCount: 1,
-		errors: [],
 		formData: {},
 		showVehicles: false,
 		useSearch: false,
@@ -83,8 +81,6 @@ class Search extends Component {
 					loader={<div key={0} className="loading-app"></div>}>
 					<VehicleList vehicles={this.props.vehicles} />
 				</InfiniteScroll>}
-			<br />
-			<DisplayErrors errors={this.state.errors} />
 		</React.Fragment >);
 	}
 }

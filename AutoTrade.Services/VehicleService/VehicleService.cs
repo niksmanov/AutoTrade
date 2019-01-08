@@ -8,6 +8,7 @@ using AutoTrade.Core.JsonModels;
 using AutoTrade.Db;
 using AutoTrade.Db.Entities;
 using AutoTrade.Db.Enums;
+using AutoTrade.Db.QueryBuilders;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoTrade.Services
@@ -20,7 +21,7 @@ namespace AutoTrade.Services
 
 		public Guid AddVehicle(VehicleJsonModel model)
 		{
-			var vehicle = (Vehicle)Map(model, new Vehicle());
+			var vehicle = Map(model, new Vehicle());
 			vehicle.DateCreated = DateTime.UtcNow;
 
 			DbContext.Vehicles.Add(vehicle);
@@ -37,7 +38,7 @@ namespace AutoTrade.Services
 
 			if (dbVehicle != null)
 			{
-				dbVehicle = (Vehicle)Map(model, dbVehicle);
+				dbVehicle = Map(model, dbVehicle);
 				DbContext.Images.RemoveRange(dbVehicle.Images);
 				DbContext.SaveChanges();
 			}
@@ -68,6 +69,7 @@ namespace AutoTrade.Services
 			string userId, SearchVehiclesJsonModel search = null)
 		{
 			var query = DbContext.Vehicles
+								 .Include(v => v.User)
 								 .Include(v => v.Images)
 								 .Include(v => v.Make)
 												.ThenInclude(m => m.Models)
@@ -81,12 +83,12 @@ namespace AutoTrade.Services
 				query = query.Where(u => u.UserId == userId);
 
 			if (search != null)
-				query = BuildSearchQuery(query);
+				query = BuildSearchQuery(query, search);
 
 			return query.Skip(page * size)
 						.Take(size)
 						.OrderByDescending(u => u.DateCreated)
-						.Select(v => (VehicleJsonModel)Map(v, MapRelatedEntities(v)));
+						.Select(v => Map(v, MapRelatedEntities(v)));
 		}
 
 		public VehicleJsonModel GetVehicle(Guid id)
@@ -103,7 +105,7 @@ namespace AutoTrade.Services
 								   .Include(v => v.GearboxType)
 								   .SingleOrDefault(v => v.Id == id);
 
-			return (VehicleJsonModel)Map(dbModel, MapRelatedEntities(dbModel));
+			return Map(dbModel, MapRelatedEntities(dbModel));
 		}
 
 		public bool AddMake(VehicleMakeJsonModel model)
@@ -113,7 +115,7 @@ namespace AutoTrade.Services
 
 			if (make == null)
 			{
-				make = (VehicleMake)Map(model, new VehicleMake());
+				make = Map(model, new VehicleMake());
 				DbContext.VehicleMakes.Add(make);
 				DbContext.SaveChanges();
 				return true;
@@ -140,7 +142,7 @@ namespace AutoTrade.Services
 			return DbContext.VehicleMakes?
 							.AsNoTracking()
 							.OrderBy(m => m.Name)
-							.Select(m => (VehicleMakeJsonModel)Map(m, new VehicleMakeJsonModel()));
+							.Select(m => Map(m, new VehicleMakeJsonModel()));
 		}
 
 		public bool AddModel(VehicleModelJsonModel model)
@@ -150,8 +152,7 @@ namespace AutoTrade.Services
 
 			if (vehicleModel == null)
 			{
-				vehicleModel = (VehicleModel)Map(model,
-								new VehicleModel { VehicleTypeId = model.VehicleTypeId });
+				vehicleModel = Map(model, new VehicleModel { VehicleTypeId = model.VehicleTypeId });
 				DbContext.VehicleModels.Add(vehicleModel);
 				DbContext.SaveChanges();
 				return true;
@@ -187,8 +188,7 @@ namespace AutoTrade.Services
 
 			return make?.Models
 						.OrderBy(m => m.Name)
-						.Select(m => (VehicleModelJsonModel)Map(m,
-								new VehicleModelJsonModel { VehicleTypeId = m.VehicleTypeId }));
+						.Select(m => Map(m, new VehicleModelJsonModel { VehicleTypeId = m.VehicleTypeId }));
 		}
 
 		private VehicleJsonModel MapRelatedEntities(Vehicle vehicle)
@@ -197,7 +197,7 @@ namespace AutoTrade.Services
 			{
 				return new VehicleJsonModel
 				{
-					User = (UserJsonModel)Map(vehicle.User, new UserJsonModel { TownName = vehicle.User?.Town?.Name }),
+					User = Map(vehicle.User, new UserJsonModel { TownName = vehicle.User?.Town?.Name }),
 					Make = vehicle.Make.Name,
 					Model = vehicle.Make.Models.SingleOrDefault(x => x.Id == vehicle.ModelId).Name,
 					Color = vehicle.Color.Name,
@@ -207,14 +207,38 @@ namespace AutoTrade.Services
 					Url = UrlHelper.GenerateVehicleUrl(vehicle.Id),
 					CoverImageUrl = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault()?.Name),
 					Images = vehicle.Images.Select(i =>
-					(ImageJsonModel)Map(i, new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, i.Name) })),
+					Map(i, new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, i.Name) })),
 				};
 			}
 			return null;
 		}
 
-		private IQueryable<Vehicle> BuildSearchQuery(IQueryable<Vehicle> query)
+		private IQueryable<Vehicle> BuildSearchQuery(IQueryable<Vehicle> query, SearchVehiclesJsonModel search)
 		{
+			var queryBuilder = new SearchVehiclesQueryBuilder(search);
+
+			query = queryBuilder.FilterTown(query);
+			query = queryBuilder.FilterMake(query);
+			query = queryBuilder.FilterModel(query);
+			query = queryBuilder.FilterColor(query);
+			query = queryBuilder.FilterType(query);
+			query = queryBuilder.FilterFuelType(query);
+			query = queryBuilder.FilterGearboxType(query);
+			query = queryBuilder.FilterAirbags(query);
+			query = queryBuilder.FilterABS(query);
+			query = queryBuilder.FilterESP(query);
+			query = queryBuilder.FilterCentralLocking(query);
+			query = queryBuilder.FilterAirConditioning(query);
+			query = queryBuilder.FilterAutoPilot(query);
+			query = queryBuilder.FilterFromCubicCapacity(query);
+			query = queryBuilder.FilterToCubicCapacity(query);
+			query = queryBuilder.FilterFromHorsePower(query);
+			query = queryBuilder.FilterToHorsePower(query);
+			query = queryBuilder.FilterFromPrice(query);
+			query = queryBuilder.FilterToPrice(query);
+			query = queryBuilder.FilterFromProductionDate(query);
+			query = queryBuilder.FilterToProductionDate(query);
+
 			return query;
 		}
 	}

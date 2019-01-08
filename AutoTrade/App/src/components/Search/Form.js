@@ -7,25 +7,23 @@ import { vehicleActionCreators } from '../Shared/Vehicle/store/Vehicle';
 import { commonActionCreators } from '../Shared/Common/store/Common';
 import * as types from '../Shared/Vehicle/store/types';
 import * as commonTypes from '../Shared/Common/store/types';
-import DisplayErrors from '../Shared/Error/Error';
 
 
 class Form extends Component {
 	state = {
-		errors: [],
-		selectTown: 0,
-		selectMake: 0,
-		selectModel: 0,
-		selectColor: 0,
-		selectType: 0,
-		selectFuel: 0,
-		selectGearbox: 0,
-		selectAirbags: false,
-		selectAbs: false,
-		selectEsp: false,
-		selectCentralLocking: false,
-		selectAirConditioning: false,
-		selectAutoPilot: false,
+		selectTown: '',
+		selectMake: '',
+		selectModel: '',
+		selectColor: '',
+		selectType: '',
+		selectFuel: '',
+		selectGearbox: '',
+		selectAirbags: '',
+		selectAbs: '',
+		selectEsp: '',
+		selectCentralLocking: '',
+		selectAirConditioning: '',
+		selectAutoPilot: '',
 	};
 
 	componentDidMount() {
@@ -167,6 +165,7 @@ class Form extends Component {
 								<div className="spacer">
 									<label>Airbags:</label>
 									<select value={this.state.selectAirbags} onChange={this.selectEvent.bind(this, 'selectAirbags')} name="airbags" className="form-control spacer">
+										<option>Select Option</option>
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -175,6 +174,7 @@ class Form extends Component {
 								<div>
 									<label>ABS:</label>
 									<select value={this.state.selectAbs} onChange={this.selectEvent.bind(this, 'selectAbs')} name="abs" className="form-control spacer">
+										<option>Select Option</option>
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -183,6 +183,7 @@ class Form extends Component {
 								<div>
 									<label>ESP:</label>
 									<select value={this.state.selectEsp} onChange={this.selectEvent.bind(this, 'selectEsp')} name="esp" className="form-control spacer">
+										<option>Select Option</option>
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -191,6 +192,7 @@ class Form extends Component {
 								<div>
 									<label>Central Locking:</label>
 									<select value={this.state.selectCentralLocking} onChange={this.selectEvent.bind(this, 'selectCentralLocking')} name="centralLocking" className="form-control spacer">
+										<option>Select Option</option>
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -199,6 +201,7 @@ class Form extends Component {
 								<div>
 									<label>Air Conditioning:</label>
 									<select value={this.state.selectAirConditioning} onChange={this.selectEvent.bind(this, 'selectAirConditioning')} name="airConditioning" className="form-control spacer">
+										<option>Select Option</option>
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -207,6 +210,7 @@ class Form extends Component {
 								<div>
 									<label>Auto Pilot:</label>
 									<select value={this.state.selectAutoPilot} onChange={this.selectEvent.bind(this, 'selectAutoPilot')} name="autoPilot" className="form-control spacer">
+										<option>Select Option</option>
 										<option value="true">Yes</option>
 										<option value="false">No</option>
 									</select>
@@ -229,8 +233,6 @@ class Form extends Component {
 							</Col>
 						</Row>
 					</form>
-					<br />
-					<DisplayErrors errors={this.state.errors} />
 				</React.Fragment>;
 		}
 

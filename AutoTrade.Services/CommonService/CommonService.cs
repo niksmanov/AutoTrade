@@ -24,7 +24,7 @@ namespace AutoTrade.Services
 
 			if (town == null)
 			{
-				town = (Town)Map(model, new Town());
+				town = Map(model, new Town());
 				DbContext.Towns.Add(town);
 				DbContext.SaveChanges();
 				return true;
@@ -51,7 +51,7 @@ namespace AutoTrade.Services
 			return DbContext.Towns?
 							.AsNoTracking()
 							.OrderBy(m => m.Name)
-							.Select(m => (CommonJsonModel)Map(m, new CommonJsonModel()));
+							.Select(m => Map(m, new CommonJsonModel()));
 		}
 
 		public bool AddColor(CommonJsonModel model)
@@ -61,7 +61,7 @@ namespace AutoTrade.Services
 
 			if (color == null)
 			{
-				color = (Color)Map(model, new Color());
+				color = Map(model, new Color());
 				DbContext.Colors.Add(color);
 				DbContext.SaveChanges();
 				return true;
@@ -88,7 +88,7 @@ namespace AutoTrade.Services
 			return DbContext.Colors?
 							.AsNoTracking()
 							.OrderBy(m => m.Name)
-							.Select(m => (CommonJsonModel)Map(m, new CommonJsonModel()));
+							.Select(m => Map(m, new CommonJsonModel()));
 		}
 
 		public bool AddVehicleType(CommonJsonModel model)
@@ -98,7 +98,7 @@ namespace AutoTrade.Services
 
 			if (vehicleType == null)
 			{
-				vehicleType = (VehicleType)Map(model, new VehicleType());
+				vehicleType = Map(model, new VehicleType());
 				DbContext.VehicleTypes.Add(vehicleType);
 				DbContext.SaveChanges();
 				return true;
@@ -125,7 +125,7 @@ namespace AutoTrade.Services
 			return DbContext.VehicleTypes?
 							.AsNoTracking()
 							.OrderBy(m => m.Name)
-							.Select(m => (CommonJsonModel)Map(m, new CommonJsonModel()));
+							.Select(m => Map(m, new CommonJsonModel()));
 		}
 
 		public bool AddFuelType(CommonJsonModel model)
@@ -135,7 +135,7 @@ namespace AutoTrade.Services
 
 			if (fuelType == null)
 			{
-				fuelType = (FuelType)Map(model, new FuelType());
+				fuelType = Map(model, new FuelType());
 				DbContext.FuelTypes.Add(fuelType);
 				DbContext.SaveChanges();
 				return true;
@@ -162,7 +162,7 @@ namespace AutoTrade.Services
 			return DbContext.FuelTypes?
 							.AsNoTracking()
 							.OrderBy(m => m.Name)
-							.Select(m => (CommonJsonModel)Map(m, new CommonJsonModel()));
+							.Select(m => Map(m, new CommonJsonModel()));
 		}
 
 		public bool AddGearboxType(CommonJsonModel model)
@@ -172,7 +172,7 @@ namespace AutoTrade.Services
 
 			if (gearboxType == null)
 			{
-				gearboxType = (GearboxType)Map(model, new GearboxType());
+				gearboxType = Map(model, new GearboxType());
 				DbContext.GearboxTypes.Add(gearboxType);
 				DbContext.SaveChanges();
 				return true;
@@ -199,7 +199,7 @@ namespace AutoTrade.Services
 			return DbContext.GearboxTypes?
 							.AsNoTracking()
 							.OrderBy(m => m.Name)
-							.Select(m => (CommonJsonModel)Map(m, new CommonJsonModel()));
+							.Select(m => Map(m, new CommonJsonModel()));
 		}
 
 		public AllCommonsJsonModel GetAllCommons()
@@ -216,7 +216,7 @@ namespace AutoTrade.Services
 
 		public bool AddImages(IEnumerable<ImageJsonModel> images)
 		{
-			var dbImages = images.Select(i => (Image)Map(i, new Image()));
+			var dbImages = images.Select(i => Map(i, new Image()));
 			DbContext.Images.AddRange(dbImages);
 			DbContext.SaveChanges();
 			return true;
@@ -224,7 +224,7 @@ namespace AutoTrade.Services
 
 		public bool RemoveImages(IEnumerable<ImageJsonModel> images)
 		{
-			var dbImages = images.Select(i => (Image)Map(i, new Image()));
+			var dbImages = images.Select(i => Map(i, new Image()));
 			DbContext.Images.RemoveRange(dbImages);
 			DbContext.SaveChanges();
 			return true;
@@ -235,8 +235,8 @@ namespace AutoTrade.Services
 			return DbContext.Images
 							.Where(i => i.VehicleId == vehicleId)
 							.AsNoTracking()
-							.Select(i =>
-							(ImageJsonModel)Map(i, new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicleId, i.Name) }));
+							.Select(i => Map(i,
+							new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicleId, i.Name) }));
 		}
 
 

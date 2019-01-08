@@ -12,7 +12,7 @@ namespace AutoTrade.Services
 
 		public AppDbContext DbContext { get; private set; }
 
-		public object Map(object sourceObject, object destinationObject)
+		public T Map<T>(object sourceObject, T destinationObject) where T : class
 		{
 			if (sourceObject != null && destinationObject != null)
 			{

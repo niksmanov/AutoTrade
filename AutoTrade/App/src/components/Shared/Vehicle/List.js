@@ -28,6 +28,10 @@ class List extends Component {
 					</Col>)
 				})}
 			</Row>
+			{this.props.vehicles.length === 0 &&
+				<div align="center">
+					<h4>No Results</h4>
+				</div>}
 		</React.Fragment>);
 	}
 }

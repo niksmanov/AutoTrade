@@ -19,7 +19,7 @@ namespace AutoTrade.Services
 								.Include(u => u.Town)
 								.SingleOrDefault(u => u.Id == id);
 			if (user != null)
-				return (UserJsonModel)Map(user, new UserJsonModel { TownName = user.Town?.Name });
+				return Map(user, new UserJsonModel { TownName = user.Town?.Name });
 
 			return null;
 		}
@@ -105,7 +105,7 @@ namespace AutoTrade.Services
 						.Take(size)
 						.OrderByDescending(u => u.UserRoles.Count)
 						.ThenBy(u => u.Email)
-						.Select(u => (UserJsonModel)Map(u, new UserJsonModel
+						.Select(u => Map(u, new UserJsonModel
 						{
 							IsAdmin = u.UserRoles.Count > 0
 						}));
