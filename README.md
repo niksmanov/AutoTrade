@@ -11,4 +11,4 @@ Auto Trade is an ASP.NET Core MVC application with React and Redux for selling v
 * Redux 3.7
 
 
-rocket: [**Website of the application**](https://autotrade-bulgaria.herokuapp.com/)
+:rocket: [**Website of the application**](https://autotrade-bulgaria.herokuapp.com/)
