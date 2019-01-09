@@ -9,9 +9,7 @@ namespace AutoTrade.Db
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options)
 			: base(options)
-		{
-			this.Database.Migrate();
-		}
+		{ }
 
 		public DbSet<Vehicle> Vehicles { get; set; }
 		public DbSet<VehicleMake> VehicleMakes { get; set; }
