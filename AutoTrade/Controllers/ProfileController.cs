@@ -60,7 +60,7 @@ namespace AutoTrade.Controllers
 				if (model.UploadImages.Any() && isAdded)
 				{
 					model.Id = id;
-					model.Images = _commonService.SaveImagesOnFileSystem(model);
+					model.Images = _commonService.SaveImagesInDatabase(model);
 					isAdded = _commonService.AddImages(model.Images);
 				}
 				string error = isAdded ? Messages.INFO_ENTITY_ADDED : Messages.ERROR_ADD_PROBLEM;
@@ -85,7 +85,7 @@ namespace AutoTrade.Controllers
 				if (model.UploadImages.Any() && isEdited)
 				{
 					model.Id = id;
-					model.Images = _commonService.SaveImagesOnFileSystem(model);
+					model.Images = _commonService.SaveImagesInDatabase(model);
 					isEdited = _commonService.AddImages(model.Images);
 				}
 				string error = isEdited ? Messages.INFO_ENTITY_EDITED : Messages.ERROR_EDIT_PROBLEM;

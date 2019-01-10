@@ -205,9 +205,9 @@ namespace AutoTrade.Services
 					FuelType = vehicle.FuelType.Name,
 					GearboxType = vehicle.GearboxType.Name,
 					Url = UrlHelper.GenerateVehicleUrl(vehicle.Id),
-					CoverImageUrl = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault()?.Name),
+					CoverImageUrl = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, vehicle.Images.FirstOrDefault()?.Data),
 					Images = vehicle.Images.Select(i =>
-					Map(i, new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, i.Name) })),
+					Map(i, new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicle.Id, i.Data) })),
 				};
 			}
 			return null;

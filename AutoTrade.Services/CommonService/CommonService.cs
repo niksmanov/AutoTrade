@@ -236,7 +236,7 @@ namespace AutoTrade.Services
 							.Where(i => i.VehicleId == vehicleId)
 							.AsNoTracking()
 							.Select(i => Map(i,
-							new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicleId, i.Name) }));
+							new ImageJsonModel { Url = UrlHelper.GenerateVehicleImageUrl(vehicleId, i.Data) }));
 		}
 
 
@@ -271,11 +271,31 @@ namespace AutoTrade.Services
 					image.ContentType == "image/png")
 				{
 					string imageName = Guid.NewGuid().ToString();
-					var fileStream = new FileStream($"{filePath}\\{imageName}.png", FileMode.Create);
-					image.CopyTo(fileStream);
-					fileStream.Close();
+					using (var fs = new FileStream($"{filePath}\\{imageName}.png", FileMode.Create))
+					{
+						image.CopyTo(fs);
+						images.Add(new ImageJsonModel { Name = imageName, VehicleId = model.Id });
+					}
+				}
+			}
+			return images;
+		}
 
-					images.Add(new ImageJsonModel { Name = imageName, VehicleId = model.Id });
+
+		public IEnumerable<ImageJsonModel> SaveImagesInDatabase(VehicleJsonModel model)
+		{
+			var images = new List<ImageJsonModel>();
+
+			foreach (var image in model.UploadImages.Take(10))
+			{
+				if (image.ContentType == "image/jpeg" ||
+					image.ContentType == "image/png")
+				{
+					using (var ms = new MemoryStream())
+					{
+						image.CopyTo(ms);
+						images.Add(new ImageJsonModel { VehicleId = model.Id, Data = ms.ToArray() });
+					}
 				}
 			}
 			return images;

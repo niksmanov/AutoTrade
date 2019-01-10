@@ -32,5 +32,6 @@ namespace AutoTrade.Services
 		AllCommonsJsonModel GetAllCommons();
 
 		IEnumerable<ImageJsonModel> SaveImagesOnFileSystem(VehicleJsonModel model);
+		IEnumerable<ImageJsonModel> SaveImagesInDatabase(VehicleJsonModel model);
 	}
 }

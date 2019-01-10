@@ -11,5 +11,6 @@ namespace AutoTrade.Db.Entities
 		public string Name { get; set; }
 		public virtual Vehicle Vehicle { get; set; }
 		public Guid VehicleId { get; set; }
+		public byte[] Data { get; set; }
 	}
 }
