@@ -63,6 +63,6 @@ namespace AutoTrade.Core.JsonModels
 
 		public IEnumerable<IFormFile> UploadImages { get; set; } = new List<IFormFile>();
 		public IEnumerable<ImageJsonModel> Images { get; set; } = new List<ImageJsonModel>();
-		public DateTime DateCreated { get; set; }
+		public DateTime? DateCreated { get; set; }
 	}
 }

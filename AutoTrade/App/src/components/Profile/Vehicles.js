@@ -31,6 +31,17 @@ class Vehicles extends Component {
 	}
 
 	render() {
+		let vehicleList;
+		if (this.props.isLoading) {
+			vehicleList =
+				<React.Fragment>
+					<div className="loading-app"></div>
+				</React.Fragment>;
+		} else {
+			vehicleList =
+				<VehicleList vehicles={this.props.vehicles} />
+		}
+
 		return (<React.Fragment>
 			<Navigation />
 			<InfiniteScroll
@@ -38,7 +49,7 @@ class Vehicles extends Component {
 				loadMore={this.loadMore.bind(this)}
 				hasMore={this.props.vehicles.length === this.state.responseCount * this.state.size}
 				loader={<div key={0} className="loading-app"></div>}>
-				<VehicleList vehicles={this.props.vehicles} />
+				{vehicleList}
 			</InfiniteScroll>
 		</React.Fragment>);
 	}

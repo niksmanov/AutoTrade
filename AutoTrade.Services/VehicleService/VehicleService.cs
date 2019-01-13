@@ -197,6 +197,7 @@ namespace AutoTrade.Services
 			{
 				return new VehicleJsonModel
 				{
+					DateCreated = vehicle.DateCreated,
 					User = Map(vehicle.User, new UserJsonModel { TownName = vehicle.User?.Town?.Name }),
 					Make = vehicle.Make.Name,
 					Model = vehicle.Make.Models.SingleOrDefault(x => x.Id == vehicle.ModelId).Name,

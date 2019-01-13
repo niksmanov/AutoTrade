@@ -65,6 +65,17 @@ class Search extends Component {
 	}
 
 	render() {
+		let vehicleList;
+		if (this.props.isLoading) {
+			vehicleList =
+				<React.Fragment>
+					<div className="loading-app"></div>
+				</React.Fragment>;
+		} else {
+			vehicleList =
+				<VehicleList vehicles={this.props.vehicles} />
+		}
+
 		return (<React.Fragment>
 			<button onClick={this.toggleForm.bind(this)}
 				className="btn btn-default spacer">{this.state.showVehicles ? 'Show form' : 'Show all vehicles'}</button>
@@ -79,7 +90,7 @@ class Search extends Component {
 					loadMore={this.loadMore.bind(this, this.state.useSearch)}
 					hasMore={this.props.vehicles.length === this.state.responseCount * this.state.size}
 					loader={<div key={0} className="loading-app"></div>}>
-					<VehicleList vehicles={this.props.vehicles} />
+					{vehicleList}
 				</InfiniteScroll>}
 		</React.Fragment >);
 	}

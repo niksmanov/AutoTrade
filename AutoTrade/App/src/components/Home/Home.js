@@ -19,10 +19,21 @@ class Home extends Component {
 
 
 	render() {
+		let vehicleList;
+		if (this.props.isLoading) {
+			vehicleList =
+				<React.Fragment>
+					<div className="loading-app"></div>
+				</React.Fragment>;
+		} else {
+			vehicleList =
+				<VehicleList vehicles={this.props.vehicles} />
+		}
+
 		return (<React.Fragment>
 			<h3 style={{ textAlign: 'center', fontWeight: '800' }}> Last added vehicles </h3>
 			<br />
-			<VehicleList vehicles={this.props.vehicles} />
+			{vehicleList}
 			<br />
 			<p style={{ textAlign: 'center' }} className="spacer">
 				<b><a href="https://gitlab.com/niksmanov/autotrade" rel="noopener noreferrer" target="_blank">Project Repository</a></b>
