@@ -7,8 +7,8 @@ using AutoTrade.Core;
 using AutoTrade.Core.JsonModels;
 using AutoTrade.Db;
 using AutoTrade.Db.Entities;
-using AutoTrade.Db.Enums;
 using Microsoft.EntityFrameworkCore;
+using ImageMagick;
 
 namespace AutoTrade.Services
 {
@@ -257,12 +257,17 @@ namespace AutoTrade.Services
 			return result;
 		}
 
+
 		public IEnumerable<ImageJsonModel> SaveImagesOnFileSystem(VehicleJsonModel model)
 		{
+			const decimal MAX_SIZE_IN_BYTES = 1000000;
 			var images = new List<ImageJsonModel>();
 			string filePath = Path.Combine(Directory.GetCurrentDirectory(), "App", "public", "images", $"{model.Id}");
 
-			if (!Directory.Exists(filePath))
+			if (Directory.Exists(filePath))
+				foreach (var file in Directory.GetFiles(filePath))
+					File.Delete(file);
+			else
 				Directory.CreateDirectory(filePath);
 
 			foreach (var image in model.UploadImages.Take(10))
@@ -270,10 +275,15 @@ namespace AutoTrade.Services
 				if (image.ContentType == "image/jpeg" ||
 					image.ContentType == "image/png")
 				{
-					string imageName = Guid.NewGuid().ToString();
-					using (var fs = new FileStream($"{filePath}\\{imageName}.png", FileMode.Create))
+					using (var compressedImg = new MagickImage(image.OpenReadStream()))
 					{
-						image.CopyTo(fs);
+						decimal quality = (MAX_SIZE_IN_BYTES / image.Length) * 100;
+						compressedImg.Quality = (int)(quality > 90 ? 90 : quality);
+						compressedImg.Format = MagickFormat.Jpg;
+
+						string imageName = Guid.NewGuid().ToString() + ".jpg";
+						compressedImg.Write($"{filePath}\\{imageName}");
+
 						images.Add(new ImageJsonModel { Name = imageName, VehicleId = model.Id });
 					}
 				}
@@ -284,6 +294,7 @@ namespace AutoTrade.Services
 
 		public IEnumerable<ImageJsonModel> SaveImagesInDatabase(VehicleJsonModel model)
 		{
+			const decimal MAX_SIZE_IN_BYTES = 1000000;
 			var images = new List<ImageJsonModel>();
 
 			foreach (var image in model.UploadImages.Take(10))
@@ -291,10 +302,14 @@ namespace AutoTrade.Services
 				if (image.ContentType == "image/jpeg" ||
 					image.ContentType == "image/png")
 				{
-					using (var ms = new MemoryStream())
+					using (var compressedImg = new MagickImage(image.OpenReadStream()))
 					{
-						image.CopyTo(ms);
-						images.Add(new ImageJsonModel { VehicleId = model.Id, Data = ms.ToArray() });
+						decimal quality = (MAX_SIZE_IN_BYTES / image.Length) * 100;
+						compressedImg.Quality = (int)(quality > 90 ? 90 : quality);
+						compressedImg.Format = MagickFormat.Jpg;
+
+						string imageName = Guid.NewGuid().ToString() + ".jpg";
+						images.Add(new ImageJsonModel { Data = compressedImg.ToByteArray(), VehicleId = model.Id });
 					}
 				}
 			}
